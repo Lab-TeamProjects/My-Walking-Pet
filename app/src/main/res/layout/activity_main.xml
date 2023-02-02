@@ -4,26 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:liftOnScroll="true"
-        android:elevation="1dp">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            style="@style/Widget.MaterialComponents.Toolbar.Surface"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:titleTextAppearance="?attr/textAppearanceSubtitle1" >
-
-        </com.google.android.material.appbar.MaterialToolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
+    tools:context="com.lab_team_projects.my_walking_pet.MainActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

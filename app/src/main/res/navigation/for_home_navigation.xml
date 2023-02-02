@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/for_home_navigation"
+    app:startDestination="@id/homeFragment">
+
+
+    w<fragment
+        android:id="@+id/homeFragment"
+        android:name="com.lab_team_projects.my_walking_pet.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/collectionFragment"
+        android:name="com.lab_team_projects.my_walking_pet.collection.CollectionFragment"
+        android:label="CollectionFragment" />
+    <fragment
+        android:id="@+id/missionFragment"
+        android:name="com.lab_team_projects.my_walking_pet.mission.MissionFragment"
+        android:label="MissionFragment" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.lab_team_projects.my_walking_pet.setting.SettingFragment"
+        android:label="SettingFragment" />
+    <fragment
+        android:id="@+id/shopFragment"
+        android:name="com.lab_team_projects.my_walking_pet.shop.ShopFragment"
+        android:label="ShopFragment" />
+    <fragment
+        android:id="@+id/walkCountFragment"
+        android:name="com.lab_team_projects.my_walking_pet.walk_count.WalkCountFragment"
+        android:label="WalkCountFragment" />
+</navigation>
