@@ -22,7 +22,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 뷰바인딩
+        /*
+        * 뷰바인딩
+        * 레이아웃에 대한 클래스를 만들 필요 없이
+        * 바인딩 선언 하나로 전부 접근 가능
+        * */
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -35,9 +40,11 @@ public class MainActivity extends AppCompatActivity {
                 R.id.settingFragment
         ).build();
 
+        // 네비게이션 컨트롤러
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration);
 
+        // 프래그먼트 이동했을 때 앱바 표시 조건문
         navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
             if (navDestination.getId() == R.id.homeFragment) {
                 binding.appBarLayout.setVisibility(View.GONE);

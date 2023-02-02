@@ -29,6 +29,8 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
+        /* 버튼 이동 */
+
         binding.ibAR.setOnClickListener(v->{
             Toast.makeText(requireContext(), "AR 이동 버튼", Toast.LENGTH_SHORT).show();
         });
@@ -63,6 +65,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        // 바인딩은 생명주기 이슈 때문에 프래그먼트가 종료되면 널을 넣어줘야 함
         binding = null;
     }
 
