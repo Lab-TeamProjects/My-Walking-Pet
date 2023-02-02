@@ -23,7 +23,14 @@ public class MainActivity extends AppCompatActivity {
 
         // 앱바 설정
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.homeFragment, R.id.walkCountFragment, R.id.shopFragment, R.id.missionFragment, R.id.collectionFragment, R.id.settingFragment).build();
-        NavController navController = Navigation.findNavController(this, R.id.for_home_navigation);
+                R.id.homeFragment,
+                R.id.walkCountFragment,
+                R.id.shopFragment, R.id.missionFragment,
+                R.id.collectionFragment,
+                R.id.settingFragment
+        ).build();
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration);
     }
 }
