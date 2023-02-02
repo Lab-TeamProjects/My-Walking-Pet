@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.my_walking_pet.R;
+import com.lab_team_projects.my_walking_pet.R;
 
 public class CollectionFragment extends Fragment {
 

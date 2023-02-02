@@ -1,14 +1,14 @@
 package com.lab_team_projects.my_walking_pet.shop;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+
 import com.lab_team_projects.my_walking_pet.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
