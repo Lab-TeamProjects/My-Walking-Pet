@@ -1,4 +1,4 @@
-package com.example.my_walking_pet.collection;
+package com.lab_team_projects.my_walking_pet.collection;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +14,7 @@ public class CollectionFragment extends Fragment {
     public CollectionFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

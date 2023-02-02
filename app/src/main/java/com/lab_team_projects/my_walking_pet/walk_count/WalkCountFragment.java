@@ -1,20 +1,21 @@
-package com.example.my_walking_pet.shop;
+package com.lab_team_projects.my_walking_pet.walk_count;
 
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
-
-import com.example.my_walking_pet.R;
+import com.lab_team_projects.my_walking_pet.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ShopFragment#newInstance} factory method to
+ * Use the {@link WalkCountFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShopFragment extends Fragment {
+public class WalkCountFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,7 +26,7 @@ public class ShopFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public ShopFragment() {
+    public WalkCountFragment() {
         // Required empty public constructor
     }
 
@@ -35,11 +36,11 @@ public class ShopFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ShopFragment.
+     * @return A new instance of fragment WalkCountFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ShopFragment newInstance(String param1, String param2) {
-        ShopFragment fragment = new ShopFragment();
+    public static WalkCountFragment newInstance(String param1, String param2) {
+        WalkCountFragment fragment = new WalkCountFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -60,6 +61,6 @@ public class ShopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_shop, container, false);
+        return inflater.inflate(R.layout.fragment_walk_count, container, false);
     }
 }

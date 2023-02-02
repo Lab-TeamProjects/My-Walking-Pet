@@ -1,4 +1,4 @@
-package com.example.my_walking_pet;
+package com.lab_team_projects.my_walking_pet;
 
 import android.content.Context;
 

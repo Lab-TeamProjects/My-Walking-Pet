@@ -1,4 +1,4 @@
-package com.example.my_walking_pet.game;
+package com.lab_team_projects.my_walking_pet.game;
 
 import java.util.Date;
 

@@ -1,10 +1,10 @@
-package com.example.my_walking_pet.login;
-
-import android.os.Bundle;
+package com.lab_team_projects.my_walking_pet.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.my_walking_pet.R;
+import android.os.Bundle;
+
+import com.lab_team_projects.my_walking_pet.R;
 
 public class LoginActivity extends AppCompatActivity {
 
