@@ -6,10 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.lab_team_projects.my_walking_pet.databinding.ActivityMainBinding;
-
 
 public class MainActivity extends AppCompatActivity {
 

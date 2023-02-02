@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.my_walking_pet'
+    namespace 'com.lab_team_projects.my_walking_pet'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.my_walking_pet"
+        applicationId "com.lab_team_projects.my_walking_pet"
         minSdk 26
         targetSdk 33
         versionCode 1
