@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
-    
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 걸음 수 센서 사용권한 -->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" /> <!-- 배터리 최적화 예외 권한 요청 -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> <!-- 포그라운드 서비스 권한 요청 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- 인터넷 사용권한 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -14,7 +17,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyWalkingPet"
-        tools:targetApi="31" >
+        tools:targetApi="31">
+        <service
+            android:name=".walk_count.WalkCountForeGroundService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <activity
             android:name=".login.SignUpActivity"
             android:exported="false">
@@ -24,16 +32,14 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false" >
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
-
         </activity>
         <activity
             android:name=".login.LoginActivity"
-            android:exported="true" >
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
