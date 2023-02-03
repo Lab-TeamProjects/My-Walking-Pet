@@ -15,7 +15,6 @@ import com.lab_team_projects.my_walking_pet.walk_count.WalkCountForeGroundServic
 
 public class LoginActivity extends AppCompatActivity {
 
-    Intent serviceIntent;
     Button btnLogin = findViewById(R.id.btnLogin);
     TextView tvFindPW = findViewById(R.id.tvFindPW);
 
@@ -26,28 +25,14 @@ public class LoginActivity extends AppCompatActivity {
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                startService();
-                Toast.makeText(getApplicationContext(), "서비스 시작", Toast.LENGTH_SHORT).show();
-            }
+            public void onClick(View v) {   }
         });
 
         tvFindPW.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "서비스 중지", Toast.LENGTH_SHORT).show();
-                stopService();
-            }
+            public void onClick(View v) {   }
         });
     }
 
-    public void startService() {
-        serviceIntent = new Intent(this, WalkCountForeGroundService.class);
-        startService(serviceIntent);
-    }
 
-    public void stopService() {
-        serviceIntent = new Intent(this, WalkCountForeGroundService.class);
-        stopService(serviceIntent);
-    }
 }

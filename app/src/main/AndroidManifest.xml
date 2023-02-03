@@ -18,14 +18,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyWalkingPet"
         tools:targetApi="31">
+
         <service
             android:name=".walk_count.WalkCountForeGroundService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity
             android:name=".setting.SettingsActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_settings">
             <meta-data
                 android:name="android.app.lib_name"
@@ -40,29 +41,23 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".login.LoginActivity"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".login.LoginActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
         </activity>
     </application>
 
