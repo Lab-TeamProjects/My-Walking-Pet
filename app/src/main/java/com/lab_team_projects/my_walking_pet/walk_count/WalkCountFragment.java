@@ -1,5 +1,6 @@
 package com.lab_team_projects.my_walking_pet.walk_count;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.lab_team_projects.my_walking_pet.R;
@@ -29,10 +37,10 @@ public class WalkCountFragment extends Fragment {
     private final MonthFragment monthFragment = new MonthFragment();
     private final YearFragment yearFragment = new YearFragment();
 
+
     public WalkCountFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -40,8 +48,12 @@ public class WalkCountFragment extends Fragment {
 
         binding = FragmentWalkCountBinding.inflate(inflater, container, false);
 
-        List<Fragment> fragments = Arrays.asList(dayFragment, weekFragment, monthFragment, yearFragment);
+        /*
+         * 탭 별로 프래그먼트 전환
+         * 뷰페이저2, 어댑터 연동
+         * */
 
+        List<Fragment> fragments = Arrays.asList(dayFragment, weekFragment, monthFragment, yearFragment);
         FragmentPagerAdapter pagerAdapter = new FragmentPagerAdapter(requireActivity(), fragments);
         binding.viewPager2.setAdapter(pagerAdapter);
 
