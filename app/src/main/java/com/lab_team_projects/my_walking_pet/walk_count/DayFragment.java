@@ -60,6 +60,7 @@ public class DayFragment extends Fragment {
         pieChart.setHoleColor(Color.TRANSPARENT);
         pieChart.setHoleRadius(90f);
 
+
     }
 
 
