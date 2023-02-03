@@ -56,6 +56,9 @@ public class HomeFragment extends Fragment {
             Toast.makeText(requireContext(), "도움말 버튼", Toast.LENGTH_SHORT).show();
         });
 
+        binding.tvWalkCount.setOnClickListener(v->{
+            Navigation.findNavController(v).navigate(R.id.walkCountFragment, null);
+        });
 
 
         return binding.getRoot();
