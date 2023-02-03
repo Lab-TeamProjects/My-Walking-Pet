@@ -6,6 +6,39 @@
     android:layout_height="match_parent"
     tools:context=".login.SignUpActivity">
 
+    <com.google.android.material.appbar.AppBarLayout
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:liftOnScroll="true"
+        android:elevation="1dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            style="@style/Widget.MaterialComponents.Toolbar.Surface"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:titleTextAppearance="?attr/textAppearanceSubtitle1" >
+
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:background="@null"
+                android:src="@drawable/arrow_back"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="8pt"
+                android:text="회원가입" />
+
+        </com.google.android.material.appbar.MaterialToolbar>=
+    </com.google.android.material.appbar.AppBarLayout>
+
     <EditText
         android:id="@+id/tbID"
         android:layout_width="300dp"
@@ -20,6 +53,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tbPW"/>
+
     <EditText
         android:id="@+id/tbPW"
         android:layout_width="300dp"
@@ -33,6 +67,7 @@
         app:layout_constraintTop_toBottomOf="@id/tbID"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
     <EditText
         android:id="@+id/tbPWCheck"
         android:layout_width="300dp"
@@ -46,6 +81,33 @@
         app:layout_constraintTop_toBottomOf="@id/tbPW"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+    <EditText
+        android:id="@+id/tbNickName"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/input_id_pw"
+        android:ems="10"
+        android:hint="닉네임을 입력하세요"
+        android:inputType="text"
+        android:padding="5pt"
+        app:layout_constraintTop_toBottomOf="@id/tbPWCheck"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnSignUp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="200dp"
+        android:background="@drawable/input_id_pw"
+        android:text="회원가입"
+        android:textSize="8pt"
+        app:layout_constraintTop_toBottomOf="@id/tbNickName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
