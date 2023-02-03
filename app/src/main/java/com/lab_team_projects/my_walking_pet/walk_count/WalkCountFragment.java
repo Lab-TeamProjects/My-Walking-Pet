@@ -24,10 +24,10 @@ public class WalkCountFragment extends Fragment {
 
     private FragmentWalkCountBinding binding;
 
-    private DayFragment dayFragment = new DayFragment();
-    private WeekFragment weekFragment = new WeekFragment();
-    private MonthFragment monthFragment = new MonthFragment();
-    private YearFragment yearFragment = new YearFragment();
+    private final DayFragment dayFragment = new DayFragment();
+    private final WeekFragment weekFragment = new WeekFragment();
+    private final MonthFragment monthFragment = new MonthFragment();
+    private final YearFragment yearFragment = new YearFragment();
 
     public WalkCountFragment() {
         // Required empty public constructor
@@ -35,7 +35,7 @@ public class WalkCountFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         binding = FragmentWalkCountBinding.inflate(inflater, container, false);
