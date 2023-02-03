@@ -5,61 +5,65 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.lab_team_projects.my_walking_pet.R;
+import com.lab_team_projects.my_walking_pet.adapters.FragmentPagerAdapter;
+import com.lab_team_projects.my_walking_pet.databinding.FragmentWalkCountBinding;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link WalkCountFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class WalkCountFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private FragmentWalkCountBinding binding;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private DayFragment dayFragment = new DayFragment();
+    private WeekFragment weekFragment = new WeekFragment();
+    private MonthFragment monthFragment = new MonthFragment();
+    private YearFragment yearFragment = new YearFragment();
 
     public WalkCountFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment WalkCountFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static WalkCountFragment newInstance(String param1, String param2) {
-        WalkCountFragment fragment = new WalkCountFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_walk_count, container, false);
+
+        binding = FragmentWalkCountBinding.inflate(inflater, container, false);
+
+        List<Fragment> fragments = Arrays.asList(dayFragment, weekFragment, monthFragment, yearFragment);
+
+        FragmentPagerAdapter pagerAdapter = new FragmentPagerAdapter(requireActivity(), fragments);
+        binding.viewPager2.setAdapter(pagerAdapter);
+
+        new TabLayoutMediator(binding.tabs, binding.viewPager2, (tab, position) -> {
+            if (position == 0) {
+                tab.setText("1일");
+            } else if (position == 1) {
+                tab.setText("7일");
+            } else if (position == 2) {
+                tab.setText("1달");
+            } else if (position == 3) {
+                tab.setText("1년");
+            }
+        }).attach();
+
+        return binding.getRoot();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
+
 }
