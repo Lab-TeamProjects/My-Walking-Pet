@@ -20,7 +20,7 @@
             style="@style/Widget.MaterialComponents.Toolbar.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:titleTextAppearance="?attr/textAppearanceSubtitle1" >
+            app:titleTextAppearance="@style/Toolbar.TitleText" >
 
             <ImageButton
                 android:id="@+id/ibHome"

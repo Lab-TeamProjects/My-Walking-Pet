@@ -19,24 +19,15 @@
             style="@style/Widget.MaterialComponents.Toolbar.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:titleTextAppearance="?attr/textAppearanceSubtitle1" >
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:title="로그인"
+            app:titleCentered="true"
+            android:layout_gravity="start"
+            app:titleTextAppearance="@style/Toolbar.TitleText" >
 
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="1dp"
-                android:background="@null"
-                android:src="@drawable/arrow_back"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="8pt"
-                android:text="로그인" />
-
-        </com.google.android.material.appbar.MaterialToolbar>=
+        </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <Button
@@ -44,7 +35,7 @@
         android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_margin="20dp"
-        android:background="@drawable/input_id_pw"
+        android:background="@drawable/bg_corner_rectangle"
         android:text="로그인"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +46,7 @@
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_margin="100dp"
-        android:background="@drawable/input_id_pw"
+        android:background="@drawable/bg_corner_rectangle"
         android:ems="10"
         android:hint="ID를 입력하세요(E-mail 형식)"
         android:inputType="textEmailAddress"
@@ -70,7 +61,7 @@
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_margin="10dp"
-        android:background="@drawable/input_id_pw"
+        android:background="@drawable/bg_corner_rectangle"
         android:ems="10"
         android:hint="비밀번호를 입력하세요"
         android:inputType="textPassword"
