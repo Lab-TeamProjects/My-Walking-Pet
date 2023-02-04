@@ -3,9 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- 걸음 수 센서 사용권한 -->
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" /> <!-- 배터리 최적화 예외 권한 요청 -->
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> <!-- 포그라운드 서비스 권한 요청 -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- 인터넷 사용권한 -->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <!-- 배터리 최적화 예외 권한 요청 -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!-- 포그라운드 서비스 권한 요청 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- 인터넷 사용권한 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -25,7 +28,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".setting.SettingsActivity"
+            android:name=".setting.NoticeSettingActivity"
             android:exported="true"
             android:label="@string/title_activity_settings">
             <meta-data
