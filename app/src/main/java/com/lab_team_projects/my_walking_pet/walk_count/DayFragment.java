@@ -122,6 +122,7 @@ public class DayFragment extends Fragment {
     }
 
     private void setupBarChart() {
+        barChart.setScaleEnabled(false);
         barChart.setDrawGridBackground(false);
         barChart.setDrawBarShadow(false);
         barChart.setDrawBorders(false);
@@ -155,7 +156,6 @@ public class DayFragment extends Fragment {
     }
 
     private void loadBarData() {
-        barChart.setScaleEnabled(false);
         ArrayList<BarEntry> valueList = new ArrayList<>();
         String title = "걸음 수";
 
