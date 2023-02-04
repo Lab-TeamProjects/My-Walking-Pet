@@ -18,4 +18,13 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+
+    <string-array name="SETTING_LIST">
+        <item>프로필 설정</item>
+        <item>알림설정</item>
+        <item>문의하기</item>
+        <item>버그제보</item>
+        <item>로그아웃</item>
+    </string-array>
 </resources>

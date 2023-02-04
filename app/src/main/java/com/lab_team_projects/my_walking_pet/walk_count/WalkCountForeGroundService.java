@@ -7,16 +7,21 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
-import com.lab_team_projects.my_walking_pet.MainActivity;
 import com.lab_team_projects.my_walking_pet.R;
-import com.lab_team_projects.my_walking_pet.setting.SettingsActivity;
+import com.lab_team_projects.my_walking_pet.game.Walk;
+import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 
 public class WalkCountForeGroundService extends Service {
 
@@ -54,7 +59,7 @@ public class WalkCountForeGroundService extends Service {
         builder.setWhen(0);
         builder.setShowWhen(false);
 
-        Intent notificationIntent = new Intent(this, SettingsActivity.class);
+        Intent notificationIntent = new Intent(this, NoticeSettingActivity.class);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
         builder.setContentIntent(pendingIntent);
@@ -66,18 +71,30 @@ public class WalkCountForeGroundService extends Service {
         startForeground(1, notification);
     }
 
-    class BackgroundTask extends AsyncTask<Integer, String, Integer> {
+    class BackgroundTask extends AsyncTask<Integer, String, Integer> implements SensorEventListener {
+
+        private Walk walk = new Walk();
+        private SensorManager sensorManager;
+        private Sensor stepCountSensor;
 
         @Override
         protected Integer doInBackground(Integer... values) {
-            while (isCancelled() == false) {
-                try {
-                    println(value + "번째 실행중");
-                    Thread.sleep(1000);
-                    value++;
-                } catch (Exception ex) { }
+            sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+            stepCountSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            if(stepCountSensor == null) {
+                Toast.makeText(getApplicationContext(), "No Step Detect Sensor", Toast.LENGTH_SHORT).show();
             }
-            return value;
+            else {
+                while (isCancelled() == false) {
+                    try {
+                        println(value + "번째 실행중");
+                        Thread.sleep(1000);
+                        value++;
+                    } catch (Exception ex) { }
+                }
+                return value;
+            }
+            return null;
         }
 
         @Override
@@ -93,6 +110,19 @@ public class WalkCountForeGroundService extends Service {
         @Override
         protected void onCancelled() {
             println("onCancelled()");
+        }
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if(event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
+                walk.setCount(walk.getCount() + 1);
+                println("걸음 수 : " + walk.getCount());
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
         }
     }
 

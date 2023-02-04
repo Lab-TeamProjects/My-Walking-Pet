@@ -1,7 +1,27 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        app:title="포어그라운드 사용여부 설정">
+        app:title="알림설정">
+
+        <CheckBoxPreference
+            app:defaultValue="false"
+            app:key="ad_notice"
+            app:title="광고성 알림 받기" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="quest_complete_notice"
+            app:title="퀘스트 완료 알림 받기" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="hungry_notice"
+            app:title="상호작용이 필요할 때 알림 받기" />
+
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="goal_notice"
+            app:title="목표 걸음 수 달성 알림 받기" />
 
         <SwitchPreferenceCompat
             app:defaultValue="false"
@@ -9,5 +29,4 @@
             app:title="포어그라운드 사용여부 설정" />
 
     </PreferenceCategory>
-
 </PreferenceScreen>
