@@ -52,6 +52,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         * 매니저 리스너가 등록이 안되어 있었음
         * 그리고 널이면 넣는다고 되어있었는데
         * 널이 아닐때 넣어야하는게 맞나봄
+        *
         * */
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
