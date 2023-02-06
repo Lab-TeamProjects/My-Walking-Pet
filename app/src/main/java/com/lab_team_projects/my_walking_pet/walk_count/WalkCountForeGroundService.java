@@ -23,12 +23,18 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.game.Walk;
 import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 
-public class WalkCountForeGroundService extends Service {
+public class WalkCountForeGroundService extends Service implements SensorEventListener {
 
     public BackgroundTask task;
     public int value = 0;
+    private final Walk walk = new Walk();
+
+
+    SensorManager sensorManager;
+    Sensor stepCounterSensor;
 
     public WalkCountForeGroundService() {
+        // 빈 생성자
     }
 
     @Override
@@ -36,14 +42,37 @@ public class WalkCountForeGroundService extends Service {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
+
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public void onCreate() {
+        super.onCreate();
+
+        /*
+        * 수정 부분
+        * 매니저 리스너가 등록이 안되어 있었음
+        * 그리고 널이면 넣는다고 되어있었는데
+        * 널이 아닐때 넣어야하는게 맞나봄
+        * */
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
+        if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
+            stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+        }
+
         task = new BackgroundTask();
         task.execute();
 
         initializeNotification();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
         return START_NOT_STICKY;
     }
+
 
     public void initializeNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1");
@@ -71,30 +100,47 @@ public class WalkCountForeGroundService extends Service {
         startForeground(1, notification);
     }
 
-    class BackgroundTask extends AsyncTask<Integer, String, Integer> implements SensorEventListener {
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if(event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
+            walk.setCount(walk.getCount() + 1);
+            println("걸음 수 : " + walk.getCount());
+        }
+        Toast.makeText(getApplicationContext(), "넌 분명 걸었다", Toast.LENGTH_SHORT).show();
+        println("ㅁㄴㅇ");
+    }
 
-        private Walk walk = new Walk();
-        private SensorManager sensorManager;
-        private Sensor stepCountSensor;
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("ForegroundService", "onDestroy");
+        task.cancel(true);
+    }
+
+    public void println(String msg) {
+        Log.d("Foreground", msg);
+    }
+
+
+    // 쓰레드
+    class BackgroundTask extends AsyncTask<Integer, String, Integer> {
 
         @Override
         protected Integer doInBackground(Integer... values) {
-            sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-            stepCountSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-            if(stepCountSensor == null) {
-                Toast.makeText(getApplicationContext(), "No Step Detect Sensor", Toast.LENGTH_SHORT).show();
+
+            while (isCancelled() == false) {
+                try {
+                    println(value + "번째 실행중");
+                    Thread.sleep(1000);
+                    value++;
+                } catch (Exception ex) { }
             }
-            else {
-                while (isCancelled() == false) {
-                    try {
-                        println(value + "번째 실행중");
-                        Thread.sleep(1000);
-                        value++;
-                    } catch (Exception ex) { }
-                }
-                return value;
-            }
-            return null;
+            return value;
+
         }
 
         @Override
@@ -112,28 +158,6 @@ public class WalkCountForeGroundService extends Service {
             println("onCancelled()");
         }
 
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if(event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
-                walk.setCount(walk.getCount() + 1);
-                println("걸음 수 : " + walk.getCount());
-            }
-        }
 
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("ForegroundService", "onDestroy");
-        task.cancel(true);
-    }
-
-    public void println(String msg) {
-        Log.d("Foreground", msg);
     }
 }
