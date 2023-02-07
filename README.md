@@ -7,10 +7,10 @@
 #### ⏰ 개발 기간
     23.02.01~
 #### 👥 멤버 구성 및 역할
-    팀장 - FrontEnd : 장용환
-    팀원 - FrontEnd : 김주영
-    팀원 - BackEnd : 박예진
-    팀원 - Design : 김민경
+    팀장 : 장용환 - FrontEnd 
+    팀원 : 김주영 - FrontEnd 
+    팀원 : 박예진 - BackEnd 
+    팀원 : 김민경 - Design 
 #### 🧰 개발 환경
     Language
         Application : Java, Xml
