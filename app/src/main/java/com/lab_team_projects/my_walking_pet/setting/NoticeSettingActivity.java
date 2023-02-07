@@ -53,6 +53,7 @@ public class NoticeSettingActivity extends AppCompatActivity {
                     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                         if(key.equals(SETTING_SENSOR_BG)) {
                             if (sharedPreferences.getBoolean(key, true)) {
+
                                 startService();
                             }
                             else {
