@@ -53,7 +53,6 @@ public class NoticeSettingActivity extends AppCompatActivity {
                     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                         if(key.equals(SETTING_SENSOR_BG)) {
                             if (sharedPreferences.getBoolean(key, true)) {
-
                                 startService();
                             }
                             else {
@@ -62,7 +61,6 @@ public class NoticeSettingActivity extends AppCompatActivity {
                         }
                     }
                 };
-
         public void startService() {
             // 서비스 시작 함수
             Intent serviceIntent;
@@ -76,6 +74,7 @@ public class NoticeSettingActivity extends AppCompatActivity {
             serviceIntent = new Intent(getContext(), WalkCountForeGroundService.class);
             requireContext().stopService(serviceIntent);
         }
+
     }
 
 
