@@ -7,9 +7,15 @@
 #### ⏰ 개발 기간
     23.02.01~
 #### 👥 멤버 구성 및 역할
-    팀장 : 장용환
-    팀원 : 김주영
-    팀원 : 박예진
+    팀장 - FrontEnd : 장용환
+    팀원 - FrontEnd : 김주영
+    팀원 - BackEnd : 박예진
+    팀원 - Design : 김민경
 #### 🧰 개발 환경
-    Language : 
-    IDE : 
+    Language
+        Application : Java, Xml
+        Server : Python
+        Database : Mysql
+    IDE 
+        AndroidStudio
+        VisualStudioCode
