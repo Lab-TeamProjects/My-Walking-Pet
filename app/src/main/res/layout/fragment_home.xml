@@ -109,6 +109,80 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabInteraction"
+            android:layout_marginStart="30dp"
+            android:layout_marginBottom="50dp"
+            android:backgroundTint="@color/dark_gray"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:textAlignment="center"
+            android:text="상호작용"/>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabWater"
+            android:visibility="invisible"
+            app:layout_constraintCircle="@id/fabInteraction"
+            app:layout_constraintCircleRadius="100dp"
+            app:layout_constraintCircleAngle="340"
+            android:backgroundTint="@color/dark_gray"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:textAlignment="center"
+            android:text="물"/>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabFood"
+            android:visibility="invisible"
+            android:backgroundTint="@color/dark_gray"
+            app:layout_constraintCircle="@id/fabInteraction"
+            app:layout_constraintCircleRadius="100dp"
+            app:layout_constraintCircleAngle="25"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:textAlignment="center"
+            android:text="밥"/>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabWash"
+            android:visibility="invisible"
+            app:layout_constraintCircle="@id/fabInteraction"
+            app:layout_constraintCircleRadius="100dp"
+            app:layout_constraintCircleAngle="70"
+            android:backgroundTint="@color/dark_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:borderWidth="0dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:textAlignment="center"
+            android:text="씻기"/>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabclothes"
+            android:visibility="invisible"
+            app:layout_constraintCircle="@id/fabInteraction"
+            app:layout_constraintCircleRadius="100dp"
+            app:layout_constraintCircleAngle="115"
+            android:backgroundTint="@color/dark_gray"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:textAlignment="center"
+            android:text="옷"/>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
