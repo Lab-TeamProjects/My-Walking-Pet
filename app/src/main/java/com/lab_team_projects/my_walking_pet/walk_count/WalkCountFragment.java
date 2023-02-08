@@ -1,6 +1,5 @@
 package com.lab_team_projects.my_walking_pet.walk_count;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,23 +7,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.adapters.FragmentPagerAdapter;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentWalkCountBinding;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

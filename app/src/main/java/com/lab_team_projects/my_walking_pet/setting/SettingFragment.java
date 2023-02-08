@@ -7,17 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.ListFragment;
 
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentSettingBinding;
-
-import java.util.List;
 
 public class SettingFragment extends Fragment {
 
@@ -41,13 +36,16 @@ public class SettingFragment extends Fragment {
         binding.lvSettingList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent;
                 Toast.makeText(getActivity(), SETTING_LIST[position], Toast.LENGTH_SHORT).show();
                 switch (position) {
                     case 0:
                         //To-Do : 사용자 정보 변경
+                        intent = new Intent(requireContext(), ProfileSettingActivity.class);
+                        startActivity(intent);
                         break;
                     case 1:
-                        Intent intent = new Intent(requireContext(), NoticeSettingActivity.class);
+                        intent = new Intent(requireContext(), NoticeSettingActivity.class);
                         startActivity(intent);
                         break;
                     case 2:
@@ -63,8 +61,6 @@ public class SettingFragment extends Fragment {
                 }
             }
         });
-
-
 
         return binding.getRoot();
     }
