@@ -60,7 +60,6 @@ public class NoticeSettingActivity extends AppCompatActivity {
                         }
                     }
                 };
-
         public void startService() {
             // 서비스 시작 함수
             Intent serviceIntent;
@@ -74,6 +73,7 @@ public class NoticeSettingActivity extends AppCompatActivity {
             serviceIntent = new Intent(getContext(), WalkCountForeGroundService.class);
             requireContext().stopService(serviceIntent);
         }
+
     }
 
 
