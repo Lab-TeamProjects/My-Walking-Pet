@@ -26,6 +26,14 @@
         android:theme="@style/Theme.MyWalkingPet"
         tools:targetApi="31">
         <activity
+            android:name=".help.HelpActivity"
+            android:exported="false"
+            android:theme="@style/Transparent">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".setting.ProfileSettingActivity"
             android:exported="false">
             <meta-data

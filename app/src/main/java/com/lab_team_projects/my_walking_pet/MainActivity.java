@@ -56,49 +56,8 @@ public class MainActivity extends AppCompatActivity {
             onBackPressed();
         });
 
-        /*walkSensor.sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        walkSensor.sensorStepCounter = walkSensor.sensorManager.getDefaultSensor((Sensor.TYPE_STEP_COUNTER));
-        if(walkSensor.sensorStepCounter == null) {
-            Toast.makeText(this, "No Step Counter Sensor", Toast.LENGTH_SHORT).show();
-        }*/
+
     }
-
-    /*@Override
-    protected void onResume() {
-        super.onResume();
-        walkSensor.sensorManager.registerListener((SensorEventListener) this, walkSensor.sensorStepCounter,walkSensor.sensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //다른 앱을 띄워놓아도 센서가 계속 동작
-        walkSensor.sensorManager.registerListener((SensorEventListener) this, walkSensor.sensorStepCounter,walkSensor.sensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-
-    public class WalkSensor implements SensorEventListener {
-        //걸음 센서 클래스
-        public SensorManager sensorManager;
-        public Sensor sensorStepCounter;
-        public Walk walk = new Walk();
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            //센서값이 변화할 때, count 수 증가시키는 함수
-            switch (event.sensor.getType()) {
-                case Sensor.TYPE_STEP_COUNTER:
-                    walk.setCount(walk.getCount() + 1);
-                    break;
-            }
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-        }
-    }*/
-
 
 }
 
