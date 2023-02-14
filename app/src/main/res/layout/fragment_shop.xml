@@ -3,7 +3,260 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".shop.ShopFragment">
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:padding="14dp"
+                android:id="@+id/tvMoney"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="00000000 걸음"/>
+
+            <TextView
+                android:padding="14dp"
+                android:id="@+id/tvFood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tvMoney"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="사료"/>
+
+
+            <TableLayout
+                android:stretchColumns="*"
+                android:id="@+id/tlFood"
+                app:layout_constraintTop_toBottomOf="@id/tvFood"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:minHeight="100dp">
+                    <Button
+                        android:id="@+id/btnFoodA"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+
+                </TableRow>
+
+                <TableRow
+                    android:minHeight="100dp">
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+
+                </TableRow>
+            </TableLayout>
+
+            <View
+                android:id="@+id/viewDividerFood"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/dark_gray"
+                app:layout_constraintTop_toBottomOf="@id/tlFood"
+                android:layout_margin="14dp" />
+
+            <TextView
+                android:padding="14dp"
+                android:id="@+id/tvSnack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/viewDividerFood"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="간식"/>
+
+
+            <TableLayout
+                android:stretchColumns="*"
+                android:id="@+id/tlSnack"
+                app:layout_constraintTop_toBottomOf="@id/tvSnack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:minHeight="100dp">
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+
+                </TableRow>
+
+                <TableRow
+                    android:minHeight="100dp">
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+
+                </TableRow>
+            </TableLayout>
+
+
+
+            <View
+                android:id="@+id/viewDividerSnack"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/dark_gray"
+                app:layout_constraintTop_toBottomOf="@id/tlSnack"
+                android:layout_margin="14dp" />
+
+            <TextView
+                android:padding="14dp"
+                android:id="@+id/tvClean"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/viewDividerSnack"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="청결 용품"/>
+
+
+            <TableLayout
+                android:stretchColumns="*"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/tlClean"
+                app:layout_constraintTop_toBottomOf="@id/tvClean"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:minHeight="100dp">
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+
+                </TableRow>
+
+                <TableRow
+                    android:minHeight="100dp">
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" />
+
+
+                </TableRow>
+            </TableLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </FrameLayout>

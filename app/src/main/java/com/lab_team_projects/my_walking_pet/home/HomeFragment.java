@@ -31,6 +31,8 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
+    private boolean isInteractionBtnClick = false;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -73,7 +75,27 @@ public class HomeFragment extends Fragment {
         });
 
 
+        binding.fabInteraction.setOnClickListener(v->{
+            isInteractionBtnClick = !isInteractionBtnClick;
+            clickInteractionBtn(isInteractionBtnClick);
+        });
+
+
         return binding.getRoot();
+    }
+
+    private void clickInteractionBtn(boolean isClick){
+        if(isClick) {
+            binding.fabWater.setVisibility(View.VISIBLE);
+            binding.fabFood.setVisibility(View.VISIBLE);
+            binding.fabWash.setVisibility(View.VISIBLE);
+            binding.fabclothes.setVisibility(View.VISIBLE);
+        } else {
+            binding.fabWater.setVisibility(View.INVISIBLE);
+            binding.fabFood.setVisibility(View.INVISIBLE);
+            binding.fabWash.setVisibility(View.INVISIBLE);
+            binding.fabclothes.setVisibility(View.INVISIBLE);
+        }
     }
 
 
