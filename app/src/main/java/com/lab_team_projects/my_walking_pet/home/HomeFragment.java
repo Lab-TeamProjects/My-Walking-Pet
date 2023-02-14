@@ -1,6 +1,7 @@
 package com.lab_team_projects.my_walking_pet.home;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -24,6 +25,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.lab_team_projects.my_walking_pet.MainActivity;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
+import com.lab_team_projects.my_walking_pet.help.HelpActivity;
 
 import java.util.ArrayList;
 
@@ -67,6 +69,7 @@ public class HomeFragment extends Fragment {
         });
 
         binding.ibHelp.setOnClickListener(v->{
+            startActivity(new Intent(requireContext(), HelpActivity.class));
             Toast.makeText(requireContext(), "도움말 버튼", Toast.LENGTH_SHORT).show();
         });
 

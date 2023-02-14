@@ -24,7 +24,7 @@
             app:titleCentered="true"
             app:titleTextAppearance="@style/Toolbar.TitleText" >
 
-        </com.google.android.material.appbar.MaterialToolbar>=
+        </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <EditText
