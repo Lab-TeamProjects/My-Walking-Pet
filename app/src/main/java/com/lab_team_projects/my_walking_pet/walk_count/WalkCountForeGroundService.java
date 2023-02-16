@@ -23,7 +23,8 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.game.Walk;
 import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 
-public class WalkCountForeGroundService extends Service {
+public class WalkCountForeGroundService extends Service implements SensorEventListener {
+
 
     public BackgroundTask task;
     public int value = 0;
@@ -48,12 +49,12 @@ public class WalkCountForeGroundService extends Service {
         super.onCreate();
 
         /*
-        * 수정 부분
-        * 매니저 리스너가 등록이 안되어 있었음
-        * 그리고 널이면 넣는다고 되어있었는데
-        * 널이 아닐때 넣어야하는게 맞나봄
-        *
-        * */
+         * 수정 부분
+         * 매니저 리스너가 등록이 안되어 있었음
+         * 그리고 널이면 넣는다고 되어있었는데
+         * 널이 아닐때 넣어야하는게 맞나봄
+         *
+         * */
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 

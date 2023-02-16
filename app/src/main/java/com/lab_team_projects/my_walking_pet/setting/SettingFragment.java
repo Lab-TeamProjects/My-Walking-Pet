@@ -40,7 +40,6 @@ public class SettingFragment extends Fragment {
                 Toast.makeText(getActivity(), SETTING_LIST[position], Toast.LENGTH_SHORT).show();
                 switch (position) {
                     case 0:
-                        //To-Do : 사용자 정보 변경
                         intent = new Intent(requireContext(), ProfileSettingActivity.class);
                         startActivity(intent);
                         break;
