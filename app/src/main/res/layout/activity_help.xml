@@ -6,6 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".help.HelpActivity"
-    android:background="@color/transparent">
+    android:background="@color/translucent">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

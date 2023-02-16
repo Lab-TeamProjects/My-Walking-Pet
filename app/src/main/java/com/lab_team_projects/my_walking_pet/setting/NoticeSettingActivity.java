@@ -26,7 +26,12 @@ public class NoticeSettingActivity extends AppCompatActivity {
         binding = SettingsActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        binding.btnArrowBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         if (savedInstanceState == null) {
             getSupportFragmentManager()
@@ -61,7 +66,6 @@ public class NoticeSettingActivity extends AppCompatActivity {
                     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                         if(key.equals(SETTING_SENSOR_BG)) {
                             if (sharedPreferences.getBoolean(key, true)) {
-
                                 startService();
                             }
                             else {
