@@ -2,6 +2,7 @@ package com.lab_team_projects.my_walking_pet.walk_count;
 
 import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,14 +32,18 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.renderer.PieChartRenderer;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.Utils;
 import com.lab_team_projects.my_walking_pet.R;
+import com.lab_team_projects.my_walking_pet.databinding.CustomWalkViewDialogBinding;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentDayBinding;
 
 import java.util.ArrayList;
@@ -67,6 +73,24 @@ public class DayFragment extends Fragment {
 
         setupBarChart();
         loadBarData();
+
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                CustomWalkViewDialog dialog = new CustomWalkViewDialog(requireContext());
+                dialog.setDialogCancelListener(() -> {
+                    barChart.highlightValue(null);
+                });
+
+
+                dialog.show();
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
 
         return binding.getRoot();
     }
