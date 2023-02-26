@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".setting.ProfileSettingActivity">
+    tools:context=".setting.ProfileSettingActivity"
+    android:background="@drawable/bg_sub_background">
 
     <com.google.android.material.appbar.AppBarLayout
         app:layout_constraintTop_toTopOf="parent"
@@ -12,17 +13,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:liftOnScroll="true"
-        android:elevation="1dp">
+        android:elevation="1dp"
+        android:background="@color/transparent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             style="@style/Widget.MaterialComponents.Toolbar.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="?attr/homeAsUpIndicator"
             app:title="프로필 설정"
             app:titleCentered="true"
-            app:titleTextAppearance="@style/Toolbar.TitleText" >
+            app:titleTextAppearance="@style/Toolbar.TitleText"
+            android:background="@color/transparent">
 
             <ImageButton
                 android:id="@+id/btnSaveProfile"
@@ -34,6 +36,17 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
+
+    <ImageButton
+        android:id="@+id/btnArrowBack"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_baseline_arrow_back_pink"
+        style="@style/Widget.MaterialComponents.Toolbar.Surface"
+        android:layout_margin="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:scaleType="fitCenter"/>
 
     <ScrollView
         android:id="@+id/svProfileView"
