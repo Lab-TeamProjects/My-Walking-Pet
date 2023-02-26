@@ -29,6 +29,11 @@ public class ProfileSettingActivity extends AppCompatActivity {
         binding = ActivityProfileSettingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        binding.btnArrowBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 }
