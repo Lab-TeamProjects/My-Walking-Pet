@@ -3,184 +3,198 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.lab_team_projects.my_walking_pet.home.HomeFragment">
+    tools:context="com.lab_team_projects.my_walking_pet.home.HomeFragment"
+    android:background="@drawable/bg_main_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_margin="10dp"
-            android:id="@+id/tvMoney"
-            android:textSize="20sp"
-            app:layout_constraintTop_toTopOf="parent"
+        <ImageView
+            android:id="@+id/ivCoin"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/ic_baseline_footprint_coin"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvMoney"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="00000 걸음(돈)"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="2dp"
+            android:text="000000000"
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@id/ivCoin"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:layout_margin="10dp"
             android:id="@+id/ibAR"
-            android:scaleType="fitXY"
-            android:background="@null"
-            android:src="@drawable/ic_baseline_photo_camera_24"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_height="40dp"
-            android:layout_width="40dp"/>
-
-        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:id="@+id/ibSetting"
-            android:scaleType="fitXY"
             android:background="@null"
-            android:src="@drawable/ic_baseline_settings_24"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/ibAR"
-            android:layout_height="40dp"
-            android:layout_width="40dp"/>
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_baseline_camera_yellow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
+            android:id="@+id/ibSetting"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_baseline_setting_yellow"
+            app:layout_constraintEnd_toStartOf="@id/ibAR"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/ibMission"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
-            android:scaleType="fitXY"
             android:background="@null"
-            android:id="@+id/ibMission"
+            android:scaleType="fitXY"
             android:src="@drawable/ic_baseline_lightbulb_24"
-            app:layout_constraintTop_toBottomOf="@id/tvMoney"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_height="40dp"
-            android:layout_width="40dp"/>
+            app:layout_constraintTop_toBottomOf="@id/tvMoney" />
 
         <ImageButton
-            android:layout_margin="5dp"
-            android:scaleType="fitXY"
-            android:background="@null"
             android:id="@+id/ibCollection"
-            android:src="@drawable/ic_baseline_menu_book_24"
-            app:layout_constraintTop_toBottomOf="@id/tvMoney"
-            app:layout_constraintStart_toEndOf="@id/ibMission"
+            android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_width="40dp"/>
-
-        <ImageButton
             android:layout_margin="5dp"
-            android:scaleType="fitXY"
             android:background="@null"
-            android:id="@+id/ibHelp"
-            android:src="@drawable/ic_baseline_question_mark_24"
-            app:layout_constraintTop_toBottomOf="@id/tvMoney"
-            app:layout_constraintStart_toEndOf="@id/ibCollection"
-            android:layout_height="40dp"
-            android:layout_width="40dp"/>
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_baseline_menu_book_24"
+            app:layout_constraintStart_toEndOf="@id/ibMission"
+            app:layout_constraintTop_toBottomOf="@id/tvMoney" />
 
         <ImageButton
-            android:layout_margin="15dp"
-            android:scaleType="fitXY"
+            android:id="@+id/ibHelp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
             android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_baseline_question_mark_24"
+            app:layout_constraintStart_toEndOf="@id/ibCollection"
+            app:layout_constraintTop_toBottomOf="@id/tvMoney" />
+
+        <ImageButton
             android:id="@+id/ibShop"
-            android:src="@drawable/ic_baseline_shopping_cart_24"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="5dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_baseline_shop_yellow"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_height="60dp"
-            android:layout_width="60dp"/>
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/tvWalkCount"
-            android:textSize="18sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="400dp"
             android:text="20000걸음"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textSize="22sp"
             android:text="동물 이름"
-            app:layout_constraintTop_toBottomOf="@id/tvWalkCount"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/tvWalkCount" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fabInteraction"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginStart="30dp"
             android:layout_marginBottom="50dp"
             android:backgroundTint="@color/dark_gray"
+            android:text="상호작용"
+            android:textAlignment="center"
             app:borderWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:textAlignment="center"
-            android:text="상호작용"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fabWater"
-            android:visibility="invisible"
-            app:layout_constraintCircle="@id/fabInteraction"
-            app:layout_constraintCircleRadius="100dp"
-            app:layout_constraintCircleAngle="340"
-            android:backgroundTint="@color/dark_gray"
-            app:borderWidth="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:backgroundTint="@color/dark_gray"
+            android:text="물"
             android:textAlignment="center"
-            android:text="물"/>
+            android:visibility="invisible"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintCircle="@id/fabInteraction"
+            app:layout_constraintCircleAngle="340"
+            app:layout_constraintCircleRadius="100dp"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fabFood"
-            android:visibility="invisible"
-            android:backgroundTint="@color/dark_gray"
-            app:layout_constraintCircle="@id/fabInteraction"
-            app:layout_constraintCircleRadius="100dp"
-            app:layout_constraintCircleAngle="25"
-            app:borderWidth="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:backgroundTint="@color/dark_gray"
+            android:text="밥"
             android:textAlignment="center"
-            android:text="밥"/>
+            android:visibility="invisible"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintCircle="@id/fabInteraction"
+            app:layout_constraintCircleAngle="25"
+            app:layout_constraintCircleRadius="100dp"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fabWash"
-            android:visibility="invisible"
-            app:layout_constraintCircle="@id/fabInteraction"
-            app:layout_constraintCircleRadius="100dp"
-            app:layout_constraintCircleAngle="70"
-            android:backgroundTint="@color/dark_gray"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:borderWidth="0dp"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:backgroundTint="@color/dark_gray"
+            android:text="씻기"
             android:textAlignment="center"
-            android:text="씻기"/>
+            android:visibility="invisible"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintCircle="@id/fabInteraction"
+            app:layout_constraintCircleAngle="70"
+            app:layout_constraintCircleRadius="100dp"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fabclothes"
-            android:visibility="invisible"
-            app:layout_constraintCircle="@id/fabInteraction"
-            app:layout_constraintCircleRadius="100dp"
-            app:layout_constraintCircleAngle="115"
-            android:backgroundTint="@color/dark_gray"
-            app:borderWidth="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:backgroundTint="@color/dark_gray"
+            android:text="옷"
             android:textAlignment="center"
-            android:text="옷"/>
+            android:visibility="invisible"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintCircle="@id/fabInteraction"
+            app:layout_constraintCircleAngle="115"
+            app:layout_constraintCircleRadius="100dp"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
