@@ -14,4 +14,11 @@
         <!-- Customize your theme here. -->
         <item name="android:windowLightStatusBar">true</item>
     </style>
+
+    <style name="NumberPickerStyle"> <!-- 넘버피커 스타일 -->
+        <!-- 글자 크기 -->
+        <item name="android:textSize">20sp</item>
+        <!-- 색상변경 -->
+        <item name="android:textColorPrimary"> @color/dark_gray </item>
+    </style>
 </resources>
