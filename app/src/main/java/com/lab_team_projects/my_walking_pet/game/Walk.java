@@ -9,31 +9,39 @@ import android.hardware.SensorManager;
 import java.util.Date;
 
 public class Walk {
-    private Integer count = 0;
-    private Date date;
-    private Integer goal;
+    private int count = 0;
+    private String date;
+    private int goal;
+    private int min;
+    private int sec;
+    private double kcal;
+    private double km;
 
-    public Date getDate() {
+
+    public String getDate() {
         return date;
     }
 
-    public Integer getCount() {
+    public int getCount() {
         return count;
     }
 
-    public Integer getGoal() {
+    public int getGoal() {
         return goal;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(int count) {
         this.count = count;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public void setGoal(Integer goal) {
+    public void setGoal(int goal) {
         this.goal = goal;
     }
+
+
+
 }

@@ -63,6 +63,27 @@ public class DayFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // 기초 대사량
+        double bmr;
+        int age = 24;
+        double weight = 80.0;
+        double height = 177.7;
+        int gender = 0;
+        int m, s;
+        // 걷기로 인한 칼로리 소모량
+        int kcal;
+        double km;
+
+        if (gender == 0) {
+            bmr = 65 + (13.7 * weight) + (5 * height) - (6.8 * age);
+        } else {
+            bmr = 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
+        }
+
+
+
+
         // Inflate the layout for this fragment
         binding = FragmentDayBinding.inflate(inflater, container, false);
         pieChart = binding.pieChart;

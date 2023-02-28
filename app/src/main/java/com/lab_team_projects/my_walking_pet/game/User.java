@@ -5,4 +5,7 @@ public class User {
     private String password;
     private String nickName;
     private String uid;
+    private int weight;
+    private int height;
+
 }
