@@ -27,11 +27,6 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
 
         binding.btnFoodA.setOnClickListener(this);
 
-
-
-
-
-
         return binding.getRoot();
     }
 

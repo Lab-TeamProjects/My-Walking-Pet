@@ -3,6 +3,7 @@ package com.lab_team_projects.my_walking_pet.setting;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
@@ -19,6 +20,7 @@ import com.lab_team_projects.my_walking_pet.walk_count.WalkCountForeGroundServic
 public class NoticeSettingActivity extends AppCompatActivity {
 
     SettingsActivityBinding binding;
+    static WalkCountForeGroundService service = new WalkCountForeGroundService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +53,29 @@ public class NoticeSettingActivity extends AppCompatActivity {
 
         private static final String SETTING_SENSOR_BG = "foreground_use";
 
+        private String rootKey = "";
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
+            this.rootKey = rootKey;
+            prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
-            prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            if(!service.isRunning()) {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean(SETTING_SENSOR_BG, false);
+                editor.apply();
+            }
 
             prefs.registerOnSharedPreferenceChangeListener(prefListener);
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            setPreferencesFromResource(R.xml.root_preferences, rootKey);
+
+            prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
         }
 
         SharedPreferences.OnSharedPreferenceChangeListener prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -77,14 +94,14 @@ public class NoticeSettingActivity extends AppCompatActivity {
         public void startService() {
             // 서비스 시작 함수
             Intent serviceIntent;
-            serviceIntent = new Intent(getContext(), WalkCountForeGroundService.class);
-            requireContext().startService(serviceIntent);
+            serviceIntent = new Intent(getContext(), service.getClass());
+            requireActivity().startService(serviceIntent);
         }
 
         public void stopService() {
             // 서비스 종료 함수
             Intent serviceIntent;
-            serviceIntent = new Intent(getContext(), WalkCountForeGroundService.class);
+            serviceIntent = new Intent(getContext(), service.getClass());
             requireContext().stopService(serviceIntent);
         }
 

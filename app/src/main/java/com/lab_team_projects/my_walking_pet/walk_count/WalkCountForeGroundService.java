@@ -26,9 +26,10 @@ import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 public class WalkCountForeGroundService extends Service implements SensorEventListener {
 
 
-    public BackgroundTask task;
+    public BackgroundTask task = new BackgroundTask();;
     public int value = 0;
     private final Walk walk = new Walk();
+
 
 
     SensorManager sensorManager;
@@ -36,6 +37,11 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
     public WalkCountForeGroundService() {
         // 빈 생성자
+
+    }
+
+    public boolean isRunning(){
+        return task.getStatus() == AsyncTask.Status.RUNNING;
     }
 
     @Override
@@ -55,7 +61,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
          * 널이 아닐때 넣어야하는게 맞나봄
          *
          * */
-
+        Log.d("Foreground", "시작되긴 하니?");
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
@@ -64,7 +70,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
         }
 
-        task = new BackgroundTask();
+
         task.execute();
 
         initializeNotification();
@@ -102,6 +108,10 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         startForeground(1, notification);
     }
 
+    /*public boolean isRunning() {
+        //if
+    }*/
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
@@ -116,6 +126,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

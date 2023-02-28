@@ -29,7 +29,7 @@ public class UserInfoEntryActivity extends AppCompatActivity {
 
     private PermissionsCheckHelper pch;
     private ImageView ivUserProfile;
-    private NumberPicker npUserWeight;
+    private NumberPicker npUserWeight, npUserHeight;
     private DatePicker dpUserBirthday;
     private RadioGroup rgUserGender;
 
@@ -40,12 +40,17 @@ public class UserInfoEntryActivity extends AppCompatActivity {
 
         ivUserProfile = findViewById(R.id.ivUserProfile);
         npUserWeight = findViewById(R.id.npUserWeight);
+        npUserHeight = findViewById(R.id.npUserHeight);
         dpUserBirthday = findViewById(R.id.dpUserBirthday);
         rgUserGender = findViewById(R.id.rgGender);
 
         npUserWeight.setMaxValue(300);
         npUserWeight.setMinValue(10);
         npUserWeight.setValue(60);
+
+        npUserHeight.setMaxValue(300);
+        npUserHeight.setMinValue(10);
+        npUserHeight.setValue(170);
 
         rgUserGender.check(R.id.rbMan);
 

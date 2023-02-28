@@ -126,31 +126,62 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginTop="20dp">
-
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="몸무게"
-                        android:textSize="19sp"
-                        app:layout_constraintStart_toStartOf="@id/etNickName"
-                        app:layout_constraintTop_toBottomOf="@id/etNickName"
-                        android:layout_weight="1"/>
+                        android:orientation="horizontal"
+                        android:layout_weight="1">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="몸무게"
+                            android:textSize="19sp"
+                            app:layout_constraintStart_toStartOf="@id/etNickName"
+                            app:layout_constraintTop_toBottomOf="@id/etNickName" />
 
-                    <NumberPicker
-                        android:id="@+id/npUserWeight"
-                        android:layout_width="wrap_content"
-                        android:layout_height="100dp"
-                        android:selectionDividerHeight="0dp"
-                        android:theme="@style/NumberPickerStyle"
-                        android:layout_weight="0.5"/>
+                        <NumberPicker
+                            android:id="@+id/npUserWeight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="100dp"
+                            android:selectionDividerHeight="0dp"
+                            android:theme="@style/NumberPickerStyle"/>
 
-                    <TextView
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Kg"
+                            android:textSize="19sp"
+                            android:layout_gravity="center_vertical"/>
+                    </LinearLayout>
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Kg"
-                        android:textSize="19sp"
-                        android:layout_weight="0.5"
-                        android:layout_gravity="center_vertical"/>
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:gravity="right">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="키"
+                            android:textSize="19sp"
+                            app:layout_constraintStart_toStartOf="@id/etNickName"
+                            app:layout_constraintTop_toBottomOf="@id/etNickName" />
+
+                        <NumberPicker
+                            android:id="@+id/npUserHeight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="100dp"
+                            android:selectionDividerHeight="0dp"
+                            android:theme="@style/NumberPickerStyle"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="cm"
+                            android:textSize="19sp"
+                            android:layout_gravity="center_vertical"/>
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <TextView

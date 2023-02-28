@@ -44,6 +44,7 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -72,7 +73,7 @@
 
         <service
             android:name=".walk_count.WalkCountForeGroundService"
-            android:enabled="false"
+            android:enabled="true"
             android:exported="true" />
 
         <activity
