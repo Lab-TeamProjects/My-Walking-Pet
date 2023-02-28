@@ -45,9 +45,12 @@ import com.github.mikephil.charting.utils.Utils;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.CustomWalkViewDialogBinding;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentDayBinding;
+import com.lab_team_projects.my_walking_pet.game.User;
+import com.lab_team_projects.my_walking_pet.game.Walk;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class DayFragment extends Fragment {
 
@@ -56,6 +59,9 @@ public class DayFragment extends Fragment {
     private PieChart pieChart;
     private BarChart barChart;
 
+
+    int goalCount = 123, nowCount = 4000;
+
     public DayFragment() {
         // Required empty public constructor
     }
@@ -63,31 +69,26 @@ public class DayFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        // 기초 대사량
-        double bmr;
-        int age = 24;
-        double weight = 80.0;
-        double height = 177.7;
-        int gender = 0;
-        int m, s;
-        // 걷기로 인한 칼로리 소모량
-        int kcal;
-        double km;
-
-        if (gender == 0) {
-            bmr = 65 + (13.7 * weight) + (5 * height) - (6.8 * age);
-        } else {
-            bmr = 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
-        }
-
-
-
-
         // Inflate the layout for this fragment
         binding = FragmentDayBinding.inflate(inflater, container, false);
         pieChart = binding.pieChart;
         barChart = binding.barChart;
+
+
+
+        User user = new User();
+        Walk walk = new Walk();
+        user.setHeight(177.0);    // 177cm
+        user.setWeight(70.0);    // 70kg
+        walk.setCount(10000);    // 만보
+        nowCount = walk.getCount();
+        walk.setHours(2);    // 2시간
+        walk.setDistance(walk.calculateDistance(user));
+        double kcal = walk.calculateKcal(user);
+        binding.tvKcalValue.setText(String.format(Locale.getDefault(),"%.2f", kcal));
+        binding.tvKmValue.setText(String.format(Locale.getDefault(),"%.2f", walk.getDistance()));
+
+        binding.tvMinValue.setText(walk.calculateHours());
 
         setupPieChart();
         loadPieChartData();
@@ -113,6 +114,8 @@ public class DayFragment extends Fragment {
             }
         });
 
+
+
         return binding.getRoot();
     }
 
@@ -132,8 +135,8 @@ public class DayFragment extends Fragment {
 
 
     /*
-    * 아래 차트 부분을 클래스로 옮겨야할지 나중에 고려해야함
-    * */
+     * 아래 차트 부분을 클래스로 옮겨야할지 나중에 고려해야함
+     * */
 
     private void loadPieChartData() {
         ArrayList<PieEntry> entries = new ArrayList<>();
@@ -152,16 +155,15 @@ public class DayFragment extends Fragment {
         PieData data = new PieData(dataSet);
         data.setDrawValues(false);
         data.setValueFormatter(new PercentFormatter(pieChart));
-        
+
         // 중앙 텍스트 설정
         // 임시데이터
-        int goalCount = 123, nowCount = 4000;
         String centerText = String.format("목표 걸음 수 %d\n%d", goalCount, nowCount);
         int index = centerText.indexOf("\n");
         SpannableString spannableString = new SpannableString(centerText);
         spannableString.setSpan(new RelativeSizeSpan(0.3f), 0, index, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         pieChart.setCenterText(spannableString);
-        
+
         pieChart.setData(data);
         pieChart.invalidate();
     }

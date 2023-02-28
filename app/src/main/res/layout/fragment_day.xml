@@ -107,7 +107,7 @@
                         android:id="@+id/tvKcalValue"
                         android:layout_gravity="top"
                         android:text="221"
-                        android:textSize="26sp"
+                        android:textSize="12sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
@@ -115,7 +115,7 @@
                         android:id="@+id/tvKmValue"
                         android:layout_gravity="top"
                         android:text="2.15"
-                        android:textSize="26sp"
+                        android:textSize="12sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                 </TableRow>
