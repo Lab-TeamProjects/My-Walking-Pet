@@ -1,8 +1,14 @@
 package com.lab_team_projects.my_walking_pet.walk_count;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.lab_team_projects.my_walking_pet.login.User;
 
+@Entity
 public class Walk {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private int count;
     private String date;
     private int goal;
