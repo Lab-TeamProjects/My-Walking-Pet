@@ -7,6 +7,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.lab_team_projects.my_walking_pet.walk_count.Walk;
+import com.lab_team_projects.my_walking_pet.walk_count.WalkDao;
 
 
 @Database(entities = {Walk.class}, version = 1)
@@ -27,6 +28,6 @@ public abstract class AppDatabase extends RoomDatabase {
         return database;
     }
 
-    public abstract Walk walkDao();
+    public abstract WalkDao walkDao();
 
 }
