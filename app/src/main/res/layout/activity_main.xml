@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lab_team_projects.my_walking_pet.MainActivity"
+    tools:context="com.lab_team_projects.my_walking_pet.app.MainActivity"
     android:background="@drawable/bg_sub_background">
 
     <com.google.android.material.appbar.AppBarLayout

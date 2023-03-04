@@ -1,4 +1,4 @@
-package com.lab_team_projects.my_walking_pet.game;
+package com.lab_team_projects.my_walking_pet.login;
 
 import java.util.ArrayList;
 import java.util.Arrays;

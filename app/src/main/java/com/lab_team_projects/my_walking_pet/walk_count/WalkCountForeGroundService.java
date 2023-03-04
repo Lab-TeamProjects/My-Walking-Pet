@@ -20,7 +20,6 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 
 import com.lab_team_projects.my_walking_pet.R;
-import com.lab_team_projects.my_walking_pet.game.Walk;
 import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 
 public class WalkCountForeGroundService extends Service implements SensorEventListener {

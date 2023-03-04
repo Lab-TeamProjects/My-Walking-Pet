@@ -8,14 +8,10 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.adapters.CollectionAdapter;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentCollectionBinding;
-import com.lab_team_projects.my_walking_pet.game.Collection;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CollectionFragment extends Fragment {

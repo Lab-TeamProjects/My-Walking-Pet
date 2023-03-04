@@ -1,4 +1,6 @@
-package com.lab_team_projects.my_walking_pet.game;
+package com.lab_team_projects.my_walking_pet.home;
+
+import com.lab_team_projects.my_walking_pet.login.User;
 
 public class Animal {
     private String name;

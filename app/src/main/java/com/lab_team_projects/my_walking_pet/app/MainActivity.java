@@ -1,6 +1,5 @@
-package com.lab_team_projects.my_walking_pet;
+package com.lab_team_projects.my_walking_pet.app;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -9,11 +8,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.preference.PreferenceManager;
 
+import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.ActivityMainBinding;
-import com.lab_team_projects.my_walking_pet.game.Walk;
-import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 
 public class MainActivity extends AppCompatActivity {
 

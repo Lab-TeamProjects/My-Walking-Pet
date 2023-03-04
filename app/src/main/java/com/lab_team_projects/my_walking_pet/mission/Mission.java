@@ -1,4 +1,4 @@
-package com.lab_team_projects.my_walking_pet.game;
+package com.lab_team_projects.my_walking_pet.mission;
 
 public class Mission {
     private String experience;

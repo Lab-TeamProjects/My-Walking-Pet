@@ -1,12 +1,6 @@
-package com.lab_team_projects.my_walking_pet.game;
+package com.lab_team_projects.my_walking_pet.walk_count;
 
-import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-
-import java.util.Date;
+import com.lab_team_projects.my_walking_pet.login.User;
 
 public class Walk {
     private int count;
