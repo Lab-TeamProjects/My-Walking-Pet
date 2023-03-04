@@ -32,6 +32,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.Utils;
+import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentDayBinding;
 import com.lab_team_projects.my_walking_pet.login.User;
 
@@ -61,14 +62,12 @@ public class DayFragment extends Fragment {
         barChart = binding.barChart;
 
 
-
-        User user = new User();
-        Walk walk = new Walk();
-        user.setHeight(177.0);    // 177cm
-        user.setWeight(70.0);    // 70kg
-        walk.setCount(10000);    // 만보
+        GameManager gm = GameManager.getInstance();
+        User user = gm.getUser();
+        Walk walk = gm.getWalk();
+        walk.setCount(10000);    // 이부분은 나중에 수정해야함
         nowCount = walk.getCount();
-        walk.setHours(2);    // 2시간
+        walk.setHours(2);    // 이부분은 나중에 수정해야함
         walk.setDistance(walk.calculateDistance(user));
         double kcal = walk.calculateKcal(user);
         binding.tvKcalValue.setText(String.format(Locale.getDefault(),"%.2f", kcal));
