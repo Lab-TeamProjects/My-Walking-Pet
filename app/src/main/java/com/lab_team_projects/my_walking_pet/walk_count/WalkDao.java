@@ -21,4 +21,8 @@ public interface WalkDao {
 
     @Query("SELECT * FROM Walk ORDER BY id DESC LIMIT 1")
     List<Walk> getAll();
+
+    @Query("SELECT * FROM Walk ORDER BY id DESC LIMIT 1")
+    Walk getLast();
 }
+

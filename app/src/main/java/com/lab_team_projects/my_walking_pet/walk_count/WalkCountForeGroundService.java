@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 
 import com.lab_team_projects.my_walking_pet.R;
+import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
 import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 
@@ -27,7 +28,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
     public BackgroundTask task = new BackgroundTask();;
     public int value = 0;
-    private final Walk walk = new Walk();
+    private Walk walk;
 
     private SensorManager sensorManager;
     private Sensor stepCounterSensor;
@@ -49,6 +50,9 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     @Override
     public void onCreate() {
         super.onCreate();
+
+        GameManager gm = GameManager.getInstance();
+        walk = gm.getWalk();
 
         /*
          * 수정 부분
@@ -105,6 +109,8 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
             walk.setCount(walk.getCount() + 1);
+            Toast.makeText(getApplicationContext(), "걸었음", Toast.LENGTH_SHORT).show();
+            Log.d("__walk__", "걸었음");
             AppDatabase db = AppDatabase.getInstance(getApplicationContext());
             db.walkDao().update(walk);
         }

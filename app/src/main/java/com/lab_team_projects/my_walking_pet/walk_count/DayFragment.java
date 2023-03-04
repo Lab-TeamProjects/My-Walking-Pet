@@ -65,7 +65,6 @@ public class DayFragment extends Fragment {
         GameManager gm = GameManager.getInstance();
         User user = gm.getUser();
         Walk walk = gm.getWalk();
-        walk.setCount(10000);    // 이부분은 나중에 수정해야함
         nowCount = walk.getCount();
         walk.setHours(2);    // 이부분은 나중에 수정해야함
         walk.setDistance(walk.calculateDistance(user));
