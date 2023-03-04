@@ -58,17 +58,18 @@ public class MainActivity extends AppCompatActivity {
 
         AppDatabase db = AppDatabase.getInstance(this);
         List<Walk> walkList = db.walkDao().getAll();
-
+        Walk walk;
         // 리스트가 완전히 비었음
         if (walkList.isEmpty()) {
             // 새로 오늘 walk를 만들어야함
-            Walk walk = new Walk();
+            walk = new Walk();
+            walk.setDate(time);
             gameManager.setWalk(walk);
             db.walkDao().insert(walk);
 
         } else {
             // 저장된 walk 리스트에서 마지막 walk를 가져옴
-            Walk walk = walkList.get(walkList.size() - 1);
+            walk = walkList.get(walkList.size() - 1);
             try {
                 Date walkDate = sdf.parse(walk.getDate());
                 LocalDate walkLocalDate = walkDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 if (localDate.isAfter(walkLocalDate)) {
                     // 오늘 walk를 만들어야함
                     walk = new Walk();
-                    gameManager.setWalk(walk);
+                    walk.setDate(time);
                     db.walkDao().insert(walk);
                 }
             } catch (ParseException e) {
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        gameManager.setWalk(walk);
 
 
         /*
@@ -125,5 +127,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GameManager gameManager = GameManager.getInstance();
+        Walk walk = gameManager.getWalk();
+        AppDatabase db = AppDatabase.getInstance(this);
+        db.walkDao().update(walk);
+    }
 }
 
