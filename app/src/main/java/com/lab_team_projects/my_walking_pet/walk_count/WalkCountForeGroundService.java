@@ -20,23 +20,20 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 
 import com.lab_team_projects.my_walking_pet.R;
+import com.lab_team_projects.my_walking_pet.db.AppDatabase;
 import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 
 public class WalkCountForeGroundService extends Service implements SensorEventListener {
-
 
     public BackgroundTask task = new BackgroundTask();;
     public int value = 0;
     private final Walk walk = new Walk();
 
-
-
-    SensorManager sensorManager;
-    Sensor stepCounterSensor;
+    private SensorManager sensorManager;
+    private Sensor stepCounterSensor;
 
     public WalkCountForeGroundService() {
         // 빈 생성자
-
     }
 
     public boolean isRunning(){
@@ -58,7 +55,6 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
          * 매니저 리스너가 등록이 안되어 있었음
          * 그리고 널이면 넣는다고 되어있었는데
          * 널이 아닐때 넣어야하는게 맞나봄
-         *
          * */
         Log.d("Foreground", "시작되긴 하니?");
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -69,7 +65,6 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
         }
 
-
         task.execute();
 
         initializeNotification();
@@ -79,7 +74,6 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_NOT_STICKY;
     }
-
 
     public void initializeNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1");
@@ -107,18 +101,13 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         startForeground(1, notification);
     }
 
-    /*public boolean isRunning() {
-        //if
-    }*/
-
     @Override
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
             walk.setCount(walk.getCount() + 1);
-            println("걸음 수 : " + walk.getCount());
+            AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+            db.walkDao().update(walk);
         }
-        Toast.makeText(getApplicationContext(), "넌 분명 걸었다", Toast.LENGTH_SHORT).show();
-        println("ㅁㄴㅇ");
     }
 
     @Override
@@ -169,7 +158,6 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         protected void onCancelled() {
             println("onCancelled()");
         }
-
 
     }
 }
