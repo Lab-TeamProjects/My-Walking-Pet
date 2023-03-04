@@ -9,9 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -21,6 +25,11 @@ import android.widget.RadioGroup;
 import com.bumptech.glide.Glide;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.helpers.PermissionsCheckHelper;
+
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 
 public class UserInfoEntryActivity extends AppCompatActivity {
@@ -89,7 +98,7 @@ public class UserInfoEntryActivity extends AppCompatActivity {
 
     private void pickImageFromGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
+        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         activityResultLauncher.launch(intent);
     }
 
@@ -98,12 +107,15 @@ public class UserInfoEntryActivity extends AppCompatActivity {
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
+
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                        //ToDo
+
                         uri = result.getData().getData();
                         Glide.with(UserInfoEntryActivity.this).load(uri).into(ivUserProfile);
                     }
                 }
             }
     );
+
+
 }
