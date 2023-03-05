@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.lab_team_projects.my_walking_pet.home.HomeFragment"
+
     android:background="@drawable/bg_main_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,11 +33,12 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
+            android:elevation="100dp"
             android:id="@+id/ibAR"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:background="@null"
+            android:background="@color/transparent"
             android:scaleType="fitXY"
             android:src="@drawable/ic_baseline_camera_yellow"
             app:layout_constraintEnd_toEndOf="parent"
