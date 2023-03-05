@@ -10,7 +10,7 @@ import java.util.Locale;
 @Entity
 public class Walk {
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private int id;    // db id
     private int count;    // 걸음 수
     private String date;    // 현재 날짜
     private int goal;    // 목표
