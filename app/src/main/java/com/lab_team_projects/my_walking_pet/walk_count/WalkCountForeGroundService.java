@@ -168,6 +168,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                     elapsedTime += System.currentTimeMillis() - startTime;
                 }
                 walk.setSec((int) (elapsedTime/1000));
+                AppDatabase.getInstance(getApplicationContext()).walkDao().update(walk);
                 break;
 
         case Sensor.TYPE_GYROSCOPE:
@@ -202,7 +203,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                         elapsedTime += System.currentTimeMillis();
                     }
                     walk.setSec((int) (elapsedTime/1000));
-
+                    AppDatabase.getInstance(getApplicationContext()).walkDao().update(walk);
                     // 자이로스코프 값의 적분 계산
                     for (int i = 0; i < 3; i++) {
                         gyroIntegral[i] += deltaVector[i] * dT;

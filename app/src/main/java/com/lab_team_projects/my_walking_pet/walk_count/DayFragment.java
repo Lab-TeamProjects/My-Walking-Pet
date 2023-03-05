@@ -7,14 +7,17 @@ import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -34,6 +37,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.Utils;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentDayBinding;
+import com.lab_team_projects.my_walking_pet.db.AppDatabase;
 import com.lab_team_projects.my_walking_pet.login.User;
 
 import java.util.ArrayList;
@@ -45,8 +49,8 @@ public class DayFragment extends Fragment {
 
     private PieChart pieChart;
     private BarChart barChart;
-
-
+    private GameManager gm = GameManager.getInstance();
+    private Walk walk = gm.getWalk();
     int goalCount = 123, nowCount = 4000;
 
     public DayFragment() {
@@ -62,9 +66,7 @@ public class DayFragment extends Fragment {
         barChart = binding.barChart;
 
 
-        GameManager gm = GameManager.getInstance();
         User user = gm.getUser();
-        Walk walk = gm.getWalk();
         nowCount = walk.getCount();
         walk.setDistance(walk.calculateDistance(user));
         double kcal = walk.calculateKcal(user);
@@ -78,6 +80,31 @@ public class DayFragment extends Fragment {
 
         setupBarChart();
         loadBarData();
+
+
+        binding.cdvPieChart.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setTitle("목표 걸음 수 설정");
+            builder.setMessage("목표 걸음 수를 설정해주세요");
+
+            final EditText editText = new EditText(requireContext());
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+            builder.setView(editText);
+
+            builder.setPositiveButton("설정", (dialog, which) -> {
+                int goal = Integer.parseInt(editText.getText().toString());
+                walk.setGoal(goal);
+                AppDatabase db = AppDatabase.getInstance(requireContext());
+                db.walkDao().update(walk);
+                // 골을 화면에 표시해야함
+            });
+
+            builder.setNegativeButton("취소", (dialog, which) -> {
+                dialog.cancel();
+            });
+
+            builder.show();
+        });
 
         barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
@@ -123,8 +150,9 @@ public class DayFragment extends Fragment {
 
     private void loadPieChartData() {
         ArrayList<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(0.5f));
-        entries.add(new PieEntry(0.4f));
+
+        entries.add(new PieEntry((float) walk.getCount() / walk.getGoal()));
+        entries.add(new PieEntry((float) 1 - (float) walk.getCount() / walk.getGoal()));
 
         final int[] MY_COLORS = {rgb("#3CB371"), rgb("#F2F3F5")};
         ArrayList<Integer> colors = new ArrayList<>();
@@ -141,7 +169,8 @@ public class DayFragment extends Fragment {
 
         // 중앙 텍스트 설정
         // 임시데이터
-        String centerText = String.format("목표 걸음 수 %d\n%d", goalCount, nowCount);
+        String centerText = String.format(Locale.getDefault()
+                ,"목표 걸음 수 %d\n%d", walk.getGoal(), walk.getCount());
         int index = centerText.indexOf("\n");
         SpannableString spannableString = new SpannableString(centerText);
         spannableString.setSpan(new RelativeSizeSpan(0.3f), 0, index, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
