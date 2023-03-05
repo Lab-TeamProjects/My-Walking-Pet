@@ -19,21 +19,15 @@ import com.lab_team_projects.my_walking_pet.walk_count.WalkCountForeGroundServic
 
 public class NoticeSettingActivity extends AppCompatActivity {
 
-    SettingsActivityBinding binding;
-    static WalkCountForeGroundService service = new WalkCountForeGroundService();
+    private static final WalkCountForeGroundService service = new WalkCountForeGroundService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = SettingsActivityBinding.inflate(getLayoutInflater());
+        SettingsActivityBinding binding = SettingsActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.btnArrowBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        binding.btnArrowBack.setOnClickListener(v -> onBackPressed());
 
         if (savedInstanceState == null) {
             getSupportFragmentManager()
@@ -41,25 +35,23 @@ public class NoticeSettingActivity extends AppCompatActivity {
                     .replace(R.id.settings, new SettingsFragment())
                     .commit();
         }
-        ActionBar actionBar = getSupportActionBar();
+        /*ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        }*/
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
 
-        private SharedPreferences prefs;
-
         private static final String SETTING_SENSOR_BG = "foreground_use";
-
         private String rootKey = "";
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
             this.rootKey = rootKey;
-            prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
             if(!service.isRunning()) {
                 SharedPreferences.Editor editor = prefs.edit();
@@ -74,34 +66,35 @@ public class NoticeSettingActivity extends AppCompatActivity {
         public void onResume() {
             super.onResume();
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
-
-            prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
         }
 
         SharedPreferences.OnSharedPreferenceChangeListener prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
                     @Override
                     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                         if(key.equals(SETTING_SENSOR_BG)) {
-                            if (sharedPreferences.getBoolean(key, true)) {
-                                startService();
-                            }
-                            else {
-                                stopService();
+                            if (getContext() != null) {
+                                if (sharedPreferences.getBoolean(key, true)) {
+                                    startService();
+                                }
+                                else {
+                                    stopService();
+                                }
                             }
                         }
                     }
                 };
+
         public void startService() {
             // 서비스 시작 함수
             Intent serviceIntent;
-            serviceIntent = new Intent(getContext(), service.getClass());
+            serviceIntent = new Intent(requireContext(), service.getClass());
             requireActivity().startService(serviceIntent);
         }
 
         public void stopService() {
             // 서비스 종료 함수
             Intent serviceIntent;
-            serviceIntent = new Intent(getContext(), service.getClass());
+            serviceIntent = new Intent(requireContext(), service.getClass());
             requireContext().stopService(serviceIntent);
         }
 

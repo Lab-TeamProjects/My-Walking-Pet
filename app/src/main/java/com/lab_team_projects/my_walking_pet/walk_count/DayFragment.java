@@ -7,13 +7,16 @@ import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,9 +131,19 @@ public class DayFragment extends Fragment {
             }
         });
 
+
+
         return binding.getRoot();
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        WalkViewModel walkViewModel = new ViewModelProvider(this).get(WalkViewModel.class);
+        walkViewModel.getWalkLiveData().observe(getViewLifecycleOwner(), walk->{
+            setPieChartCenterText(walk.getCount(), walk.getGoal());
+        });
+    }
 
     private void setupPieChart() {
         pieChart.setDrawHoleEnabled(true);
@@ -169,15 +182,19 @@ public class DayFragment extends Fragment {
         data.setDrawValues(false);
         data.setValueFormatter(new PercentFormatter(pieChart));
 
+
+        setPieChartCenterText(walk.getCount(), walk.getGoal());
+        pieChart.setData(data);
+        pieChart.invalidate();
+    }
+
+    private void setPieChartCenterText(int count, int goal) {
         String centerText = String.format(Locale.getDefault()
-                ,"목표 걸음 수 %d\n%d", walk.getGoal(), walk.getCount());
+                ,"목표 걸음 수 %d\n%d", goal, count);
         int index = centerText.indexOf("\n");
         SpannableString spannableString = new SpannableString(centerText);
         spannableString.setSpan(new RelativeSizeSpan(0.3f), 0, index, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         pieChart.setCenterText(spannableString);
-
-        pieChart.setData(data);
-        pieChart.invalidate();
     }
 
     private void setupBarChart() {

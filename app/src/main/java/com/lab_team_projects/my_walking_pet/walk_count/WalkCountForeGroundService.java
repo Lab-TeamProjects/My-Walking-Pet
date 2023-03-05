@@ -27,8 +27,8 @@ import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 
 public class WalkCountForeGroundService extends Service implements SensorEventListener {
 
-    public BackgroundTask task = new BackgroundTask();;
-    public int value = 0;
+    public static BackgroundTask task = new BackgroundTask();
+    public static int value = 0;
     private Walk walk;
 
     private SensorManager sensorManager;
@@ -162,60 +162,66 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                     elapsedTime += System.currentTimeMillis() - startTime;
                 }
                 walk.setSec((int) (elapsedTime/1000));
-                AppDatabase.getInstance(getApplicationContext()).walkDao().update(walk);
+                updateWalk();
                 break;
 
-        case Sensor.TYPE_GYROSCOPE:
-            // 자이로스코프 센서 이벤트 처리
-            if (timestamp != 0) {
-                final float dT = (event.timestamp - timestamp) * NS2S;
-                float[] gyroValues = event.values.clone();
-                float xGyro = gyroValues[0];
-                float yGyro = gyroValues[1];
-                float zGyro = gyroValues[2];
-                float[] deltaVector = new float[4];
-                deltaVector[0] = xGyro;
-                deltaVector[1] = yGyro;
-                deltaVector[2] = zGyro;
-                float omegaMagnitude = (float) Math.sqrt(xGyro * xGyro + yGyro * yGyro + zGyro * zGyro);
+            case Sensor.TYPE_GYROSCOPE:
+                // 자이로스코프 센서 이벤트 처리
+                if (timestamp != 0) {
+                    final float dT = (event.timestamp - timestamp) * NS2S;
+                    float[] gyroValues = event.values.clone();
+                    float xGyro = gyroValues[0];
+                    float yGyro = gyroValues[1];
+                    float zGyro = gyroValues[2];
+                    float[] deltaVector = new float[4];
+                    deltaVector[0] = xGyro;
+                    deltaVector[1] = yGyro;
+                    deltaVector[2] = zGyro;
+                    float omegaMagnitude = (float) Math.sqrt(xGyro * xGyro + yGyro * yGyro + zGyro * zGyro);
 
-                // omegaMagnitude 값에 따라 걸음 수를 증가시킴
-                if (omegaMagnitude > THRESHOLD) {
-                    // 뛰는 상태일 때
-                    if (!isMoving) {
-                        // 이전에 이동 상태가 아니었다면, 이동 상태로 전환됨
-                        isMoving = true;
-                        startTime = System.currentTimeMillis();
+                    // omegaMagnitude 값에 따라 걸음 수를 증가시킴
+                    if (omegaMagnitude > THRESHOLD) {
+                        // 뛰는 상태일 때
+                        if (!isMoving) {
+                            // 이전에 이동 상태가 아니었다면, 이동 상태로 전환됨
+                            isMoving = true;
+                            startTime = System.currentTimeMillis();
+                        }
+                        // 걸음 수 증가 처리
+                        step();
+                    } else {
+                        // 걸음 수를 증가시키는 기준 값을 넘지 못했을 때
+                        if (isMoving) {
+                            // 이전에 이동 상태였다면, 멈춤 상태로 전환됨
+                            isMoving = false;
+                            elapsedTime += System.currentTimeMillis();
+                        }
+                        walk.setSec((int) (elapsedTime/1000));
+                        // 자이로스코프 값의 적분 계산
+                        for (int i = 0; i < 3; i++) {
+                            gyroIntegral[i] += deltaVector[i] * dT;
+                        }
                     }
-                    // 걸음 수 증가 처리
-                    step();
-                } else {
-                    // 걸음 수를 증가시키는 기준 값을 넘지 못했을 때
-                    if (isMoving) {
-                        // 이전에 이동 상태였다면, 멈춤 상태로 전환됨
-                        isMoving = false;
-                        elapsedTime += System.currentTimeMillis();
-                    }
-                    walk.setSec((int) (elapsedTime/1000));
-                    AppDatabase.getInstance(getApplicationContext()).walkDao().update(walk);
-                    // 자이로스코프 값의 적분 계산
-                    for (int i = 0; i < 3; i++) {
-                        gyroIntegral[i] += deltaVector[i] * dT;
-                    }
+                    timestamp = event.timestamp;
+                    updateWalk();
+                    break;
                 }
-                timestamp = event.timestamp;
+            default:
                 break;
-            }
         }
-        GameManager gm = GameManager.getInstance();
-        User user = gm.getUser();
-        walk.setKcal(walk.calculateKcal(user));
+
     }
 
     private void step() {
         walk.setCount(walk.getCount() + 1);
-        //Toast.makeText(getApplicationContext(), "걸었음", Toast.LENGTH_SHORT).show();
-        //Log.d("__walk__", "걸었음");
+    }
+
+    private void updateWalk() {
+        GameManager gm = GameManager.getInstance();
+        if (gm != null) {
+            User user = gm.getUser();
+            walk.setKcal(walk.calculateKcal(user));
+        }
         AppDatabase db = AppDatabase.getInstance(getApplicationContext());
         db.walkDao().update(walk);
     }
@@ -232,13 +238,13 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         task.cancel(true);
     }
 
-    public void println(String msg) {
+    public static void println(String msg) {
         Log.d("Foreground", msg);
     }
 
 
     // 쓰레드
-    class BackgroundTask extends AsyncTask<Integer, String, Integer> {
+    static class BackgroundTask extends AsyncTask<Integer, String, Integer> {
 
         @Override
         protected Integer doInBackground(Integer... values) {
