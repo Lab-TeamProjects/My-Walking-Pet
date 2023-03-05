@@ -75,12 +75,6 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         GameManager gm = GameManager.getInstance();
         walk = gm.getWalk();
 
-        /*
-         * 수정 부분
-         * 매니저 리스너가 등록이 안되어 있었음
-         * 그리고 널이면 넣는다고 되어있었는데
-         * 널이 아닐때 넣어야하는게 맞나봄
-         * */
         Log.d("Foreground", "시작되긴 하니?");
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
@@ -90,7 +84,6 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
             sensorManager.registerListener(this, gyroscope, SensorManager.SENSOR_DELAY_NORMAL);
             sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
             timestamp = 0;
-
         }
 
         task.execute();

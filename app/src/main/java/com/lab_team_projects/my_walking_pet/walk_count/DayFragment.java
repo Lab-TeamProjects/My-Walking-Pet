@@ -53,7 +53,6 @@ public class DayFragment extends Fragment {
     private BarChart barChart;
     private GameManager gm = GameManager.getInstance();
     private Walk walk = gm.getWalk();
-    int goalCount = 123, nowCount = 4000;
     List<Walk> walks;
 
 
@@ -73,7 +72,6 @@ public class DayFragment extends Fragment {
         walks = AppDatabase.getInstance(requireContext()).walkDao().getAll();
 
         User user = gm.getUser();
-        nowCount = walk.getCount();
         walk.setDistance(walk.calculateDistance(user));
         binding.tvKcalValue.setText(String.format(Locale.getDefault(),"%.2f", walk.getKcal()));
         binding.tvKmValue.setText(String.format(Locale.getDefault(),"%.2f", walk.getDistance()));
