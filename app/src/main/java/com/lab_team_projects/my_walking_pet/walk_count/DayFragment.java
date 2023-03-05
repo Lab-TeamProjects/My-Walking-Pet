@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -97,6 +98,10 @@ public class DayFragment extends Fragment {
 
             builder.setPositiveButton("설정", (dialog, which) -> {
                 int goal = Integer.parseInt(editText.getText().toString());
+                if (goal < 1000) {
+                    Toast.makeText(requireContext(), "목표 걸음 수는 1000이하로 설정할 수 없습니다!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 walk.setGoal(goal);
                 AppDatabase db = AppDatabase.getInstance(requireContext());
                 db.walkDao().update(walk);
