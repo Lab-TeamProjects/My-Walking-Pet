@@ -31,7 +31,27 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     private Walk walk;
 
     private SensorManager sensorManager;
-    private Sensor stepCounterSensor;
+    private Sensor gyroscope;
+    private Sensor accelerometer;
+    private static final float NS2S = 1.0f / 1000000000.0f;    // 나노초를 초로 변환하기 위한 상수
+    private float timestamp;
+    private float[] lastAccelValues = new float[3];
+    private float[] lastGyroValues = new float[3];
+    private float[] gyroIntegral = new float[3];
+    private final float THRESHOLD = 0.1f;
+    private static final float THRESHOLD_WALK = 8.0f; // 걷는 동작 판별 임계값
+    private static final float THRESHOLD_RUN = 15.0f; // 뛰는 동작 판별 임계값
+    private long lastTime;
+
+    private static final float THRESHOLD_STOP = 0.2f; // 멈춤 판별 임계값
+    private static final long STOP_DURATION = 2000; // 일정 시간 동안 값이 일정하면 멈춘 것으로 판별
+
+    private long startTime;
+    private long elapsedTime;
+    private boolean isMoving = false;
+
+
+
 
     public WalkCountForeGroundService() {
         // 빈 생성자
@@ -64,8 +84,11 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
-            stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-            sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            sensorManager.registerListener(this, gyroscope, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+            timestamp = 0;
 
         }
 
@@ -107,13 +130,96 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if(event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
-            walk.setCount(walk.getCount() + 1);
-            Toast.makeText(getApplicationContext(), "걸었음", Toast.LENGTH_SHORT).show();
-            Log.d("__walk__", "걸었음");
-            AppDatabase db = AppDatabase.getInstance(getApplicationContext());
-            db.walkDao().update(walk);
+        switch (event.sensor.getType()) {
+            case Sensor.TYPE_ACCELEROMETER:
+                float[] accelValues = event.values.clone();
+                float x = accelValues[0];
+                float y = accelValues[1];
+                float z = accelValues[2];
+                float accelMagnitude = (float) Math.sqrt(x*x + y*y + z*z);
+                float delta = accelMagnitude - lastAccelValues[2];
+                lastAccelValues[2] = accelMagnitude;
+
+                long currentTime = System.currentTimeMillis();
+                float timeDelta = currentTime - lastTime;
+
+                lastTime = currentTime;
+
+                if (delta > THRESHOLD_WALK) {
+                    // 걸음 수를 증가시키는 기준값을 넘었을 때
+                    if (!isMoving) {
+                        // 이전에 이동 상태가 아니었다면, 이동 상태로 전환됨
+                        isMoving = true;
+                        startTime = System.currentTimeMillis();
+                    }
+                    // 걸음 수 증가 처리
+                    step();
+                } else {
+                    // 걸음 수를 증가시키는 기준 값을 넘지 못했을 때
+                    if (isMoving) {
+                        // 이전에 이동 상태였다면, 멈춤 상태로 전환됨
+                        isMoving = false;
+                        elapsedTime += System.currentTimeMillis() - startTime;
+                    }
+                }
+
+                if (isMoving) {
+                    // 이동 상태인 경우, 현재까지 이동한 시간을 더함
+                    elapsedTime += System.currentTimeMillis() - startTime;
+                }
+                walk.setSec((int) (elapsedTime/1000));
+                break;
+
+        case Sensor.TYPE_GYROSCOPE:
+            // 자이로스코프 센서 이벤트 처리
+            if (timestamp != 0) {
+                final float dT = (event.timestamp - timestamp) * NS2S;
+                float[] gyroValues = event.values.clone();
+                float xGyro = gyroValues[0];
+                float yGyro = gyroValues[1];
+                float zGyro = gyroValues[2];
+                float[] deltaVector = new float[4];
+                deltaVector[0] = xGyro;
+                deltaVector[1] = yGyro;
+                deltaVector[2] = zGyro;
+                float omegaMagnitude = (float) Math.sqrt(xGyro * xGyro + yGyro * yGyro + zGyro * zGyro);
+
+                // omegaMagnitude 값에 따라 걸음 수를 증가시킴
+                if (omegaMagnitude > THRESHOLD) {
+                    // 뛰는 상태일 때
+                    if (!isMoving) {
+                        // 이전에 이동 상태가 아니었다면, 이동 상태로 전환됨
+                        isMoving = true;
+                        startTime = System.currentTimeMillis();
+                    }
+                    // 걸음 수 증가 처리
+                    step();
+                } else {
+                    // 걸음 수를 증가시키는 기준 값을 넘지 못했을 때
+                    if (isMoving) {
+                        // 이전에 이동 상태였다면, 멈춤 상태로 전환됨
+                        isMoving = false;
+                        elapsedTime += System.currentTimeMillis();
+                    }
+                    walk.setSec((int) (elapsedTime/1000));
+
+                    // 자이로스코프 값의 적분 계산
+                    for (int i = 0; i < 3; i++) {
+                        gyroIntegral[i] += deltaVector[i] * dT;
+                    }
+                }
+                timestamp = event.timestamp;
+                break;
+            }
         }
+    }
+
+    private void step() {
+        walk.setCount(walk.getCount() + 1);
+        //Toast.makeText(getApplicationContext(), "걸었음", Toast.LENGTH_SHORT).show();
+        //Log.d("__walk__", "걸었음");
+        AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+        db.walkDao().update(walk);
     }
 
     @Override

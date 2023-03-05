@@ -66,7 +66,6 @@ public class DayFragment extends Fragment {
         User user = gm.getUser();
         Walk walk = gm.getWalk();
         nowCount = walk.getCount();
-        walk.setHours(2);    // 이부분은 나중에 수정해야함
         walk.setDistance(walk.calculateDistance(user));
         double kcal = walk.calculateKcal(user);
         binding.tvKcalValue.setText(String.format(Locale.getDefault(),"%.2f", kcal));
