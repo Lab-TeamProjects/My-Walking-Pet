@@ -30,6 +30,7 @@ import android.widget.RadioGroup;
 
 import com.bumptech.glide.Glide;
 import com.lab_team_projects.my_walking_pet.R;
+import com.lab_team_projects.my_walking_pet.app.SendData;
 import com.lab_team_projects.my_walking_pet.helpers.PermissionsCheckHelper;
 
 import org.json.JSONException;
@@ -40,6 +41,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -78,14 +82,15 @@ public class UserInfoEntryActivity extends AppCompatActivity {
         rbWomen = findViewById(R.id.rbWomen);
         btnComplete = findViewById(R.id.btnComplete);
 
+        // 몸무게 Number Picker 설정
         npUserWeight.setMaxValue(300);
         npUserWeight.setMinValue(10);
         npUserWeight.setValue(60);
-
+        // 키 Number Picker 설정
         npUserHeight.setMaxValue(300);
         npUserHeight.setMinValue(10);
         npUserHeight.setValue(170);
-
+        // 성별 Radio Group 설정
         rgUserGender.check(R.id.rbMan);
 
         try {
@@ -105,7 +110,7 @@ public class UserInfoEntryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    permissionCheck();
+                    permissionCheck(); // 권한 체크
                     pickImageFromGallery();
                 } else {
                     pickImageFromGallery();
@@ -113,27 +118,38 @@ public class UserInfoEntryActivity extends AppCompatActivity {
             }
         });
 
+        // 설정완료 버튼 클릭
         btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("profilePhoto", profilePhoto.toString());
-                Log.d("nickName",  etNickName.getText().toString());
-                Log.d("statusMsg", etStatusMsg.getText().toString());
-                Log.d("userBirthday", dpUserBirthday.getYear() + "-" + (dpUserBirthday.getMonth() + 1) + "-" + dpUserBirthday.getDayOfMonth());
-                Log.d("userWeight", String.valueOf(npUserWeight.getValue()));
-                Log.d("userHeight", String.valueOf(npUserHeight.getValue()));
-                if(rbMan.isChecked()) {
-                    Log.d("userGender", String.valueOf(rbMan.getText()));
-                } else {
-                    Log.d("userGender", String.valueOf(rbWomen.getText()));
+                JSONObject jsonObject = new JSONObject();
+
+                try {
+                    jsonObject.put("profilePhoto", profilePhoto.toString());
+                    jsonObject.put("nickName", etNickName.getText().toString());
+                    jsonObject.put("statusMsg", etStatusMsg.getText().toString());
+                    jsonObject.put("userBirthday", dpUserBirthday.getYear() + "-" + (dpUserBirthday.getMonth() + 1) + "-" + dpUserBirthday.getDayOfMonth());
+                    jsonObject.put("userWeight", String.valueOf(npUserWeight.getValue()));
+                    jsonObject.put("userHeight", String.valueOf(npUserHeight.getValue()));
+                    if(rbMan.isChecked()) {
+                        jsonObject.put("userGender", String.valueOf(rbMan.getText()));
+                    } else {
+                        jsonObject.put("userGender", String.valueOf(rbWomen.getText()));
+                    }
+
+                    // 서버로 데이터 전송
+                    SendData sendData = new SendData(jsonObject,"url");
+                    sendData.execute();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });
     }
 
+    // 권한 체크 함수
     private void permissionCheck(){
         if(Build.VERSION.SDK_INT >= 23){
-
             pch =  new PermissionsCheckHelper(this, this);
 
             if(!pch.checkPermission()){
@@ -151,12 +167,14 @@ public class UserInfoEntryActivity extends AppCompatActivity {
         }
     }
 
+    // 갤러리 접근 함수
     private void pickImageFromGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         activityResultLauncher.launch(intent);
     }
 
+    // 갤러리 접근 함수 실행 시
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -188,82 +206,5 @@ public class UserInfoEntryActivity extends AppCompatActivity {
                 }
             }
     );
-
-    private void sendServer() { // 서버로 전송하기위한 함수
-        class sendData extends AsyncTask<Void, Void, String> { // 쓰레드 만들기
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-            }
-
-            @Override
-            protected void onProgressUpdate(Void... values) {
-                super.onProgressUpdate(values);
-            }
-
-            @Override
-            protected void onCancelled(String s) {
-                super.onCancelled(s);
-            }
-
-            @Override
-            protected void onCancelled() {
-                super.onCancelled();
-            }
-
-            @Override
-            protected String doInBackground(Void... voids) {
-
-                try {
-                    OkHttpClient client = new OkHttpClient();
-                    // okHttpClient 호출
-                    JSONObject jsonInput = new JSONObject();
-                    // Json객체 생성
-                    jsonInput.put("profilePhoto", profilePhoto);
-                    jsonInput.put("nickName",  etNickName.getText().toString());
-                    jsonInput.put("statusMsg", etStatusMsg.getText().toString());
-                    jsonInput.put("userBirthday", dpUserBirthday.getYear() + "-" + (dpUserBirthday.getMonth() + 1) + "-" + dpUserBirthday.getDayOfMonth());
-                    jsonInput.put("userWeight", npUserWeight.toString());
-                    jsonInput.put("userHeight", npUserHeight.toString());
-                    if(rbMan.isChecked()) {
-                        jsonInput.put("userGender", String.valueOf(rbMan.getText()));
-                    } else {
-                        jsonInput.put("userGender", String.valueOf(rbWomen.getText()));
-                    }
-
-                    // json객체에 데이터 추가
-                    RequestBody reqBody = RequestBody.create(
-                            jsonInput.toString(),
-                            MediaType.parse("application/json; charset=utf-8")
-                    );
-
-                    /*Request request = new Request.Builder()
-                            .post(reqBody)
-                            .url(urls)
-                            .build();
-
-                    Response responses = null;
-                    responses = client.newCall(request).execute();
-                    System.out.println(responses.body().string());*/
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                //catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-                return null;
-            }
-        }
-        sendData sendData = new sendData();
-        sendData.execute();
-        // 웹서버에 데이터 전송
-    }
 
 }

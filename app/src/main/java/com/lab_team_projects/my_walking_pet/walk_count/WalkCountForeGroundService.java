@@ -22,14 +22,16 @@ import androidx.core.app.NotificationCompat;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
+import com.lab_team_projects.my_walking_pet.login.User;
 import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 
 public class WalkCountForeGroundService extends Service implements SensorEventListener {
 
     public BackgroundTask task = new BackgroundTask();;
     public int value = 0;
-    private Walk walk;
 
+    private User user;
+    private Walk walk;
     private SensorManager sensorManager;
     private Sensor gyroscope;
     private Sensor accelerometer;
@@ -73,6 +75,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
         GameManager gm = GameManager.getInstance();
         walk = gm.getWalk();
+        user = gm.getUser();
 
         /*
          * 수정 부분
@@ -217,10 +220,9 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
     private void step() {
         walk.setCount(walk.getCount() + 1);
-        //Toast.makeText(getApplicationContext(), "걸었음", Toast.LENGTH_SHORT).show();
-        //Log.d("__walk__", "걸었음");
         AppDatabase db = AppDatabase.getInstance(getApplicationContext());
         db.walkDao().update(walk);
+        user.addMoney(1);
     }
 
     @Override
@@ -248,9 +250,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
             while (isCancelled() == false) {
                 try {
-                    println(value + "번째 실행중");
                     Thread.sleep(1000);
-                    value++;
                 } catch (Exception ex) { }
             }
             return value;

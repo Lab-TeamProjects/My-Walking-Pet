@@ -18,6 +18,8 @@ public class User {
     private double bmi;
     private double bmr;    // 기초 대사량
 
+    private int money;
+
 
     public double getBMR() {
         if (this.gender == 0) {
@@ -30,8 +32,6 @@ public class User {
     public void setBMI(){
         this.bmi = weight / Math.pow(height, 2);
     }
-
-
 
     public double calculateStride() {
         List<Double> list = Arrays.asList(
@@ -124,5 +124,13 @@ public class User {
 
     public void setBmr(double bmr) {
         this.bmr = bmr;
+    }
+
+    public int getMoney() { return money; }
+
+    public void setMoney(int money) { this.money = money; }
+
+    public void addMoney(int money) {
+        this.money += money;
     }
 }
