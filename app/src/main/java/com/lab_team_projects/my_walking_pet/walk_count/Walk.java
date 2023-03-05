@@ -5,19 +5,18 @@ import androidx.room.PrimaryKey;
 
 import com.lab_team_projects.my_walking_pet.login.User;
 
+import java.util.Locale;
+
 @Entity
 public class Walk {
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private int count;
-    private String date;
-    private int goal;
-    private int min;
-    private int sec;
+    private int count;    // 걸음 수
+    private String date;    // 현재 날짜
+    private int goal;    // 목표
+    private int sec;    // 걸은 초
     private double kcal;
-    private double hours;
-    // 단위 km
-    private double distance;
+    private double distance;    // 단위 km
 
 
     public double calculateKcal(User user) {
@@ -26,25 +25,17 @@ public class Walk {
         return user.getWeight() * calculateDistance(user) * 0.57;
     }
 
-
     public double calculateDistance(User user) {
         // km로 반환함
         return (this.count * (user.calculateStride() * 0.01) * 0.001);
 
     }
 
-
     public String calculateHours() {
-        return "임시:임시:임시";
-    }
-
-
-    public double getHours() {
-        return hours;
-    }
-
-    public void setHours(double hours) {
-        this.hours = hours;
+        int hours = this.sec / 3600;
+        int minutes = (this.sec % 3600) / 60;
+        int seconds = this.sec % 60;
+        return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     public double getDistance() {
@@ -85,14 +76,6 @@ public class Walk {
 
     public void setGoal(int goal) {
         this.goal = goal;
-    }
-
-    public int getMin() {
-        return min;
-    }
-
-    public void setMin(int min) {
-        this.min = min;
     }
 
     public int getSec() {
