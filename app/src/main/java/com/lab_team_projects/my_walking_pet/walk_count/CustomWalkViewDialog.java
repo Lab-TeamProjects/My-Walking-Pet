@@ -7,9 +7,20 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
+import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.databinding.CustomWalkViewDialogBinding;
+import com.lab_team_projects.my_walking_pet.login.User;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Locale;
 
 public class CustomWalkViewDialog extends Dialog {
+
+    private Walk walk;
 
     public interface DialogCancelListener {
         void onDialogCancel();
@@ -24,8 +35,9 @@ public class CustomWalkViewDialog extends Dialog {
     private CustomWalkViewDialogBinding binding;
     private WindowManager.LayoutParams params;
 
-    public CustomWalkViewDialog(@NonNull Context context) {
+    public CustomWalkViewDialog(@NonNull Context context, Walk walk) {
         super(context);
+        this.walk = walk;
     }
 
     @Override
@@ -41,8 +53,23 @@ public class CustomWalkViewDialog extends Dialog {
 
         this.getWindow().setAttributes(params);
 
-        binding.tvWalkCount.setText("12020");
-        binding.tvGoalCount.setText("120");
+        binding.tvWalkCount.setText(String.valueOf(walk.getCount()));
+        binding.tvGoalCount.setText(String.valueOf(walk.getGoal()));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+        Date walkDate;
+        try {
+            walkDate = sdf.parse(walk.getDate());
+            sdf = new SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault());
+            String time = sdf.format(walkDate);
+            binding.tvTitle.setText(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        binding.tvCalories.setText(String.valueOf(walk.getKcal()));
+        binding.tvDistance.setText(String.format(Locale.getDefault(), "%.2f", walk.getDistance()));
+        binding.tvTime.setText(walk.calculateHours());
     }
 
     @Override

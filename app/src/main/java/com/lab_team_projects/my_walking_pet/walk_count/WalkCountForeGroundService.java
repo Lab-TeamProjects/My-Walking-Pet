@@ -216,6 +216,9 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                 break;
             }
         }
+        GameManager gm = GameManager.getInstance();
+        User user = gm.getUser();
+        walk.setKcal(walk.calculateKcal(user));
     }
 
     private void step() {

@@ -33,6 +33,8 @@ public class User {
         this.bmi = weight / Math.pow(height, 2);
     }
 
+
+
     public double calculateStride() {
         List<Double> list = Arrays.asList(
             height * 0.45,
