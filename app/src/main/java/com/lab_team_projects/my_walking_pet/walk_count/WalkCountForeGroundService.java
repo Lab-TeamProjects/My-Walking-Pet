@@ -22,6 +22,7 @@ import androidx.core.app.NotificationCompat;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
+import com.lab_team_projects.my_walking_pet.login.User;
 import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 
 public class WalkCountForeGroundService extends Service implements SensorEventListener {
@@ -213,6 +214,9 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                 break;
             }
         }
+        GameManager gm = GameManager.getInstance();
+        User user = gm.getUser();
+        walk.setKcal(walk.calculateKcal(user));
     }
 
     private void step() {

@@ -18,7 +18,6 @@ public class User {
     private double bmi;
     private double bmr;    // 기초 대사량
 
-
     public double getBMR() {
         if (this.gender == 0) {
             return  65.0 + (13.7 * weight) + (5.0 * height) - (6.8 * age);
@@ -31,8 +30,6 @@ public class User {
         this.bmi = weight / Math.pow(height, 2);
     }
 
-
-
     public double calculateStride() {
         List<Double> list = Arrays.asList(
             height * 0.45,
@@ -43,8 +40,6 @@ public class User {
         // cm로 반환함
         return (Collections.max(list) + Collections.min(list)) / 2.0;
     }
-
-
 
     public String getEmail() {
         return email;

@@ -18,7 +18,6 @@ public class Walk {
     private double kcal;
     private double distance;    // 단위 km
 
-
     public double calculateKcal(User user) {
         // 칼로리 계산
         // 몸무게 kg * 거리 km * 단위 면적당 칼로리 소모량 (걷기는 약 30 ~ 40)
@@ -28,7 +27,6 @@ public class Walk {
     public double calculateDistance(User user) {
         // km로 반환함
         return (this.count * (user.calculateStride() * 0.01) * 0.001);
-
     }
 
     public String calculateHours() {

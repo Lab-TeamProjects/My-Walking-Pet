@@ -41,6 +41,7 @@ import com.lab_team_projects.my_walking_pet.db.AppDatabase;
 import com.lab_team_projects.my_walking_pet.login.User;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class DayFragment extends Fragment {
@@ -52,6 +53,9 @@ public class DayFragment extends Fragment {
     private GameManager gm = GameManager.getInstance();
     private Walk walk = gm.getWalk();
     int goalCount = 123, nowCount = 4000;
+    List<Walk> walks;
+
+
 
     public DayFragment() {
         // Required empty public constructor
@@ -65,12 +69,12 @@ public class DayFragment extends Fragment {
         pieChart = binding.pieChart;
         barChart = binding.barChart;
 
+        walks = AppDatabase.getInstance(requireContext()).walkDao().getAll();
 
         User user = gm.getUser();
         nowCount = walk.getCount();
         walk.setDistance(walk.calculateDistance(user));
-        double kcal = walk.calculateKcal(user);
-        binding.tvKcalValue.setText(String.format(Locale.getDefault(),"%.2f", kcal));
+        binding.tvKcalValue.setText(String.format(Locale.getDefault(),"%.2f", walk.getKcal()));
         binding.tvKmValue.setText(String.format(Locale.getDefault(),"%.2f", walk.getDistance()));
 
         binding.tvMinValue.setText(walk.calculateHours());
@@ -109,12 +113,9 @@ public class DayFragment extends Fragment {
         barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                CustomWalkViewDialog dialog = new CustomWalkViewDialog(requireContext());
-                dialog.setDialogCancelListener(() -> {
-                    barChart.highlightValue(null);
-                });
 
-
+                CustomWalkViewDialog dialog = new CustomWalkViewDialog(requireContext(), walks.get((int) e.getX()));
+                dialog.setDialogCancelListener(() -> barChart.highlightValue(null));
                 dialog.show();
             }
 
@@ -123,8 +124,6 @@ public class DayFragment extends Fragment {
 
             }
         });
-
-
 
         return binding.getRoot();
     }
@@ -167,8 +166,6 @@ public class DayFragment extends Fragment {
         data.setDrawValues(false);
         data.setValueFormatter(new PercentFormatter(pieChart));
 
-        // 중앙 텍스트 설정
-        // 임시데이터
         String centerText = String.format(Locale.getDefault()
                 ,"목표 걸음 수 %d\n%d", walk.getGoal(), walk.getCount());
         int index = centerText.indexOf("\n");
@@ -218,10 +215,11 @@ public class DayFragment extends Fragment {
         ArrayList<BarEntry> valueList = new ArrayList<>();
         String title = "걸음 수";
 
-        // 임의 데이터
-        for (int i = 0; i<30; i++) {
-            valueList.add(new BarEntry((float)i, i * 100f));
+
+        for (int i = 0; i < walks.size(); i++) {
+            valueList.add(new BarEntry((float) i, walk.getCount()));
         }
+
 
         BarDataSet barDataSet = new BarDataSet(valueList, title);
         barDataSet.setColors(rgb("#3CB371"));
