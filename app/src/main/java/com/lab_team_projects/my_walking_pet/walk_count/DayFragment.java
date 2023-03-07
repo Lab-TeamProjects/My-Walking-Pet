@@ -7,17 +7,21 @@ import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -52,7 +56,6 @@ public class DayFragment extends Fragment {
     private BarChart barChart;
     private GameManager gm = GameManager.getInstance();
     private Walk walk = gm.getWalk();
-    int goalCount = 123, nowCount = 4000;
     List<Walk> walks;
 
 
@@ -72,7 +75,6 @@ public class DayFragment extends Fragment {
         walks = AppDatabase.getInstance(requireContext()).walkDao().getAll();
 
         User user = gm.getUser();
-        nowCount = walk.getCount();
         walk.setDistance(walk.calculateDistance(user));
         binding.tvKcalValue.setText(String.format(Locale.getDefault(),"%.2f", walk.getKcal()));
         binding.tvKmValue.setText(String.format(Locale.getDefault(),"%.2f", walk.getDistance()));
@@ -97,6 +99,10 @@ public class DayFragment extends Fragment {
 
             builder.setPositiveButton("설정", (dialog, which) -> {
                 int goal = Integer.parseInt(editText.getText().toString());
+                if (goal < 1000) {
+                    Toast.makeText(requireContext(), "목표 걸음 수는 1000이하로 설정할 수 없습니다!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 walk.setGoal(goal);
                 AppDatabase db = AppDatabase.getInstance(requireContext());
                 db.walkDao().update(walk);
@@ -125,9 +131,19 @@ public class DayFragment extends Fragment {
             }
         });
 
+
+
         return binding.getRoot();
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        WalkViewModel walkViewModel = new ViewModelProvider(this).get(WalkViewModel.class);
+        walkViewModel.getWalkLiveData().observe(getViewLifecycleOwner(), walk->{
+            setPieChartCenterText(walk.getCount(), walk.getGoal());
+        });
+    }
 
     private void setupPieChart() {
         pieChart.setDrawHoleEnabled(true);
@@ -166,15 +182,19 @@ public class DayFragment extends Fragment {
         data.setDrawValues(false);
         data.setValueFormatter(new PercentFormatter(pieChart));
 
+
+        setPieChartCenterText(walk.getCount(), walk.getGoal());
+        pieChart.setData(data);
+        pieChart.invalidate();
+    }
+
+    private void setPieChartCenterText(int count, int goal) {
         String centerText = String.format(Locale.getDefault()
-                ,"목표 걸음 수 %d\n%d", walk.getGoal(), walk.getCount());
+                ,"목표 걸음 수 %d\n%d", goal, count);
         int index = centerText.indexOf("\n");
         SpannableString spannableString = new SpannableString(centerText);
         spannableString.setSpan(new RelativeSizeSpan(0.3f), 0, index, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         pieChart.setCenterText(spannableString);
-
-        pieChart.setData(data);
-        pieChart.invalidate();
     }
 
     private void setupBarChart() {

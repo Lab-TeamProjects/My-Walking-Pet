@@ -16,4 +16,6 @@
     <color name="transparent">#00000000</color>
     <color name="translucent">#80000000</color>
 
+    <color name="button_ripple">#807C7C7C</color>
+
 </resources>

@@ -13,7 +13,7 @@ public class Walk {
     private int id;    // db id
     private int count;    // 걸음 수
     private String date;    // 현재 날짜
-    private int goal;    // 목표
+    private int goal = 1000;    // 목표
     private int sec;    // 걸은 초
     private double kcal;
     private double distance;    // 단위 km
