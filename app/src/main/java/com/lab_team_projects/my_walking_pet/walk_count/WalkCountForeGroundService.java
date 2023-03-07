@@ -34,8 +34,8 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     private final AppDatabase db = AppDatabase.getInstance(this);
 
     private float[] lastAccelValues = new float[3];
-    private static final float THRESHOLD_WALK = 15.0f; // 걷는 동작 판별 임계값
-    private static final float THRESHOLD_RUN = 30.0f; // 뛰는 동작 판별 임계값
+    private static final float THRESHOLD_WALK = 12.5f; // 걷는 동작 판별 임계값
+    private static final float THRESHOLD_RUN = 25.5f; // 뛰는 동작 판별 임계값
     private boolean isWalking = false;
     private boolean isRunning = false;
 

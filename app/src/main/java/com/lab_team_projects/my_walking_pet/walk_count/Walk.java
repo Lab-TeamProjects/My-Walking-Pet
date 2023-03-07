@@ -17,7 +17,6 @@ public class Walk {
     private int sec;    // 걸은 초
     private double kcal;
     private double distance;    // 총 거리
-
     private int walkCount;
     private int runCount;
 

@@ -23,6 +23,7 @@ public class HomeFragment extends Fragment {
 
     private boolean isInteractionBtnClick = false;
 
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -31,6 +32,15 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+
+
+        binding.fabWater.setOnClickListener(v->{
+            binding.customBarChartView.setBarLength("-");
+        });
+
+        binding.fabFood.setOnClickListener(v->{
+            binding.customBarChartView.setBarLength("+");
+        });
 
 
         /* 버튼 이동 */
