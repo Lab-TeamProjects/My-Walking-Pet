@@ -33,7 +33,10 @@ public class User {
         this.bmi = weight / Math.pow(height, 2);
     }
 
-
+    public float[] getWalkRunStride() {
+        // 반환 미터
+        return new float[]{ (float) this.height * 0.45f,(float) this.height * 1.3f };
+    }
 
     public double calculateStride() {
         List<Double> list = Arrays.asList(
