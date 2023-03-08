@@ -69,20 +69,20 @@ public class NoticeSettingActivity extends AppCompatActivity {
         }
 
         SharedPreferences.OnSharedPreferenceChangeListener prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-                    @Override
-                    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                        if(key.equals(SETTING_SENSOR_BG)) {
-                            if (getContext() != null) {
-                                if (sharedPreferences.getBoolean(key, true)) {
-                                    startService();
-                                }
-                                else {
-                                    stopService();
-                                }
-                            }
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                if(key.equals(SETTING_SENSOR_BG)) {
+                    if (getContext() != null) {
+                        if (sharedPreferences.getBoolean(key, true)) {
+                            startService();
+                        }
+                        else {
+                            stopService();
                         }
                     }
-                };
+                }
+            }
+        };
 
         public void startService() {
             // 서비스 시작 함수

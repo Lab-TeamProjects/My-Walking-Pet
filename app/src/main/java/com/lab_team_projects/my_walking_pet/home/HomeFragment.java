@@ -35,12 +35,16 @@ public class HomeFragment extends Fragment {
 
 
         binding.fabWater.setOnClickListener(v->{
-            binding.customBarChartView.setBarLength("-");
+            binding.customBarChartView.setBarLength("+");
         });
 
         binding.fabFood.setOnClickListener(v->{
-            binding.customBarChartView.setBarLength("+");
+            binding.customBarChartView.setBarLength("-");
         });
+
+        binding.pbHunger.setProgress(70);
+        binding.pbThirst.setProgress(40);
+        binding.pbCleanliness.setProgress(50);
 
 
         /* 버튼 이동 */

@@ -6,18 +6,19 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 public class CustomBarChartView extends View {
 
-    private Bar bgBar = new Bar(0.4f, 0.8f, 0, Color.WHITE);
-    private Bar contentBar = new Bar(0.4f, 0.8f, 0.4f, Color.LTGRAY);
+    private final Bar bgBar = new Bar(0.4f, 0.8f, 0.0f, Color.WHITE);
+    private final Bar contentBar = new Bar(0.4f, 0.8f, 0.4f, Color.LTGRAY);
 
     public void setBarLength(String s) {
         if (s.equals("+")) {
-            contentBar.readjust(0.1f, true);
+            contentBar.increaseLength();
         } else if (s.equals("-")) {
-            contentBar.readjust(0.1f, false);
+            contentBar.decreaseLength();
         }
         invalidate();
     }
@@ -59,12 +60,13 @@ public class CustomBarChartView extends View {
         float barY;
         int color;
         float inWidth, inHeight;
-        float ratio;
+        float amount;
+        Canvas canvas;
 
-        public Bar(float inWidth, float inHeight, float ratio, int color) {
+        public Bar(float inWidth, float inHeight, float amount, int color) {
             this.inWidth = inWidth;
             this.inHeight = inHeight;
-            this.ratio = ratio;
+            this.amount = amount;
             this.color = color;
         }
 
@@ -72,34 +74,30 @@ public class CustomBarChartView extends View {
             this.paint = new Paint();
             this.paint.setColor(this.color);
             this.rect = new RectF();
+
         }
 
         public void draw(Canvas canvas) {
-            // 커스텀 막대 그리기
-            width = getWidth();
-            height = getHeight();
-            barHeight = height * inHeight;
-            barWidth = width * inWidth;
-            barX = (width - barWidth) / 2;
-            barY = (height - barHeight) / 2;
-            ratio = height * ratio;
-            rect.set(barX, barY + ratio, barX + barWidth, barY + barHeight);
-            canvas.drawRoundRect(rect, 20, 20, paint);
+            this.canvas = canvas;
+            this.width = getWidth();
+            this.height = getHeight();
+            this.barHeight = height * inHeight;
+            this.barWidth = width * inWidth;
+            this.barX = (width - barWidth) / 2;
+            this.barY = (height - barHeight) / 2;
+            this.rect.set(barX, barY + this.amount, barX + barWidth, barY + barHeight);
+            this.canvas.drawRoundRect(rect, 20, 20, paint);
         }
 
-        public void readjust(float ratio, boolean isAdd) {
-            ratio = height * ratio;
 
-            if (isAdd) {
-                this.ratio -= ratio;
-            } else {
-                this.ratio += ratio;
-            }
-            rect.set(barX, barY + this.ratio, barX + barWidth, barY + barHeight);
+        public void increaseLength() {
+            this.amount -= 50.0f;
+            this.rect.set(barX, barY + this.amount, barX + barWidth, barY + barHeight);
         }
 
-        public float getRatio() {
-            return ratio;
+        public void decreaseLength() {
+            this.amount += 50.0f;
+            this.rect.set(barX, barY + this.amount, barX + barWidth, barY + barHeight);
         }
     }
 }

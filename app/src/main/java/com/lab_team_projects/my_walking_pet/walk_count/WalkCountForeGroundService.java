@@ -38,7 +38,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     private float[] strideLength = new float[2];
 
     private float[] lastAccelValues = new float[3];
-    private static final float THRESHOLD_WALK = 12.0f; // 걷는 동작 판별 임계값
+    private static final float THRESHOLD_WALK = 7.0f; // 걷는 동작 판별 임계값
     private static final float THRESHOLD_RUN = 45.0f; // 뛰는 동작 판별 임계값
     private boolean isWalking = false;
     private boolean isRunning = false;
@@ -103,6 +103,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                 .setContentText(String.format(Locale.getDefault(), "\uD83D\uDC36 펫 다음 성장까지 %d걸음 남았습니다!", walk.getCount()))
                 .setContentTitle(String.format(Locale.getDefault(), "%d 걸음", walk.getCount()))
                 .setOngoing(true)
+                .setNumber(0)    // 앱 뱃지 뜨는 것이 별로라서 없애고 싶은데 안없어짐
                 .setWhen(0)
                 .setShowWhen(false);
 
