@@ -24,18 +24,22 @@ import com.lab_team_projects.my_walking_pet.db.AppDatabase;
 import com.lab_team_projects.my_walking_pet.login.User;
 import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 
+import java.util.Locale;
+
 public class WalkCountForeGroundService extends Service implements SensorEventListener {
 
     public static BackgroundTask task = new BackgroundTask();
     public static int value = 0;
+    private NotificationManager notificationManager;
     private Walk walk;
     private final GameManager gm = GameManager.getInstance();
     private final User user = gm.getUser();
     private final AppDatabase db = AppDatabase.getInstance(this);
+    private float[] strideLength = new float[2];
 
     private float[] lastAccelValues = new float[3];
-    private static final float THRESHOLD_WALK = 12.5f; // 걷는 동작 판별 임계값
-    private static final float THRESHOLD_RUN = 25.5f; // 뛰는 동작 판별 임계값
+    private static final float THRESHOLD_WALK = 12.0f; // 걷는 동작 판별 임계값
+    private static final float THRESHOLD_RUN = 45.0f; // 뛰는 동작 판별 임계값
     private boolean isWalking = false;
     private boolean isRunning = false;
 
@@ -62,10 +66,20 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
         // 가속도 센서 등록 등록
         Sensor accelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        Sensor stepDetectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        Sensor stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         // 센서 리스너 등록
         if (accelSensor != null) {
             sensorManager.registerListener(this, accelSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+
+        if (stepDetectorSensor!= null) {
+            sensorManager.registerListener(this, stepDetectorSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+
+        if (stepCounterSensor != null) {
+            sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
         task.execute();
@@ -77,19 +91,20 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         return START_NOT_STICKY;
     }
 
-    public void initializeNotification() {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1");
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
-        style.bigText("설정을 보려면 누르세요");
-        style.setBigContentTitle(null);
-        style.setSummaryText("서비스 동작중");
-        builder.setContentText(null);
-        builder.setContentTitle(null);
-        builder.setOngoing(true);
-        builder.setStyle(style);
-        builder.setWhen(0);
-        builder.setShowWhen(false);
+    public Notification makeNotification(){
+        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle()
+                .bigText(String.format(Locale.getDefault(), "\uD83D\uDC36 펫 다음 성장까지 %d걸음\n\uD83D\uDC5F 목표 걸음까지 %d걸음 남았습니다!", walk.getCount(), walk.getGoal()))
+                .setBigContentTitle(String.format(Locale.getDefault(), "%d 걸음", walk.getCount()));
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setStyle(bigTextStyle)
+                .setContentText(String.format(Locale.getDefault(), "\uD83D\uDC36 펫 다음 성장까지 %d걸음 남았습니다!", walk.getCount()))
+                .setContentTitle(String.format(Locale.getDefault(), "%d 걸음", walk.getCount()))
+                .setOngoing(true)
+                .setWhen(0)
+                .setShowWhen(false);
 
         Intent notificationIntent = new Intent(this, NoticeSettingActivity.class);
 
@@ -99,11 +114,15 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             manager.createNotificationChannel(new NotificationChannel("1","포그라운드 서비스", NotificationManager.IMPORTANCE_NONE));
         }
-        Notification notification = builder.build();
-        startForeground(1, notification);
+
+        return builder.build();
     }
 
-    private static final float ALPHA = 0.8f; // 필터 계수, 높을 수록 입력갑에 둔감해짐
+    public void initializeNotification() {
+        startForeground(1, makeNotification());
+    }
+
+    private static final float ALPHA = 0.65f; // 필터 계수, 높을 수록 입력갑에 둔감해짐
 
     private float[] lowPass(float[] input, float[] output) {
         if (output == null) return input;
@@ -151,6 +170,8 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                 // 뛰는 상태였다면, 멈춤 상태로 전환됨
                 isRunning = false;
             }
+        } else if (event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
+            step(true);
         }
     }
 
@@ -158,7 +179,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         if (isWalking) {
             walk.setWalkCount(walk.getWalkCount() + 1);
         } else {
-            walk.setRunCount(walk.getRunCount() + 2);
+            walk.setRunCount(walk.getRunCount() + 1);
         }
         walk.setCount(walk.getWalkCount() + walk.getRunCount());
         walk.calculateSec(user);
@@ -170,6 +191,10 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
             walk.setKcal(walk.calculateKcal(user));
         }
         db.walkDao().update(walk);
+        
+        // 센서 리로딩
+        notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.notify(1, makeNotification());
     }
 
     @Override
