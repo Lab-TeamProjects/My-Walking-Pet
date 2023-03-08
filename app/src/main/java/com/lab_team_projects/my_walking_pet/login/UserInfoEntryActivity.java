@@ -5,16 +5,13 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -30,68 +27,45 @@ import android.widget.RadioGroup;
 
 import com.bumptech.glide.Glide;
 import com.lab_team_projects.my_walking_pet.R;
-import com.lab_team_projects.my_walking_pet.app.SendData;
+import com.lab_team_projects.my_walking_pet.app.ServerConnection;
+import com.lab_team_projects.my_walking_pet.databinding.ActivityTitleBinding;
+import com.lab_team_projects.my_walking_pet.databinding.ActivityUserInfoEntryBinding;
 import com.lab_team_projects.my_walking_pet.helpers.PermissionsCheckHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import java.util.Objects;
 
 
 public class UserInfoEntryActivity extends AppCompatActivity {
+    private final String PROFILE_SETTING = "URL 넣어야함"; // URL 넣어야 함
 
+    private ActivityUserInfoEntryBinding binding;
 
     private PermissionsCheckHelper pch;
 
-    private ImageView ivUserProfile;
-    private NumberPicker npUserWeight, npUserHeight;
-    private EditText etNickName, etStatusMsg;
-    private DatePicker dpUserBirthday;
-    private RadioGroup rgUserGender;
-    private RadioButton rbMan, rbWomen;
-    private Button btnComplete;
     private Bitmap profilePhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_info_entry);
-
-        ivUserProfile = findViewById(R.id.ivUserProfile);
-        npUserWeight = findViewById(R.id.npUserWeight);
-        npUserHeight = findViewById(R.id.npUserHeight);
-        etNickName = findViewById(R.id.etNickName);
-        etStatusMsg = findViewById(R.id.etStatusMsg);
-        dpUserBirthday = findViewById(R.id.dpUserBirthday);
-        rgUserGender = findViewById(R.id.rgGender);
-        rbMan = findViewById(R.id.rbMan);
-        rbWomen = findViewById(R.id.rbWomen);
-        btnComplete = findViewById(R.id.btnComplete);
+        binding = ActivityUserInfoEntryBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         // 몸무게 Number Picker 설정
-        npUserWeight.setMaxValue(300);
-        npUserWeight.setMinValue(10);
-        npUserWeight.setValue(60);
+        binding.npUserWeight.setMaxValue(300);
+        binding.npUserWeight.setMinValue(10);
+        binding.npUserWeight.setValue(60);
         // 키 Number Picker 설정
-        npUserHeight.setMaxValue(300);
-        npUserHeight.setMinValue(10);
-        npUserHeight.setValue(170);
+        binding.npUserHeight.setMaxValue(300);
+        binding.npUserHeight.setMinValue(10);
+        binding.npUserHeight.setValue(170);
         // 성별 Radio Group 설정
-        rgUserGender.check(R.id.rbMan);
+        binding.rgGender.check(R.id.rbMan);
 
         try {
             // 저장된 프로필 사진 불러오기
@@ -100,13 +74,13 @@ public class UserInfoEntryActivity extends AppCompatActivity {
 
             profilePhoto = BitmapFactory.decodeFile(photo.getAbsolutePath());
 
-            ivUserProfile.setImageBitmap(profilePhoto);
+            binding.ivUserProfile.setImageBitmap(profilePhoto);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         // 프로필 이미지 클릭
-        ivUserProfile.setOnClickListener(new View.OnClickListener() {
+        binding.ivUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -119,27 +93,43 @@ public class UserInfoEntryActivity extends AppCompatActivity {
         });
 
         // 설정완료 버튼 클릭
-        btnComplete.setOnClickListener(new View.OnClickListener() {
+        binding.btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 JSONObject jsonObject = new JSONObject();
 
                 try {
                     jsonObject.put("profilePhoto", profilePhoto.toString());
-                    jsonObject.put("nickName", etNickName.getText().toString());
-                    jsonObject.put("statusMsg", etStatusMsg.getText().toString());
-                    jsonObject.put("userBirthday", dpUserBirthday.getYear() + "-" + (dpUserBirthday.getMonth() + 1) + "-" + dpUserBirthday.getDayOfMonth());
-                    jsonObject.put("userWeight", String.valueOf(npUserWeight.getValue()));
-                    jsonObject.put("userHeight", String.valueOf(npUserHeight.getValue()));
-                    if(rbMan.isChecked()) {
-                        jsonObject.put("userGender", String.valueOf(rbMan.getText()));
+                    jsonObject.put("nickName", binding.etNickName.getText().toString());
+                    jsonObject.put("statusMsg", binding.etStatusMsg.getText().toString());
+                    jsonObject.put("userBirthday", binding.dpUserBirthday.getYear() + "-" + (binding.dpUserBirthday.getMonth() + 1) + "-" + binding.dpUserBirthday.getDayOfMonth());
+                    jsonObject.put("userWeight", String.valueOf(binding.npUserWeight.getValue()));
+                    jsonObject.put("userHeight", String.valueOf(binding.npUserHeight.getValue()));
+                    if(binding.rbMan.isChecked()) {
+                        jsonObject.put("userGender", String.valueOf(binding.rbMan.getText()));
                     } else {
-                        jsonObject.put("userGender", String.valueOf(rbWomen.getText()));
+                        jsonObject.put("userGender", String.valueOf(binding.rbWomen.getText()));
                     }
 
                     // 서버로 데이터 전송
-                    SendData sendData = new SendData(jsonObject,"url");
-                    sendData.execute();
+                    ServerConnection serverRequest = new ServerConnection(PROFILE_SETTING, jsonObject);
+                    serverRequest.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
+                        if(response.isSuccessful()) {
+                            try {
+                                if(Objects.requireNonNull(response.body()).string().equals("올바른 응답 메시지")) { // 응답 메시지 입력해야함
+                                    // 회원가입에 성공 했을 경우
+
+                                } else {
+                                    // 회원가입에 실패 했을 경우
+
+                                }
+                            } catch (IOException e) {
+                                Log.e("Email Duplication : ", "이메일 중복", e);
+                            }
+                        } else {
+                            Log.e("Email Duplication - else : ", "응답 실패");
+                        }
+                    }));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -184,7 +174,7 @@ public class UserInfoEntryActivity extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         // 사진 불러오기
                         Uri uri = result.getData().getData();
-                        Glide.with(UserInfoEntryActivity.this).load(uri).into(ivUserProfile);
+                        Glide.with(UserInfoEntryActivity.this).load(uri).into(binding.ivUserProfile);
 
                         try {
                             // 사진 지정

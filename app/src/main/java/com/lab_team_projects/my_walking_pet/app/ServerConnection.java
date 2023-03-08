@@ -18,10 +18,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ServerRequest {
+public class ServerConnection {
 
-    private String serverUrl = "http://203.232.193.164:5000/";
-
+    private String serverUrl = "http://203.232.193.164:5000/"; // 서버 기본 url
 
     private ClientCallBackListener clientCallBackListener = null;
 
@@ -33,31 +32,27 @@ public class ServerRequest {
         void onResponse(@NonNull Call call, @NonNull Response response) throws IOException;
     }
 
-
-
-    public ServerRequest(String url, JSONObject jsonInput) {
+    /**
+     * 서버에 http 요청을 보내고 반환값을 받는 클래스
+     * @param url : 파일경로(path)
+     * @param jsonObject : 보낼 메시지를 담은 객체
+     */
+    public ServerConnection(String url, JSONObject jsonObject) {
         serverUrl = serverUrl.concat(url);
 
         RequestBody reqBody = RequestBody.create(
-                jsonInput.toString(),
+                jsonObject.toString(),
                 MediaType.parse("application/json; charset=utf-8")
         );
 
         requestClient(reqBody, serverUrl);
     }
 
-    public ServerRequest(String url, List<String[]> requestBodyElements) {
-        serverUrl = serverUrl.concat(url);
-
-        FormBody.Builder builder = new FormBody.Builder();
-        for(String[] strings : requestBodyElements) {
-            builder.add(strings[0], strings[1]);
-        }
-
-        RequestBody requestBody = builder.build();
-        requestClient(requestBody, serverUrl);
-    }
-
+    /**
+     * 서버에 데이터를 보내고 반환값을 받는 함수
+     * @param requestBody : 보낼 메시지를 담은 객체
+     * @param serverUrl : 서버 Url
+     */
     private void requestClient(RequestBody requestBody, String serverUrl) {
         Request request = new Request.Builder()
                 .url(serverUrl)
