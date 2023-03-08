@@ -68,7 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 tvDuplicationResult.setText("중복된 이메일");
                             }
                         } catch (IOException e) {
-                            Log.e("Email Duplication : ", "이메일 중복", e);
+                            Log.e("IOException : ", "btnDuplicationCheck", e);
                         }
                     } else {
                         tvDuplicationResult.setText("서버 응답에 실패했습니다.");

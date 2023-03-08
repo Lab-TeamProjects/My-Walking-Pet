@@ -38,8 +38,8 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     private float[] strideLength = new float[2];
 
     private float[] lastAccelValues = new float[3];
-    private static final float THRESHOLD_WALK = 7.0f; // 걷는 동작 판별 임계값
-    private static final float THRESHOLD_RUN = 45.0f; // 뛰는 동작 판별 임계값
+    private static final float THRESHOLD_WALK = 5.0f; // 걷는 동작 판별 임계값
+    private static final float THRESHOLD_RUN = 15.0f; // 뛰는 동작 판별 임계값
     private boolean isWalking = false;
     private boolean isRunning = false;
 
@@ -123,7 +123,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         startForeground(1, makeNotification());
     }
 
-    private static final float ALPHA = 0.65f; // 필터 계수, 높을 수록 입력갑에 둔감해짐
+    private static final float ALPHA = 0.7f; // 필터 계수, 계수가 높을 수록 필터되는 값이 줄어듬
 
     private float[] lowPass(float[] input, float[] output) {
         if (output == null) return input;
