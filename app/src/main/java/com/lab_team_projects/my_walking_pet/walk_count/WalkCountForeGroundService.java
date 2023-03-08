@@ -136,43 +136,46 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float[] accelValues = event.values.clone();
-            accelValues = lowPass(accelValues, lastAccelValues);
-            float x = accelValues[0];
-            float y = accelValues[1];
-            float z = accelValues[2];
-            float accelMagnitude = (float) Math.sqrt(x * x + y * y + z * z);
-            float delta = accelMagnitude - lastAccelValues[2];
-            lastAccelValues[2] = accelMagnitude;
+        switch (event.sensor.getType()) {
+            case Sensor.TYPE_ACCELEROMETER:
+                float[] accelValues = event.values.clone();
+                accelValues = lowPass(accelValues, lastAccelValues);
+                float x = accelValues[0];
+                float y = accelValues[1];
+                float z = accelValues[2];
+                float accelMagnitude = (float) Math.sqrt(x * x + y * y + z * z);
+                float delta = accelMagnitude - lastAccelValues[2];
+                lastAccelValues[2] = accelMagnitude;
 
-            if (delta > THRESHOLD_WALK) {
-                // 걸음 수를 증가시키는 기준값을 넘었을 때
-                if (!isWalking) {
-                    // 이전에 이동 상태가 아니었다면, 이동 상태로 전환됨
-                    isWalking = true;
+                if (delta > THRESHOLD_WALK) {
+                    // 걸음 수를 증가시키는 기준값을 넘었을 때
+                    if (!isWalking) {
+                        // 이전에 이동 상태가 아니었다면, 이동 상태로 전환됨
+                        isWalking = true;
+                    }
+                    // 걷는 걸음 수 증가 처리
+                    step(true);
+                } else {
+                    // 걸음 수를 증가시키는 기준 값을 넘지 못했을 때
+                    if (isWalking) {
+                        // 이전에 이동 상태였다면, 멈춤 상태로 전환됨
+                        isWalking = false;
+                    }
                 }
-                // 걷는 걸음 수 증가 처리
+
+                if (delta > THRESHOLD_RUN && !isRunning) {
+                    // 이전에 뛰는 상태가 아니었다면, 뛰는 상태로 전환됨
+                    isRunning = true;
+                    // 뛰는 걸음 수 증가 처리
+                    step(false);
+                } else if (delta < THRESHOLD_RUN && isRunning) {
+                    // 뛰는 상태였다면, 멈춤 상태로 전환됨
+                    isRunning = false;
+                }
+                break;
+            case Sensor.TYPE_STEP_COUNTER:
                 step(true);
-            } else {
-                // 걸음 수를 증가시키는 기준 값을 넘지 못했을 때
-                if (isWalking) {
-                    // 이전에 이동 상태였다면, 멈춤 상태로 전환됨
-                    isWalking = false;
-                }
-            }
-
-            if (delta > THRESHOLD_RUN && !isRunning) {
-                // 이전에 뛰는 상태가 아니었다면, 뛰는 상태로 전환됨
-                isRunning = true;
-                // 뛰는 걸음 수 증가 처리
-                step(false);
-            } else if (delta < THRESHOLD_RUN && isRunning) {
-                // 뛰는 상태였다면, 멈춤 상태로 전환됨
-                isRunning = false;
-            }
-        } else if (event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
-            step(true);
+                break;
         }
     }
 
