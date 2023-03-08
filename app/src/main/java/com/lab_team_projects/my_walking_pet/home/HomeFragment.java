@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,11 @@ import android.widget.Toast;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
 import com.lab_team_projects.my_walking_pet.help.HelpActivity;
+import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class HomeFragment extends Fragment {
 
@@ -37,6 +43,33 @@ public class HomeFragment extends Fragment {
         binding.pbHunger.setProgress(70);
         binding.pbThirst.setProgress(40);
         binding.pbCleanliness.setProgress(50);
+
+
+        /* 임시 */
+        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject2 = new JSONObject();
+        JSONObject jsonObject3 = new JSONObject();
+        try {
+            jsonObject.put("code", 1001).put("count", 3);
+            jsonObject2.put("code", 1006).put("count", 10);
+            jsonObject3.put("code", 1002).put("count", 5);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(jsonObject);
+        jsonArray.put(jsonObject2);
+
+
+        String json = jsonArray.toString();
+        InventoryHelper inventoryHelper = new InventoryHelper(json);
+        inventoryHelper.setBindingButton(binding.fabWater, binding.fabFood, binding.fabWash, binding.tvItemName, binding.ibItemPreview, binding.ibItemNext);
+
+
+
+
+
 
         bindingListener();
 
@@ -78,12 +111,16 @@ public class HomeFragment extends Fragment {
             binding.fabWater.setVisibility(View.VISIBLE);
             binding.fabFood.setVisibility(View.VISIBLE);
             binding.fabWash.setVisibility(View.VISIBLE);
-            binding.fabclothes.setVisibility(View.VISIBLE);
+            binding.tvItemName.setVisibility(View.VISIBLE);
+            binding.ibItemPreview.setVisibility(View.VISIBLE);
+            binding.ibItemNext.setVisibility(View.VISIBLE);
         } else {
             binding.fabWater.setVisibility(View.INVISIBLE);
             binding.fabFood.setVisibility(View.INVISIBLE);
             binding.fabWash.setVisibility(View.INVISIBLE);
-            binding.fabclothes.setVisibility(View.INVISIBLE);
+            binding.tvItemName.setVisibility(View.INVISIBLE);
+            binding.ibItemPreview.setVisibility(View.INVISIBLE);
+            binding.ibItemNext.setVisibility(View.INVISIBLE);
         }
     }
 
