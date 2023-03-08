@@ -24,12 +24,9 @@ public class Item {
         this.count = count;
     }
 
-    public enum ItemSelect {
-        DRINK, FOOD, WASH
-    }
 
     public enum ItemType {
-        FOOD, SNACK, CLEAN
+        DRINK, FOOD, WASH
     }
 
     public enum ItemEffect {

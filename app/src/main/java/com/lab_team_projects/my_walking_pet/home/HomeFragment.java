@@ -49,6 +49,7 @@ public class HomeFragment extends Fragment {
         try {
             initInventory();
         } catch (IOException e) {
+            // 임시
             e.printStackTrace();
         }
 
@@ -72,16 +73,28 @@ public class HomeFragment extends Fragment {
         JSONArray jsonArray = new JSONArray();
         jsonArray.put(jsonObject);
         jsonArray.put(jsonObject2);
+        jsonArray.put(jsonObject3);
 
         String json = jsonArray.toString();
 
         InventoryHelper inventoryHelper = new InventoryHelper(json, requireContext());
         inventoryHelper.setBindingButton(binding.tvItemName, binding.ibItemPreview, binding.ibItemNext);
-        binding.fabWater.setOnClickListener(v-> inventoryHelper.setSelectType(Item.ItemSelect.DRINK));
-        binding.fabFood.setOnClickListener(v-> inventoryHelper.setSelectType(Item.ItemSelect.FOOD));
-        binding.fabWash.setOnClickListener(v-> inventoryHelper.setSelectType(Item.ItemSelect.WASH));
+        binding.fabWater.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.DRINK, inventoryHelper));
+        binding.fabFood.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.FOOD, inventoryHelper));
+        binding.fabWash.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.WASH, inventoryHelper));
+        binding.ibItemNext.setOnClickListener(v -> binding.tvItemName.setText(inventoryHelper.setNextItem()));
+        binding.ibItemPreview.setOnClickListener(v -> binding.tvItemName.setText(inventoryHelper.setPreviewItem()));
+
+    }
+
+    private void setFabOnClickListener(Item.ItemType itemType, InventoryHelper inventoryHelper) {
+        binding.tvItemName.setVisibility(View.VISIBLE);
+        binding.ibItemPreview.setVisibility(View.VISIBLE);
+        binding.ibItemNext.setVisibility(View.VISIBLE);
+        inventoryHelper.setItemType(itemType);
         binding.tvItemName.setText(inventoryHelper.setItemName());
     }
+
 
     private void bindingListener() {
         binding.ibShop.setOnClickListener(v -> navigateToFragment(v, R.id.shopFragment));
@@ -103,7 +116,6 @@ public class HomeFragment extends Fragment {
         binding.ibAR.setOnClickListener(v -> Toast.makeText(requireContext(), "AR 이동 버튼", Toast.LENGTH_SHORT).show());
     }
 
-    // 중복되는 코드를 메소드로 추출
     private void navigateToFragment(View view, @IdRes int fragmentId) {
         Navigation.findNavController(view).navigate(fragmentId, null);
     }
@@ -113,9 +125,6 @@ public class HomeFragment extends Fragment {
             binding.fabWater.setVisibility(View.VISIBLE);
             binding.fabFood.setVisibility(View.VISIBLE);
             binding.fabWash.setVisibility(View.VISIBLE);
-            binding.tvItemName.setVisibility(View.VISIBLE);
-            binding.ibItemPreview.setVisibility(View.VISIBLE);
-            binding.ibItemNext.setVisibility(View.VISIBLE);
         } else {
             binding.fabWater.setVisibility(View.INVISIBLE);
             binding.fabFood.setVisibility(View.INVISIBLE);
