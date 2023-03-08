@@ -25,7 +25,7 @@ public class Item {
     }
 
     public enum ItemSelect {
-        WATER, FOOD, WASH
+        DRINK, FOOD, WASH
     }
 
     public enum ItemType {

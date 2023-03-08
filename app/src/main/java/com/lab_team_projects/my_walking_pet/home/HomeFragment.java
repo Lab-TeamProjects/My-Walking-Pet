@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,8 @@ import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class HomeFragment extends Fragment {
 
@@ -44,7 +45,18 @@ public class HomeFragment extends Fragment {
         binding.pbThirst.setProgress(40);
         binding.pbCleanliness.setProgress(50);
 
+        bindingListener();
+        try {
+            initInventory();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        return binding.getRoot();
+    }
+
+
+    private void initInventory() throws IOException {
         /* 임시 */
         JSONObject jsonObject = new JSONObject();
         JSONObject jsonObject2 = new JSONObject();
@@ -61,20 +73,14 @@ public class HomeFragment extends Fragment {
         jsonArray.put(jsonObject);
         jsonArray.put(jsonObject2);
 
-
         String json = jsonArray.toString();
-        InventoryHelper inventoryHelper = new InventoryHelper(json);
-        inventoryHelper.setBindingButton(binding.fabWater, binding.fabFood, binding.fabWash, binding.tvItemName, binding.ibItemPreview, binding.ibItemNext);
 
-
-
-
-
-
-        bindingListener();
-
-
-        return binding.getRoot();
+        InventoryHelper inventoryHelper = new InventoryHelper(json, requireContext());
+        inventoryHelper.setBindingButton(binding.tvItemName, binding.ibItemPreview, binding.ibItemNext);
+        binding.fabWater.setOnClickListener(v-> inventoryHelper.setSelectType(Item.ItemSelect.DRINK));
+        binding.fabFood.setOnClickListener(v-> inventoryHelper.setSelectType(Item.ItemSelect.FOOD));
+        binding.fabWash.setOnClickListener(v-> inventoryHelper.setSelectType(Item.ItemSelect.WASH));
+        binding.tvItemName.setText(inventoryHelper.setItemName());
     }
 
     private void bindingListener() {
@@ -88,10 +94,6 @@ public class HomeFragment extends Fragment {
             isInteractionBtnClick = !isInteractionBtnClick;
             clickInteractionBtn(isInteractionBtnClick);
         });
-
-        binding.fabWater.setOnClickListener(v -> binding.customBarChartView.setBarLength("+"));
-        binding.fabFood.setOnClickListener(v -> binding.customBarChartView.setBarLength("-"));
-
 
         binding.ibHelp.setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), HelpActivity.class));
@@ -131,6 +133,4 @@ public class HomeFragment extends Fragment {
         // 바인딩은 생명주기 이슈 때문에 프래그먼트가 종료되면 널을 넣어줘야 함
         binding = null;
     }
-
-
 }
