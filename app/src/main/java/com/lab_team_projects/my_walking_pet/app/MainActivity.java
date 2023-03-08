@@ -34,23 +34,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         /*
-        * 게임매니저를 통해서 유저 정보를 세팅함
-        * 이부분은 다른곳으로 옮겨도 됨
-        * 자동로그인 하는 부분이라던가
-        * */
+         * 게임매니저를 통해서 유저 정보를 세팅함
+         * 이부분은 다른곳으로 옮겨도 됨
+         * 자동로그인 하는 부분이라던가
+         * */
         GameManager gameManager = GameManager.getInstance();
         gameManager.loadUser(this);
 
         /*
-        * 현재 데이터베이스를 확인해서 전날 db가 있는지 확인해야함
-        * 혹은 오늘 db가 있는지 없는지 확인해아함
-        * db가 없으면 새로운 Walk를 만들고 db에 저장
-        * */
+         * 현재 데이터베이스를 확인해서 전날 db가 있는지 확인해야함
+         * 혹은 오늘 db가 있는지 없는지 확인해아함
+         * db가 없으면 새로운 Walk를 만들고 db에 저장
+         * */
 
         /*
-        * 현재 시간을 받아와야함
-        * 아래 date format을 저렇게 한 이유는 mysql date 포맷이랑 같게 하려고 했음
-        * */
+         * 현재 시간을 받아와야함
+         * 아래 date format을 저렇게 한 이유는 mysql date 포맷이랑 같게 하려고 했음
+         * */
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
         Date date = new Date();
         LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -90,10 +90,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         /*
-        * 뷰바인딩
-        * 레이아웃에 대한 클래스를 만들 필요 없이
-        * 바인딩 선언 하나로 전부 접근 가능
-        * */
+         * 뷰바인딩
+         * 레이아웃에 대한 클래스를 만들 필요 없이
+         * 바인딩 선언 하나로 전부 접근 가능
+         * */
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

@@ -1,0 +1,9 @@
+code,name,effect,value,type,explanation
+1001,강아지사료,HUNGER,100,FOOD,강아지가 좋아하는 사료
+1002,고양이사료,HUNGER,100,FOOD,고양이가 좋아하는 사료
+1003,원숭이사료,HUNGER,100,FOOD,원숭이가 좋아하는 사료
+1004,물,THIRST,50,DRINK,물은 역시 삼다수
+1005,간식,"HUNGER, MOOD","10, 25",SNACK,모든 동물들이 좋아하는 간식
+1006,샴푸,"CLEANLINESS, DURABILITY","100, 5",CLEAN,아이 깨끗해
+1007,물,CLEANLINESS,50,CLEAN,그냥 물은 동물들이 안좋아해용
+1008,비누,"CLEANLINESS, DURABILITY","80, 10",CLEAN,비누는 염기성

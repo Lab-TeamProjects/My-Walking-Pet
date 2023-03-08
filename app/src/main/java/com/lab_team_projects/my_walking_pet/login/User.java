@@ -1,5 +1,10 @@
 package com.lab_team_projects.my_walking_pet.login;
 
+import com.lab_team_projects.my_walking_pet.collection.Collection;
+import com.lab_team_projects.my_walking_pet.home.Animal;
+import com.lab_team_projects.my_walking_pet.home.Item;
+import com.lab_team_projects.my_walking_pet.mission.Mission;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,6 +25,11 @@ public class User {
 
     private int money;
 
+    private List<Item> itemLists;
+    private List<Mission> missionList;
+    private List<Animal> animalList;
+    private List<Collection> collectionList;
+
 
     public double getBMR() {
         if (this.gender == 0) {
@@ -33,7 +43,10 @@ public class User {
         this.bmi = weight / Math.pow(height, 2);
     }
 
-
+    public float[] getWalkRunStride() {
+        // 반환 미터
+        return new float[]{ (float) this.height * 0.45f,(float) this.height * 1.3f };
+    }
 
     public double calculateStride() {
         List<Double> list = Arrays.asList(
@@ -134,5 +147,37 @@ public class User {
 
     public void addMoney(int money) {
         this.money += money;
+    }
+
+    public List<Item> getItemLists() {
+        return itemLists;
+    }
+
+    public void setItemLists(List<Item> itemLists) {
+        this.itemLists = itemLists;
+    }
+
+    public List<Mission> getMissionList() {
+        return missionList;
+    }
+
+    public void setMissionList(List<Mission> missionList) {
+        this.missionList = missionList;
+    }
+
+    public List<Animal> getAnimalList() {
+        return animalList;
+    }
+
+    public void setAnimalList(List<Animal> animalList) {
+        this.animalList = animalList;
+    }
+
+    public List<Collection> getCollectionList() {
+        return collectionList;
+    }
+
+    public void setCollectionList(List<Collection> collectionList) {
+        this.collectionList = collectionList;
     }
 }

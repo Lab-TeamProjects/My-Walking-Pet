@@ -15,7 +15,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -25,35 +24,24 @@ import com.lab_team_projects.my_walking_pet.db.AppDatabase;
 import com.lab_team_projects.my_walking_pet.login.User;
 import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 
+import java.util.Locale;
+
 public class WalkCountForeGroundService extends Service implements SensorEventListener {
 
-    public BackgroundTask task = new BackgroundTask();;
-    public int value = 0;
-
-    private User user;
+    public static BackgroundTask task = new BackgroundTask();
+    public static int value = 0;
+    private NotificationManager notificationManager;
     private Walk walk;
-    private SensorManager sensorManager;
-    private Sensor gyroscope;
-    private Sensor accelerometer;
-    private static final float NS2S = 1.0f / 1000000000.0f;    // 나노초를 초로 변환하기 위한 상수
-    private float timestamp;
+    private final GameManager gm = GameManager.getInstance();
+    private final User user = gm.getUser();
+    private final AppDatabase db = AppDatabase.getInstance(this);
+    private float[] strideLength = new float[2];
+
     private float[] lastAccelValues = new float[3];
-    private float[] lastGyroValues = new float[3];
-    private float[] gyroIntegral = new float[3];
-    private final float THRESHOLD = 0.1f;
-    private static final float THRESHOLD_WALK = 8.0f; // 걷는 동작 판별 임계값
+    private static final float THRESHOLD_WALK = 5.0f; // 걷는 동작 판별 임계값
     private static final float THRESHOLD_RUN = 15.0f; // 뛰는 동작 판별 임계값
-    private long lastTime;
-
-    private static final float THRESHOLD_STOP = 0.2f; // 멈춤 판별 임계값
-    private static final long STOP_DURATION = 2000; // 일정 시간 동안 값이 일정하면 멈춘 것으로 판별
-
-    private long startTime;
-    private long elapsedTime;
-    private boolean isMoving = false;
-
-
-
+    private boolean isWalking = false;
+    private boolean isRunning = false;
 
     public WalkCountForeGroundService() {
         // 빈 생성자
@@ -73,30 +61,28 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     public void onCreate() {
         super.onCreate();
 
-        GameManager gm = GameManager.getInstance();
         walk = gm.getWalk();
-        user = gm.getUser();
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-        /*
-         * 수정 부분
-         * 매니저 리스너가 등록이 안되어 있었음
-         * 그리고 널이면 넣는다고 되어있었는데
-         * 널이 아닐때 넣어야하는게 맞나봄
-         * */
-        Log.d("Foreground", "시작되긴 하니?");
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        // 가속도 센서 등록 등록
+        Sensor accelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        Sensor stepDetectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        Sensor stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
-        if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
-            gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            sensorManager.registerListener(this, gyroscope, SensorManager.SENSOR_DELAY_NORMAL);
-            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-            timestamp = 0;
+        // 센서 리스너 등록
+        if (accelSensor != null) {
+            sensorManager.registerListener(this, accelSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
 
+        if (stepDetectorSensor!= null) {
+            sensorManager.registerListener(this, stepDetectorSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+
+        if (stepCounterSensor != null) {
+            sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
         task.execute();
-
         initializeNotification();
     }
 
@@ -105,19 +91,21 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         return START_NOT_STICKY;
     }
 
-    public void initializeNotification() {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1");
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
-        style.bigText("설정을 보려면 누르세요");
-        style.setBigContentTitle(null);
-        style.setSummaryText("서비스 동작중");
-        builder.setContentText(null);
-        builder.setContentTitle(null);
-        builder.setOngoing(true);
-        builder.setStyle(style);
-        builder.setWhen(0);
-        builder.setShowWhen(false);
+    public Notification makeNotification(){
+        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle()
+                .bigText(String.format(Locale.getDefault(), "\uD83D\uDC36 펫 다음 성장까지 %d걸음\n\uD83D\uDC5F 목표 걸음까지 %d걸음 남았습니다!", walk.getCount(), walk.getGoal()))
+                .setBigContentTitle(String.format(Locale.getDefault(), "%d 걸음", walk.getCount()));
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setStyle(bigTextStyle)
+                .setContentText(String.format(Locale.getDefault(), "\uD83D\uDC36 펫 다음 성장까지 %d걸음 남았습니다!", walk.getCount()))
+                .setContentTitle(String.format(Locale.getDefault(), "%d 걸음", walk.getCount()))
+                .setOngoing(true)
+                .setNumber(0)    // 앱 뱃지 뜨는 것이 별로라서 없애고 싶은데 안없어짐
+                .setWhen(0)
+                .setShowWhen(false);
 
         Intent notificationIntent = new Intent(this, NoticeSettingActivity.class);
 
@@ -127,105 +115,87 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             manager.createNotificationChannel(new NotificationChannel("1","포그라운드 서비스", NotificationManager.IMPORTANCE_NONE));
         }
-        Notification notification = builder.build();
-        startForeground(1, notification);
+
+        return builder.build();
+    }
+
+    public void initializeNotification() {
+        startForeground(1, makeNotification());
+    }
+
+    private static final float ALPHA = 0.7f; // 필터 계수, 계수가 높을 수록 필터되는 값이 줄어듬
+
+    private float[] lowPass(float[] input, float[] output) {
+        if (output == null) return input;
+
+        for (int i = 0; i < input.length; i++) {
+            output[i] = output[i] + ALPHA * (input[i] - output[i]);
+        }
+        return output;
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        switch (event.sensor.getType()) {
-            case Sensor.TYPE_ACCELEROMETER:
-                float[] accelValues = event.values.clone();
-                float x = accelValues[0];
-                float y = accelValues[1];
-                float z = accelValues[2];
-                float accelMagnitude = (float) Math.sqrt(x*x + y*y + z*z);
-                float delta = accelMagnitude - lastAccelValues[2];
-                lastAccelValues[2] = accelMagnitude;
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            float[] accelValues = event.values.clone();
+            accelValues = lowPass(accelValues, lastAccelValues);
+            float x = accelValues[0];
+            float y = accelValues[1];
+            float z = accelValues[2];
+            float accelMagnitude = (float) Math.sqrt(x * x + y * y + z * z);
+            float delta = accelMagnitude - lastAccelValues[2];
+            lastAccelValues[2] = accelMagnitude;
 
-                long currentTime = System.currentTimeMillis();
-                float timeDelta = currentTime - lastTime;
-
-                lastTime = currentTime;
-
-                if (delta > THRESHOLD_WALK) {
-                    // 걸음 수를 증가시키는 기준값을 넘었을 때
-                    if (!isMoving) {
-                        // 이전에 이동 상태가 아니었다면, 이동 상태로 전환됨
-                        isMoving = true;
-                        startTime = System.currentTimeMillis();
-                    }
-                    // 걸음 수 증가 처리
-                    step();
-                } else {
-                    // 걸음 수를 증가시키는 기준 값을 넘지 못했을 때
-                    if (isMoving) {
-                        // 이전에 이동 상태였다면, 멈춤 상태로 전환됨
-                        isMoving = false;
-                        elapsedTime += System.currentTimeMillis() - startTime;
-                    }
+            if (delta > THRESHOLD_WALK) {
+                // 걸음 수를 증가시키는 기준값을 넘었을 때
+                if (!isWalking) {
+                    // 이전에 이동 상태가 아니었다면, 이동 상태로 전환됨
+                    isWalking = true;
                 }
-
-                if (isMoving) {
-                    // 이동 상태인 경우, 현재까지 이동한 시간을 더함
-                    elapsedTime += System.currentTimeMillis() - startTime;
+                // 걷는 걸음 수 증가 처리
+                step(true);
+            } else {
+                // 걸음 수를 증가시키는 기준 값을 넘지 못했을 때
+                if (isWalking) {
+                    // 이전에 이동 상태였다면, 멈춤 상태로 전환됨
+                    isWalking = false;
                 }
-                walk.setSec((int) (elapsedTime/1000));
-                AppDatabase.getInstance(getApplicationContext()).walkDao().update(walk);
-                break;
-
-        case Sensor.TYPE_GYROSCOPE:
-            // 자이로스코프 센서 이벤트 처리
-            if (timestamp != 0) {
-                final float dT = (event.timestamp - timestamp) * NS2S;
-                float[] gyroValues = event.values.clone();
-                float xGyro = gyroValues[0];
-                float yGyro = gyroValues[1];
-                float zGyro = gyroValues[2];
-                float[] deltaVector = new float[4];
-                deltaVector[0] = xGyro;
-                deltaVector[1] = yGyro;
-                deltaVector[2] = zGyro;
-                float omegaMagnitude = (float) Math.sqrt(xGyro * xGyro + yGyro * yGyro + zGyro * zGyro);
-
-                // omegaMagnitude 값에 따라 걸음 수를 증가시킴
-                if (omegaMagnitude > THRESHOLD) {
-                    // 뛰는 상태일 때
-                    if (!isMoving) {
-                        // 이전에 이동 상태가 아니었다면, 이동 상태로 전환됨
-                        isMoving = true;
-                        startTime = System.currentTimeMillis();
-                    }
-                    // 걸음 수 증가 처리
-                    step();
-                } else {
-                    // 걸음 수를 증가시키는 기준 값을 넘지 못했을 때
-                    if (isMoving) {
-                        // 이전에 이동 상태였다면, 멈춤 상태로 전환됨
-                        isMoving = false;
-                        elapsedTime += System.currentTimeMillis();
-                    }
-                    walk.setSec((int) (elapsedTime/1000));
-                    AppDatabase.getInstance(getApplicationContext()).walkDao().update(walk);
-                    // 자이로스코프 값의 적분 계산
-                    for (int i = 0; i < 3; i++) {
-                        gyroIntegral[i] += deltaVector[i] * dT;
-                    }
-                }
-                timestamp = event.timestamp;
-                break;
             }
+
+            if (delta > THRESHOLD_RUN && !isRunning) {
+                // 이전에 뛰는 상태가 아니었다면, 뛰는 상태로 전환됨
+                isRunning = true;
+                // 뛰는 걸음 수 증가 처리
+                step(false);
+            } else if (delta < THRESHOLD_RUN && isRunning) {
+                // 뛰는 상태였다면, 멈춤 상태로 전환됨
+                isRunning = false;
+            }
+        } else if (event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
+            step(true);
         }
-        GameManager gm = GameManager.getInstance();
-        User user = gm.getUser();
-        walk.setKcal(walk.calculateKcal(user));
     }
 
-    private void step() {
-        walk.setCount(walk.getCount() + 1);
-        AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+    private void step(boolean isWalking) {
+        if (isWalking) {
+            walk.setWalkCount(walk.getWalkCount() + 1);
+        } else {
+            walk.setRunCount(walk.getRunCount() + 1);
+        }
+        walk.setCount(walk.getWalkCount() + walk.getRunCount());
+        walk.calculateSec(user);
+        updateWalk();
+    }
+
+    private void updateWalk() {
+        if (gm != null) {
+            walk.setKcal(walk.calculateKcal(user));
+        }
         db.walkDao().update(walk);
-        user.addMoney(1);
+        
+        // 센서 리로딩
+        notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.notify(1, makeNotification());
     }
 
     @Override
@@ -240,13 +210,13 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         task.cancel(true);
     }
 
-    public void println(String msg) {
+    public static void println(String msg) {
         Log.d("Foreground", msg);
     }
 
 
     // 쓰레드
-    class BackgroundTask extends AsyncTask<Integer, String, Integer> {
+    static class BackgroundTask extends AsyncTask<Integer, String, Integer> {
 
         @Override
         protected Integer doInBackground(Integer... values) {
