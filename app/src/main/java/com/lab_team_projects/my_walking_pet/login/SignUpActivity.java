@@ -1,111 +1,161 @@
 package com.lab_team_projects.my_walking_pet.login;
 
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.lab_team_projects.my_walking_pet.R;
-import com.lab_team_projects.my_walking_pet.app.SendData;
-import com.lab_team_projects.my_walking_pet.app.ServerRequest;
+import com.lab_team_projects.my_walking_pet.app.ServerConnection;
+import com.lab_team_projects.my_walking_pet.databinding.ActivitySignUpBinding;
+import com.lab_team_projects.my_walking_pet.databinding.SettingsActivityBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Objects;
-
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import java.util.regex.Pattern;
 
 public class SignUpActivity extends AppCompatActivity {
-    private Button btnSignUp;
-    private Button btnDuplicationCheck;
-    private TextView tvDuplicationResult;
-    private static final String urls = "http://203.232.193.164:9999/sign-up"; // flask 호출 url
-    private static final String url = "check-email-duplication";
-    private EditText input_id, input_pwd; // 아이디 비밀번호 이름 받아오기위한 변수
+    private static final String SIGN_UP = "sign-up";
+    private static final String CHECK_EMAIL_DUPLICATION = "check-email-duplication";
+
+    ActivitySignUpBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        binding = ActivitySignUpBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        input_id = findViewById(R.id.tbID);
-        input_pwd = findViewById(R.id.tbPW);
-        btnDuplicationCheck = findViewById(R.id.btnDuplicationCheck);
-        tvDuplicationResult = findViewById(R.id.tvDuplicationResult);
-        btnSignUp = findViewById(R.id.btnSignUp);
-
-        btnDuplicationCheck.setOnClickListener(new View.OnClickListener() {
+        binding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject.put("email", input_id.getText().toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                onBackPressed();
+            }
+        });
 
-                ServerRequest serverRequest = new ServerRequest(url, jsonObject);
-                serverRequest.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
+        binding.btnDuplicationCheck.setOnClickListener(btnDuplicationCheckListener);
+        binding.btnSignUp.setOnClickListener(btnSignUpListener);
+
+        binding.etEmail.addTextChangedListener(textWatcher);
+        binding.etPassWord.addTextChangedListener(textWatcher);
+        binding.etPassWordCheck.addTextChangedListener(textWatcher);
+    }
+
+    TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // EditText 입력값이 변경될 때마다 모든 필드의 입력 여부를 검사하여 회원가입 버튼을 활성화 또는 비활성화함
+            if (!binding.etEmail.getText().toString().isEmpty()
+                    && !binding.etPassWord.getText().toString().isEmpty()
+                    && !binding.etPassWordCheck.getText().toString().isEmpty()
+            ) {
+                binding.btnSignUp.setEnabled(true); // 모든 필드가 채워졌다면 회원가입 버튼 활성화
+            } else {
+                binding.btnSignUp.setEnabled(false); // 하나 이상의 필드가 비어있다면 회원가입 버튼 비활성화
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {}
+    };
+
+    // 중복체크 리스너
+    View.OnClickListener btnDuplicationCheckListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("email", binding.etEmail.getText().toString());
+            } catch (JSONException e) {
+                Log.e("JSONException : ", "btnDuplicationCheck", e);
+            }
+            if(!isEmailPattern(binding.etEmail.getText().toString())) {
+                binding.tvDuplicationResult.setText("올바른 이메일 형식이 아닙니다.");
+                binding.tvDuplicationResult.setTextColor(Color.RED);
+            }
+            else {
+                ServerConnection sc = new ServerConnection(CHECK_EMAIL_DUPLICATION, jsonObject);
+                sc.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
                     if(response.isSuccessful()) {
                         try {
                             if(Objects.requireNonNull(response.body()).string().equals("사용가능한 이메일")) {
-                                tvDuplicationResult.setText("사용가능한 이메일");
+                                // 사용 가능한 이메일일 경우
+                                binding.tvDuplicationResult.setText("사용가능한 이메일입니다.");
+                                binding.tvDuplicationResult.setTextColor(Color.GREEN);
                             } else {
-                                tvDuplicationResult.setText("중복된 이메일");
+                                // 중복되거나 없는 이메일일 경우
+                                binding.tvDuplicationResult.setText("");
+                                binding.tvDuplicationResult.setTextColor(Color.RED);
                             }
                         } catch (IOException e) {
                             Log.e("IOException : ", "btnDuplicationCheck", e);
                         }
                     } else {
-                        tvDuplicationResult.setText("서버 응답에 실패했습니다.");
-                        Log.e("Email Duplication - else : ", "응답 실패");
+                        binding.tvDuplicationResult.setText("서버 연결이 불안정합니다.");
+                        Log.e("response failed : ", "btnDuplicationCheck");
                     }
                 }));
-
-                /*JSONObject jsonObject = new JSONObject();
-
-                try {
-                    jsonObject.put("email",  input_id.getText().toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                SendData sendData = new SendData(jsonObject, urls);
-                sendData.execute();*/
             }
-        });
+        }
+    };
 
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                JSONObject jsonObject = new JSONObject();
+    View.OnClickListener btnSignUpListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            JSONObject jsonObject = new JSONObject();
 
-                try {
-                    jsonObject.put("email",  input_id.getText().toString());
-                    jsonObject.put("password",  input_pwd.getText().toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                SendData sendData = new SendData(jsonObject, urls);
-                sendData.execute();
-
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                finish();
+            try {
+                jsonObject.put("email", binding.etEmail.getText().toString());
+                jsonObject.put("password", binding.etEmail.getText().toString());
+            } catch (JSONException e) {
+                Log.e("JSONException : ", "btnSignUp", e);
             }
-        });
+            ServerConnection sc = new ServerConnection(SIGN_UP, jsonObject);
+            sc.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
+                if(response.isSuccessful()) {
+                    try {
+                        if(Objects.requireNonNull(response.body()).string().equals("올바른 응답 메시지")) { // 응답 메시지 입력해야함
+                            // 회원가입에 성공 했을 경우
+                            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                            finish();
+                        } else {
+                            // 회원가입에 실패 했을 경우
+                            Toast.makeText(SignUpActivity.this, "회원가입에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (IOException e) {
+                        Log.e("IOException : ", "btnSignUp", e);
+                    }
+                } else {
+                    binding.tvDuplicationResult.setText("서버 연결이 불안정합니다.");
+                    Log.e("response failed : ", "btnSignUp");
+                }
+            }));
+        }
+    };
+
+    // 이메일 형식 판별
+    public static boolean isEmailPattern(String src) {
+        return Pattern.matches("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+                "\\@" +
+                "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                "(" +
+                "\\." +
+                "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                ")+", src);
     }
 }

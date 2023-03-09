@@ -28,11 +28,10 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <EditText
-        android:id="@+id/tbID"
+        android:id="@+id/etEmail"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginTop="100dp"
-        android:layout_marginBottom="10dp"
         android:background="@drawable/bg_corner_rectangle"
         android:ems="10"
         android:hint="ID를 입력하세요(E-mail 형식)"
@@ -47,21 +46,22 @@
         android:id="@+id/tvDuplicationResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="민ㅇ라ㅓ민어리ㅏㅁㄴ얼"
-        app:layout_constraintTop_toTopOf="@id/btnDuplicationCheck"
-        app:layout_constraintBottom_toBottomOf="@id/btnDuplicationCheck"
-        app:layout_constraintStart_toStartOf="@id/tbID" />
+        android:text=""
+        app:layout_constraintTop_toBottomOf="@id/etEmail"
+        app:layout_constraintBottom_toTopOf="@id/etPassWord"
+        app:layout_constraintLeft_toLeftOf="@id/etEmail" />
+
     <Button
         android:id="@+id/btnDuplicationCheck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="중복 검사"
-        app:layout_constraintTop_toBottomOf="@id/tbID"
-        app:layout_constraintBottom_toTopOf="@id/tbPW"
-        app:layout_constraintRight_toRightOf="@id/tbID"/>
+        app:layout_constraintTop_toBottomOf="@id/etEmail"
+        app:layout_constraintBottom_toTopOf="@id/etPassWord"
+        app:layout_constraintRight_toRightOf="@id/etEmail"/>
 
     <EditText
-        android:id="@+id/tbPW"
+        android:id="@+id/etPassWord"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_margin="10dp"
@@ -76,7 +76,7 @@
 
 
     <EditText
-        android:id="@+id/tbPWCheck"
+        android:id="@+id/etPassWordCheck"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_margin="10dp"
@@ -85,11 +85,9 @@
         android:hint="비밀번호를 한번 더 입력하세요"
         android:inputType="textPassword"
         android:padding="5pt"
-        app:layout_constraintTop_toBottomOf="@id/tbPW"
+        app:layout_constraintTop_toBottomOf="@id/etPassWord"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-
 
     <Button
         android:id="@+id/btnSignUp"
@@ -99,7 +97,8 @@
         android:background="@drawable/bg_corner_rectangle"
         android:text="회원가입"
         android:textSize="8pt"
-        app:layout_constraintTop_toBottomOf="@id/tbPWCheck"
+        android:enabled="false"
+        app:layout_constraintTop_toBottomOf="@id/etPassWordCheck"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
