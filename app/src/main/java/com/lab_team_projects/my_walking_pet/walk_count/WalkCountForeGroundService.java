@@ -14,6 +14,7 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,12 +38,18 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     private final User user = gm.getUser();
     private final AppDatabase db = AppDatabase.getInstance(this);
 
+    private boolean isWalking = false;
+    private boolean isRunning = false;
     private final float[] lastAccelValues = new float[3];
-    private static final float THRESHOLD_WALK = 4.5f; // 걷는 동작 판별 임계값
-    private static final float THRESHOLD_RUN = 15.5f; // 뛰는 동작 판별 임계값
+    private static final float THRESHOLD_WALK = 5.0f; // 걷는 동작 판별 임계값
+    private static final float THRESHOLD_RUN = 17.5f; // 뛰는 동작 판별 임계값
     private static final float NS2S = 1.0f / 1000000000.0f;
     private long lastTimestamp = 0;
     private float angle = 0;
+    private long walkStartTime = 0;
+    private long runStartTime = 0;
+    private long runElapsedTime;
+    private long walkElapsedTime;
 
     public WalkCountForeGroundService() {
         // 빈 생성자
@@ -125,7 +132,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         startForeground(1, makeNotification());
     }
 
-    private static final float ALPHA = 0.8f; // 필터 계수, 계수가 높을 수록 필터되는 값이 줄어듬
+    private static final float ALPHA = 0.65f; // 필터 계수, 계수가 높을 수록 필터되는 값이 줄어듬
 
     private float[] lowPass(float[] input, float[] output) {
         if (output == null) return input;
@@ -137,7 +144,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     }
 
     public float[] highPassFilter(float[] input) {
-        final float ALPHA = 0.8f;
+        final float ALPHA = 0.65f;
         float[] lastValues = input.clone();
 
         for (int i = 0; i < input.length; i++) {
@@ -165,13 +172,50 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                 float delta = accelMagnitude - lastAccelValues[2];
                 lastAccelValues[2] = accelMagnitude;
 
+                /*// 걷기 타이머 시작
+                if (delta > THRESHOLD_WALK && !isWalking) {
+                    Log.d("WALK", "걷기시작");
+                    isWalking = true;
+                    walkStartTime = SystemClock.elapsedRealtime();
+                }
+
+                // 뛰기 타이머 시작
+                if (delta > THRESHOLD_RUN && !isRunning) {
+                    Log.d("WALK", "뛰기시작");
+                    isRunning = true;
+                    runStartTime = SystemClock.elapsedRealtime();
+                }
+
+                // 걷기 타이머 종료 및 뛰기 타이머 시작
+                if (delta < THRESHOLD_RUN && isRunning) {
+                    isRunning = false;
+                    runElapsedTime = (SystemClock.elapsedRealtime() - runStartTime);
+                    Log.d("WALK", "뛰기정지");
+                }
+
+                // 뛰기 타이머 종료 및 걷기 타이머 계산
+                if (delta < THRESHOLD_WALK && isWalking) {
+                    Log.d("WALK", "운동정지");
+                    isWalking = false;
+                    walkElapsedTime = (SystemClock.elapsedRealtime() - walkStartTime);
+                    walk.setSec((int) (walk.getSec() + (walkElapsedTime + runElapsedTime) / 1000));
+                    Log.d("WALK", String.format(Locale.getDefault(), "이번 운동으로 %d 초 만큼 운동했습니다.", walk.getSec()));
+                    walkElapsedTime = 0;
+                    runElapsedTime = 0;
+                    updateWalk();
+                }*/
+
+                // 걷기 임계값 이상이면 걷는중으로 인지
                 if (delta > THRESHOLD_WALK) {
                     long timestamp = event.timestamp;
                     if (lastTimestamp != 0) {
+                        // 자이로스코프 이벤트 시간 차이 계산
                         float dt = (timestamp - lastTimestamp) * NS2S;
+                        // 현재 기기의 방향을 측정하고 보정
                         angle += event.values[2] * dt;
                         if (angle >= Math.PI / 2) {
                             angle -= Math.PI / 2;
+                            // 현재 걷고 있는지, 뛰고 있는지에 맞춰서 걸음 수 증가
                             step(!(delta > THRESHOLD_RUN));
                         }
                     }
