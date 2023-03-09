@@ -60,21 +60,26 @@ public class LoginActivity extends AppCompatActivity {
                 sc.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
                     if(response.isSuccessful()) {
                         try {
-                            if(Objects.requireNonNull(response.body()).string().equals("올바른 응답 메시지")) { // 응답 메시지 입력해야함
-                                /*
-                                 유저가 로그인을 했을 때,
-                                 DB에 사용자 정보가 있으면 MainActivity,
-                                 그렇지 않으면 UserInfoEntryActivity 이동
-                                 */
-                            } else {
-                                /*
-                                로그인에 실패했을 때,
-                                아이디는 놔두고 비밀번호를 초기화 하며
-                                토스트 메시지로 "로그인에 실패했습니다." 출력
-                                 */
+                            String responseString = response.body().toString();
+                            JSONObject responseJson = new JSONObject(responseString);
+                            switch(responseString) {
+                                case "NoID" :
+                                    /*
+                                    아이디가 없는 경우
+                                     */
+                                    break;
+                                case "NoAuth" :
+
+                                    break;
+                                case "NoPW" :
+
+                                    break;
+                                case "OK" :
+
+                                    break;
                             }
-                        } catch (IOException e) {
-                            Log.e("IOException : ", "btnLogin", e);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     } else {
                         Log.e("response failed : ", "btnLogin");
