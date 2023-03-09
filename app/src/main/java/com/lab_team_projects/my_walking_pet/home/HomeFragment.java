@@ -1,6 +1,7 @@
 package com.lab_team_projects.my_walking_pet.home;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
 import com.lab_team_projects.my_walking_pet.help.HelpActivity;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
+import com.lab_team_projects.my_walking_pet.helpers.OnSwipeTouchHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,6 +59,7 @@ public class HomeFragment extends Fragment {
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initInventory() throws IOException {
         /* 임시 */
         JSONObject jsonObject = new JSONObject();
@@ -84,6 +87,12 @@ public class HomeFragment extends Fragment {
         binding.fabWash.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.WASH, inventoryHelper));
         binding.ibItemNext.setOnClickListener(v -> binding.tvItemName.setText(inventoryHelper.setNextItem()));
         binding.ibItemPreview.setOnClickListener(v -> binding.tvItemName.setText(inventoryHelper.setPreviewItem()));
+        binding.tvItemName.setOnTouchListener(new OnSwipeTouchHelper(requireContext()) {
+            @Override
+            public void onSwipeTop() {
+                binding.tvItemName.setText(inventoryHelper.useCurrentItem());
+            }
+        });
 
     }
 

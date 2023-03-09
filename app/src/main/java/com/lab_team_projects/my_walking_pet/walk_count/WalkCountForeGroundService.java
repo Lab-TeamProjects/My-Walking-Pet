@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -42,6 +43,27 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     private static final float THRESHOLD_RUN = 15.0f; // 뛰는 동작 판별 임계값
     private boolean isWalking = false;
     private boolean isRunning = false;
+
+
+
+
+    /////////////
+
+
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+    private Sensor magnetometer;
+    private float[] lastAccelerometer = new float[3];
+    private float[] lastMagnetometer = new float[3];
+    private boolean lastAccelerometerSet = false;
+    private boolean lastMagnetometerSet = false;
+    private float[] rotationMatrix = new float[9];
+    private float[] orientation = new float[3];
+    private float currentDegree = 0f;
+    private float[] acceleration = new float[3];
+    private long lastUpdate = 0;
+    private float lastVelocity = 0f;
+
 
     public WalkCountForeGroundService() {
         // 빈 생성자
@@ -137,6 +159,14 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     @Override
     public void onSensorChanged(SensorEvent event) {
         switch (event.sensor.getType()) {
+            case Sensor.TYPE_STEP_DETECTOR:
+                step(true);
+                Toast.makeText(getApplicationContext(), "walkDE", Toast.LENGTH_SHORT).show();
+                break;
+            case Sensor.TYPE_STEP_COUNTER:
+                step(true);
+                Toast.makeText(getApplicationContext(), "walkCOUN", Toast.LENGTH_SHORT).show();
+                break;
             case Sensor.TYPE_ACCELEROMETER:
                 float[] accelValues = event.values.clone();
                 accelValues = lowPass(accelValues, lastAccelValues);
@@ -173,9 +203,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                     isRunning = false;
                 }
                 break;
-            case Sensor.TYPE_STEP_COUNTER:
-                step(true);
-                break;
+
 
         }
     }

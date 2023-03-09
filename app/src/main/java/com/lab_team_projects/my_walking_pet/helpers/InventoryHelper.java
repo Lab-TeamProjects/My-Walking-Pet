@@ -69,7 +69,7 @@ public class InventoryHelper {
         }
 
         if(items.isEmpty()) {
-            return "아이템이 없습니다";
+            return "아이템이 없습니다.";
         } else {
             Item firstItem = items.get(currentItemIndex);
             return getItemName(firstItem);
@@ -89,7 +89,7 @@ public class InventoryHelper {
 
     public String setNextItem() {
         if(items.isEmpty()) {
-            return "아이템이 없습니다";
+            return "아이템이 없습니다.";
         } else {
             if (currentItemIndex < items.size() - 1) {
                 currentItemIndex++;
@@ -103,7 +103,7 @@ public class InventoryHelper {
 
     public String setPreviewItem() {
         if(items.isEmpty()) {
-            return "아이템이 없습니다";
+            return "아이템이 없습니다.";
         } else {
             if (currentItemIndex > 0) {
                 currentItemIndex--;
@@ -116,9 +116,24 @@ public class InventoryHelper {
     }
 
     @NonNull
-    private String getItemName(Item firstItem) {
-        return String.format(Locale.getDefault(), "%s x %d개", findItem(firstItem.getCode()).getName(), firstItem.getCount());
+    private String getItemName(Item item) {
+        return String.format(Locale.getDefault(), "%s x %d개", findItem(item.getCode()).getName(), item.getCount());
     }
 
 
+    public String useCurrentItem() {
+        if (!items.isEmpty()) {
+            Item item = items.get(currentItemIndex);
+            if (item.getCount() > 0) {
+                item.setCount(item.getCount() - 1);
+                if (item.getCount() == 0) {
+                    user.getItemLists().remove(item);
+                    items.remove(currentItemIndex);
+                    return "아이템이 없습니다.";
+                }
+                return getItemName(item);
+            }
+        }
+        return "아이템이 없습니다.";
+    }
 }
