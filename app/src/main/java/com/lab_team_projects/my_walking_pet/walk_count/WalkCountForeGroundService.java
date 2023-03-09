@@ -123,7 +123,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         startForeground(1, makeNotification());
     }
 
-    private static final float ALPHA = 0.7f; // 필터 계수, 계수가 높을 수록 필터되는 값이 줄어듬
+    private static final float ALPHA = 0.8f; // 필터 계수, 계수가 높을 수록 필터되는 값이 줄어듬
 
     private float[] lowPass(float[] input, float[] output) {
         if (output == null) return input;
@@ -176,6 +176,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
             case Sensor.TYPE_STEP_COUNTER:
                 step(true);
                 break;
+
         }
     }
 
