@@ -2,6 +2,7 @@ package com.lab_team_projects.my_walking_pet.app;
 
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,18 +27,21 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    public ActivityMainBinding binding;
-//    public WalkSensor walkSensor = new WalkSensor();
+    private ActivityMainBinding binding;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         /*
          * 게임매니저를 통해서 유저 정보를 세팅함
          * 이부분은 다른곳으로 옮겨도 됨
          * 자동로그인 하는 부분이라던가
          * */
+
         GameManager gameManager = GameManager.getInstance();
         gameManager.loadUser(this);
 
@@ -88,16 +92,6 @@ public class MainActivity extends AppCompatActivity {
 
         gameManager.setWalk(walk);
 
-
-        /*
-         * 뷰바인딩
-         * 레이아웃에 대한 클래스를 만들 필요 없이
-         * 바인딩 선언 하나로 전부 접근 가능
-         * */
-
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
         // 앱바 설정
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.homeFragment,
@@ -108,23 +102,23 @@ public class MainActivity extends AppCompatActivity {
         ).build();
 
         // 네비게이션 컨트롤러
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration);
 
         // 프래그먼트 이동했을 때 앱바 표시 조건문
         navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
             if (navDestination.getId() == R.id.homeFragment) {
                 binding.appBarLayout.setVisibility(View.GONE);
-            } else {
-                binding.appBarLayout.setVisibility(View.VISIBLE);
             }
         });
 
         binding.ibHome.setOnClickListener(v->{
             onBackPressed();
         });
+    }
 
-
+    public void onAppBarLoad(){
+        binding.appBarLayout.setVisibility(View.VISIBLE);
     }
 
     @Override

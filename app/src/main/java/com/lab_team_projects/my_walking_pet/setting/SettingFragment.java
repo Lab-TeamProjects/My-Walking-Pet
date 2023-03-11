@@ -1,5 +1,6 @@
 package com.lab_team_projects.my_walking_pet.setting;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,17 +10,26 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.lab_team_projects.my_walking_pet.R;
+import com.lab_team_projects.my_walking_pet.app.MainActivity;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentSettingBinding;
 
 public class SettingFragment extends Fragment {
 
     private FragmentSettingBinding binding;
-
+    private MainActivity mMainActivity;
     public SettingFragment() {
         // Required empty public constructor
+    }
+
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mMainActivity = (MainActivity) context;
     }
 
     @Override
@@ -27,6 +37,9 @@ public class SettingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentSettingBinding.inflate(inflater, container, false);
+        mMainActivity.onAppBarLoad();
+
+
 
         final String[] SETTING_LIST = getResources().getStringArray(R.array.SETTING_LIST);
 
