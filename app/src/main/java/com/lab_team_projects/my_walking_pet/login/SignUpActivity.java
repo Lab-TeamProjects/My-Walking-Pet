@@ -1,6 +1,5 @@
 package com.lab_team_projects.my_walking_pet.login;
 
-import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.PROTOCOL;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.SUCCESS;
 
 import android.content.Intent;
@@ -94,7 +93,7 @@ public class SignUpActivity extends AppCompatActivity {
                             String jsonResult = Objects.requireNonNull(response.body()).string();
                             JSONObject responseJson = new JSONObject(jsonResult);
 
-                            if(responseJson.getString("result").equals("OK")) {
+                            if(responseJson.get("result").equals(SUCCESS)) {
                                 // 사용 가능한 이메일일 경우
                                 binding.tvDuplicationResult.setText("사용가능한 이메일입니다.");
                                 binding.tvDuplicationResult.setTextColor(Color.GREEN);
@@ -135,9 +134,8 @@ public class SignUpActivity extends AppCompatActivity {
                         String jsonResult = Objects.requireNonNull(response.body()).string();
                         JSONObject responseJson = new JSONObject(jsonResult);
                         String result = (String) responseJson.get("result");
-                        Integer protocol = PROTOCOL.get(result);
 
-                        if (protocol != null && protocol == SUCCESS) {
+                        if (result.equals(SUCCESS)) {
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                             finish();
                         } else {

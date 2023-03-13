@@ -1,5 +1,10 @@
 package com.lab_team_projects.my_walking_pet.login;
 
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_AUTH_EMAIL;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_CORRECT_PASSWORD;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_FOUND_EMAIL;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.SUCCESS;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -63,19 +68,31 @@ public class LoginActivity extends AppCompatActivity {
                             String responseString = response.body().toString();
                             JSONObject responseJson = new JSONObject(responseString);
                             switch(responseString) {
-                                case "NoID" :
+                                case NOT_FOUND_EMAIL:
                                     /*
                                     아이디가 없는 경우
                                      */
                                     break;
-                                case "NoAuth" :
-
+                                case NOT_AUTH_EMAIL:
+                                    /*
+                                    인증되지 않은 이메일 일 경우
+                                     */
                                     break;
-                                case "NoPW" :
-
+                                case NOT_CORRECT_PASSWORD:
+                                    /*
+                                    비밀번호가 틀린 경우
+                                     */
                                     break;
-                                case "OK" :
+                                case SUCCESS:
+                                    /*
+                                    성공한 경우
+                                     */
+                                    break;
 
+                                default:
+                                    /*
+                                    그 외
+                                     */
                                     break;
                             }
                         } catch (JSONException e) {
