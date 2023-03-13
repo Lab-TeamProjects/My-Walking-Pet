@@ -9,4 +9,5 @@ public class ConnectionProtocol {
     public static final String NOT_CORRECT_PASSWORD = "A03";
     public static final String EMAIL_IS_DUPLICATION = "A04";
 
+
 }
