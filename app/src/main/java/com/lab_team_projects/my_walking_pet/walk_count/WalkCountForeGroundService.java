@@ -14,7 +14,9 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -35,13 +37,19 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     private final GameManager gm = GameManager.getInstance();
     private final User user = gm.getUser();
     private final AppDatabase db = AppDatabase.getInstance(this);
-    private float[] strideLength = new float[2];
 
-    private float[] lastAccelValues = new float[3];
-    private static final float THRESHOLD_WALK = 5.0f; // 걷는 동작 판별 임계값
-    private static final float THRESHOLD_RUN = 15.0f; // 뛰는 동작 판별 임계값
     private boolean isWalking = false;
     private boolean isRunning = false;
+    private final float[] lastAccelValues = new float[3];
+    private static final float THRESHOLD_WALK = 5.0f; // 걷는 동작 판별 임계값
+    private static final float THRESHOLD_RUN = 12.5f; // 뛰는 동작 판별 임계값
+    private static final float NS2S = 1.0f / 1000000000.0f;
+    private long lastTimestamp = 0;
+    private float angle = 0;
+    private long walkStartTime = 0;
+    private long runStartTime = 0;
+    private long runElapsedTime;
+    private long walkElapsedTime;
 
     public WalkCountForeGroundService() {
         // 빈 생성자
@@ -64,10 +72,10 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         walk = gm.getWalk();
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-        // 가속도 센서 등록 등록
+        // 가속도 센서, 걸음 감지 센서, 자이로스코프 센서 등록 등록
         Sensor accelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         Sensor stepDetectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-        Sensor stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        Sensor gyroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
         // 센서 리스너 등록
         if (accelSensor != null) {
@@ -78,9 +86,10 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
             sensorManager.registerListener(this, stepDetectorSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
-        if (stepCounterSensor != null) {
-            sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if (gyroSensor!= null) {
+            sensorManager.registerListener(this, gyroSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
+
 
         task.execute();
         initializeNotification();
@@ -123,7 +132,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         startForeground(1, makeNotification());
     }
 
-    private static final float ALPHA = 0.7f; // 필터 계수, 계수가 높을 수록 필터되는 값이 줄어듬
+    private static final float ALPHA = 0.65f; // 필터 계수, 계수가 높을 수록 필터되는 값이 줄어듬
 
     private float[] lowPass(float[] input, float[] output) {
         if (output == null) return input;
@@ -134,45 +143,93 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         return output;
     }
 
+    public float[] highPassFilter(float[] input) {
+        final float ALPHA = 0.65f;
+        float[] lastValues = input.clone();
+
+        for (int i = 0; i < input.length; i++) {
+            lastValues[i] = ALPHA * (lastValues[i] + input[i] - lastValues[i]);
+        }
+
+        return lastValues;
+    }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float[] accelValues = event.values.clone();
-            accelValues = lowPass(accelValues, lastAccelValues);
-            float x = accelValues[0];
-            float y = accelValues[1];
-            float z = accelValues[2];
-            float accelMagnitude = (float) Math.sqrt(x * x + y * y + z * z);
-            float delta = accelMagnitude - lastAccelValues[2];
-            lastAccelValues[2] = accelMagnitude;
-
-            if (delta > THRESHOLD_WALK) {
-                // 걸음 수를 증가시키는 기준값을 넘었을 때
-                if (!isWalking) {
-                    // 이전에 이동 상태가 아니었다면, 이동 상태로 전환됨
-                    isWalking = true;
-                }
-                // 걷는 걸음 수 증가 처리
+        switch (event.sensor.getType()) {
+            case Sensor.TYPE_STEP_DETECTOR:
                 step(true);
-            } else {
-                // 걸음 수를 증가시키는 기준 값을 넘지 못했을 때
-                if (isWalking) {
-                    // 이전에 이동 상태였다면, 멈춤 상태로 전환됨
-                    isWalking = false;
-                }
-            }
+                break;
+            case Sensor.TYPE_ACCELEROMETER:
+                float[] accelValues = event.values.clone();
+                float[] filteredValues = highPassFilter(accelValues);
+                filteredValues = lowPass(accelValues, filteredValues);
 
-            if (delta > THRESHOLD_RUN && !isRunning) {
-                // 이전에 뛰는 상태가 아니었다면, 뛰는 상태로 전환됨
-                isRunning = true;
-                // 뛰는 걸음 수 증가 처리
-                step(false);
-            } else if (delta < THRESHOLD_RUN && isRunning) {
-                // 뛰는 상태였다면, 멈춤 상태로 전환됨
-                isRunning = false;
-            }
-        } else if (event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
-            step(true);
+                float x = filteredValues[0];
+                float y = filteredValues[1];
+                float z = filteredValues[2];
+                float accelMagnitude = (float) Math.sqrt(x * x + y * y + z * z);
+                float delta = accelMagnitude - lastAccelValues[2];
+                lastAccelValues[2] = accelMagnitude;
+
+                /*// 걷기 타이머 시작
+                if (delta > THRESHOLD_WALK && !isWalking) {
+                    Log.d("WALK", "걷기시작");
+                    isWalking = true;
+                    walkStartTime = SystemClock.elapsedRealtime();
+                }
+
+                // 뛰기 타이머 시작
+                if (delta > THRESHOLD_RUN && !isRunning) {
+                    Log.d("WALK", "뛰기시작");
+                    isRunning = true;
+                    runStartTime = SystemClock.elapsedRealtime();
+                }
+
+                // 걷기 타이머 종료 및 뛰기 타이머 시작
+                if (delta < THRESHOLD_RUN && isRunning) {
+                    isRunning = false;
+                    runElapsedTime = (SystemClock.elapsedRealtime() - runStartTime);
+                    Log.d("WALK", "뛰기정지");
+                }
+
+                // 뛰기 타이머 종료 및 걷기 타이머 계산
+                if (delta < THRESHOLD_WALK && isWalking) {
+                    Log.d("WALK", "운동정지");
+                    isWalking = false;
+                    walkElapsedTime = (SystemClock.elapsedRealtime() - walkStartTime);
+                    walk.setSec((int) (walk.getSec() + (walkElapsedTime + runElapsedTime) / 1000));
+                    Log.d("WALK", String.format(Locale.getDefault(), "이번 운동으로 %d 초 만큼 운동했습니다.", walk.getSec()));
+                    walkElapsedTime = 0;
+                    runElapsedTime = 0;
+                    updateWalk();
+                }*/
+
+                // 걷기 임계값 이상이면 걷는중으로 인지
+                if (delta > THRESHOLD_WALK) {
+                    long timestamp = event.timestamp;
+                    if (lastTimestamp != 0) {
+                        // 자이로스코프 이벤트 시간 차이 계산
+                        float dt = (timestamp - lastTimestamp) * NS2S;
+                        // 현재 기기의 방향을 측정하고 보정
+                        angle += event.values[2] * dt;
+                        if (angle >= Math.PI / 2) {
+                            angle -= Math.PI / 2;
+                            // 현재 걷고 있는지, 뛰고 있는지에 맞춰서 걸음 수 증가
+                            step(!(delta > THRESHOLD_RUN));
+                        }
+                    }
+                    lastTimestamp = timestamp;
+                }
+                break;
+            case Sensor.TYPE_GYROSCOPE:
+                float[] gyroValues = event.values.clone();
+                // 자이로스코프 값을 적분하여 보정
+                float dt = (event.timestamp - lastTimestamp) * NS2S;
+                angle += gyroValues[2] * dt;
+                lastTimestamp = event.timestamp;
+                break;
+
         }
     }
 

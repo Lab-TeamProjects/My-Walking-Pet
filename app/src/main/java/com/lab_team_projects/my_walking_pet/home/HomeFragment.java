@@ -1,6 +1,7 @@
 package com.lab_team_projects.my_walking_pet.home;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +19,13 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
 import com.lab_team_projects.my_walking_pet.help.HelpActivity;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
+import com.lab_team_projects.my_walking_pet.helpers.OnSwipeTouchHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class HomeFragment extends Fragment {
 
@@ -44,7 +47,20 @@ public class HomeFragment extends Fragment {
         binding.pbThirst.setProgress(40);
         binding.pbCleanliness.setProgress(50);
 
+        bindingListener();
+        try {
+            initInventory();
+        } catch (IOException e) {
+            // 임시
+            e.printStackTrace();
+        }
 
+        return binding.getRoot();
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void initInventory() throws IOException {
         /* 임시 */
         JSONObject jsonObject = new JSONObject();
         JSONObject jsonObject2 = new JSONObject();
@@ -60,22 +76,34 @@ public class HomeFragment extends Fragment {
         JSONArray jsonArray = new JSONArray();
         jsonArray.put(jsonObject);
         jsonArray.put(jsonObject2);
-
+        jsonArray.put(jsonObject3);
 
         String json = jsonArray.toString();
-        InventoryHelper inventoryHelper = new InventoryHelper(json);
-        inventoryHelper.setBindingButton(binding.fabWater, binding.fabFood, binding.fabWash, binding.tvItemName, binding.ibItemPreview, binding.ibItemNext);
 
+        InventoryHelper inventoryHelper = new InventoryHelper(json, requireContext());
+        inventoryHelper.setBindingButton(binding.tvItemName, binding.ibItemPreview, binding.ibItemNext);
+        binding.fabWater.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.DRINK, inventoryHelper));
+        binding.fabFood.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.FOOD, inventoryHelper));
+        binding.fabWash.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.WASH, inventoryHelper));
+        binding.ibItemNext.setOnClickListener(v -> binding.tvItemName.setText(inventoryHelper.setNextItem()));
+        binding.ibItemPreview.setOnClickListener(v -> binding.tvItemName.setText(inventoryHelper.setPreviewItem()));
+        binding.tvItemName.setOnTouchListener(new OnSwipeTouchHelper(requireContext()) {
+            @Override
+            public void onSwipeTop() {
+                binding.tvItemName.setText(inventoryHelper.useCurrentItem());
+            }
+        });
 
-
-
-
-
-        bindingListener();
-
-
-        return binding.getRoot();
     }
+
+    private void setFabOnClickListener(Item.ItemType itemType, InventoryHelper inventoryHelper) {
+        binding.tvItemName.setVisibility(View.VISIBLE);
+        binding.ibItemPreview.setVisibility(View.VISIBLE);
+        binding.ibItemNext.setVisibility(View.VISIBLE);
+        inventoryHelper.setItemType(itemType);
+        binding.tvItemName.setText(inventoryHelper.setItemName());
+    }
+
 
     private void bindingListener() {
         binding.ibShop.setOnClickListener(v -> navigateToFragment(v, R.id.shopFragment));
@@ -89,10 +117,6 @@ public class HomeFragment extends Fragment {
             clickInteractionBtn(isInteractionBtnClick);
         });
 
-        binding.fabWater.setOnClickListener(v -> binding.customBarChartView.setBarLength("+"));
-        binding.fabFood.setOnClickListener(v -> binding.customBarChartView.setBarLength("-"));
-
-
         binding.ibHelp.setOnClickListener(v -> {
             startActivity(new Intent(requireContext(), HelpActivity.class));
             Toast.makeText(requireContext(), "도움말 버튼", Toast.LENGTH_SHORT).show();
@@ -101,7 +125,6 @@ public class HomeFragment extends Fragment {
         binding.ibAR.setOnClickListener(v -> Toast.makeText(requireContext(), "AR 이동 버튼", Toast.LENGTH_SHORT).show());
     }
 
-    // 중복되는 코드를 메소드로 추출
     private void navigateToFragment(View view, @IdRes int fragmentId) {
         Navigation.findNavController(view).navigate(fragmentId, null);
     }
@@ -111,9 +134,6 @@ public class HomeFragment extends Fragment {
             binding.fabWater.setVisibility(View.VISIBLE);
             binding.fabFood.setVisibility(View.VISIBLE);
             binding.fabWash.setVisibility(View.VISIBLE);
-            binding.tvItemName.setVisibility(View.VISIBLE);
-            binding.ibItemPreview.setVisibility(View.VISIBLE);
-            binding.ibItemNext.setVisibility(View.VISIBLE);
         } else {
             binding.fabWater.setVisibility(View.INVISIBLE);
             binding.fabFood.setVisibility(View.INVISIBLE);
@@ -131,6 +151,4 @@ public class HomeFragment extends Fragment {
         // 바인딩은 생명주기 이슈 때문에 프래그먼트가 종료되면 널을 넣어줘야 함
         binding = null;
     }
-
-
 }
