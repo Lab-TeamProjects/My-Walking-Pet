@@ -22,6 +22,13 @@ public class OnSwipeTouchHelper implements OnTouchListener {
 
     private final class GestureListener extends SimpleOnGestureListener {
 
+        /*
+        * 해당 뷰를 클릭하고 이동한 값을 계산하여
+        * 위로 드래그 했는지 혹은 아래, 왼쪽, 오른쪽 등등
+        * 각각 다른 함수를 설정할 수 있고
+        * 사용 방법은 클래스를 선언하고 익명함수로 재정의하면 된다
+        * */
+
         private static final int SWIPE_THRESHOLD = 1;
         private static final int SWIPE_VELOCITY_THRESHOLD = 1;
 

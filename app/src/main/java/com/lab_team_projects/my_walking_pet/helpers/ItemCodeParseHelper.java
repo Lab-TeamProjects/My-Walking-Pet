@@ -21,6 +21,17 @@ public class ItemCodeParseHelper {
     }
 
     public ItemCodeParseHelper(Context context) throws IOException {
+
+        /*
+        * csv 파일을 불러와서
+        * 형식에 맞게 파싱함
+        * 아이템 ID,
+        * 아이템 이름,
+        * 효과:값&효과:값&효과:값(만약 단일 효과면 그냥 효과:값 으로 표기,
+        * 카테고리,
+        * 아이템 설명
+        * */
+
         InputStream is = context.getResources().openRawResource(R.raw.item);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 

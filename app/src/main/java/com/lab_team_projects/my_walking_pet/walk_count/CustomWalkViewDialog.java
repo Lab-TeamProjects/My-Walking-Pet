@@ -53,6 +53,11 @@ public class CustomWalkViewDialog extends Dialog {
 
         this.getWindow().setAttributes(params);
 
+        /*
+        * 임시
+        * 현재 선택한 차트에 대한 설명을 다이얼로그 화면으로 표시함
+        * */
+
         binding.tvWalkCount.setText(String.valueOf(walk.getCount()));
         binding.tvGoalCount.setText(String.valueOf(walk.getGoal()));
 

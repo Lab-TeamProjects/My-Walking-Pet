@@ -21,7 +21,14 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static final ExecutorService databaseWriteExecutor = Executors.newSingleThreadExecutor();
 
-    /* 싱글톤 */
+    /*
+    * 데이터 베이스를 관리하는 클래스
+    * 싱글톤 구조로 되어있음
+    * 메인 액티비티가 종료되어도
+    * 포그라운드 서비스가 켜져있다면
+    * 메모리 상에 계속 남아서
+    * db io를 도와줌
+    * */
     public synchronized static AppDatabase getInstance(Context context)
     {
         if(instance == null) {

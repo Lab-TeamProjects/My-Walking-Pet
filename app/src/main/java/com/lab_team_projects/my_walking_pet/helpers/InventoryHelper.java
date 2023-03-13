@@ -21,45 +21,46 @@ import java.util.Locale;
 
 public class InventoryHelper {
     private User user = GameManager.getInstance().getUser();
-    private TextView tvItemName;
-    private ImageButton ibItemPreview;
-    private ImageButton ibItemNext;
 
     private Item.ItemType itemType = Item.ItemType.DRINK;
     private Context context;
-    private ItemCodeParseHelper itemCodeParseHelper;
 
-    private List<ItemDetails> detailsList;
+    private final List<ItemDetails> detailsList;    // 파싱한 아이템 정보 리스트
     private List<Item> items = new ArrayList<>();;
     private int currentItemIndex;
 
+    /*
+    * 사용자의 인벤토리에 아이템 저장 및 사용을 도와줌
+    * 아이템의 정보는 ItemCodeParseHelper를 통해서
+    * csv 파일을 파싱한 후 메모리 상에 적재해놓음
+    * */
+
     public InventoryHelper(String json, Context context) throws IOException {
-        user.setItemLists(new Gson().fromJson(json, new TypeToken<List<Item>>(){}.getType()));
         this.context = context;
 
-        setInventory();
-        itemCodeParseHelper = new ItemCodeParseHelper(context);
+        /*
+        * 사용자의 인벤토리 아이템 json 문자열을 클래스 타입에 맞게 대입
+        * */
+        user.setItemLists(new Gson().fromJson(json, new TypeToken<List<Item>>(){}.getType()));
+
+        /*
+        * csv 파일을 파싱하는 클래스
+        * */
+        ItemCodeParseHelper itemCodeParseHelper = new ItemCodeParseHelper(context);
         detailsList = itemCodeParseHelper.getItemDetailsList();
     }
 
-    private void setInventory() {
-
-    }
-
-    public void setBindingButton(TextView tvItemName,
-                                 ImageButton ibItemPreview,
-                                 ImageButton ibItemNext) {
-        this.tvItemName = tvItemName;
-        this.ibItemPreview = ibItemPreview;
-        this.ibItemNext = ibItemNext;
-    }
 
     public void setItemType(Item.ItemType itemType) {
         this.itemType = itemType;
     }
 
     public String setItemName() {
-        currentItemIndex = 0;   // 물, 밥, 씻기 중에 선택
+        /*
+        * 상호작용 버튼을 눌렀을 때 나오는 물, 밥, 씻기 버튼을 클릭하면
+        * 카테고리에 맞게 유저의 인벤토리 리스트에서 아이템을 가져온다
+        * */
+        currentItemIndex = 0;   // 초기값은 당연히 리스트의 첫번째로 선택
         items.clear();
         for(Item item : user.getItemLists()) {
             ItemDetails itemDetails = findItem(item.getCode());
@@ -88,6 +89,10 @@ public class InventoryHelper {
 
 
     public String setNextItem() {
+        /*
+        * 현재 선택중인 아이템 에서 다음 버튼을 클릭시
+        * 현재 아이템 인덱스가 변경되고 텍스트뷰도 변경
+        * */
         if(items.isEmpty()) {
             return "아이템이 없습니다.";
         } else {

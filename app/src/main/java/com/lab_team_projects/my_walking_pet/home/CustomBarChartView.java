@@ -11,6 +11,10 @@ import android.view.View;
 
 public class CustomBarChartView extends View {
 
+    /*
+    * 성장치 그래프 커스텀 뷰
+    * */
+
     private final Bar bgBar = new Bar(0.4f, 0.8f, 0.0f, Color.WHITE);
     private final Bar contentBar = new Bar(0.4f, 0.8f, 0.4f, Color.LTGRAY);
 

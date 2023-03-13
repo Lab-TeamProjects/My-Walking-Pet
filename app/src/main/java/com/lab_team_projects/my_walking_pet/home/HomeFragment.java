@@ -108,8 +108,10 @@ public class HomeFragment extends Fragment {
 
         String json = jsonArray.toString();
 
+        /*
+        * 인벤토리 조작
+        * */
         InventoryHelper inventoryHelper = new InventoryHelper(json, requireContext());
-        inventoryHelper.setBindingButton(binding.tvItemName, binding.ibItemPreview, binding.ibItemNext);
         binding.fabWater.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.DRINK, inventoryHelper));
         binding.fabFood.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.FOOD, inventoryHelper));
         binding.fabWash.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.WASH, inventoryHelper));

@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration);
 
-        // 프래그먼트 이동했을 때 앱바 표시 조건문
+        // 홈화면에서는 앱바를 표시하면 안되기 때문에 홈화면일 때 앱바 숨김
         navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
             if (navDestination.getId() == R.id.homeFragment) {
                 binding.appBarLayout.setVisibility(View.GONE);

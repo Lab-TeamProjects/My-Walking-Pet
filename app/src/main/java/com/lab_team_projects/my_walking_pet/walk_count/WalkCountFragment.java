@@ -1,5 +1,6 @@
 package com.lab_team_projects.my_walking_pet.walk_count;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.lab_team_projects.my_walking_pet.adapters.FragmentPagerAdapter;
+import com.lab_team_projects.my_walking_pet.app.MainActivity;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentWalkCountBinding;
 
 import java.util.Arrays;
@@ -18,7 +20,7 @@ import java.util.List;
 public class WalkCountFragment extends Fragment {
 
     private FragmentWalkCountBinding binding;
-
+    private MainActivity mMainActivity;
     private final DayFragment dayFragment = new DayFragment();
     private final WeekFragment weekFragment = new WeekFragment();
     private final MonthFragment monthFragment = new MonthFragment();
@@ -28,6 +30,11 @@ public class WalkCountFragment extends Fragment {
     public WalkCountFragment() {
         // Required empty public constructor
     }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mMainActivity = (MainActivity) context;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -35,6 +42,7 @@ public class WalkCountFragment extends Fragment {
 
         binding = FragmentWalkCountBinding.inflate(inflater, container, false);
 
+        mMainActivity.onAppBarLoad();
         /*
          * 탭 별로 프래그먼트 전환
          * 뷰페이저2, 어댑터 연동
