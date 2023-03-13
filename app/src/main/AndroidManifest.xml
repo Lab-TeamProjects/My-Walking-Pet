@@ -2,13 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <!-- 걸음 수 센서 사용 권한 -->
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" /> <!-- 배터리 최적화 예외 권한 -->
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> <!-- 포그라운드 서비스 권한 -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- 인터넷 사용권한 -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- 인터넷 접근 권한 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 카메라 사용 권한 -->
-    <uses-permission android:name="android.permission.CAMERA" /> <!-- 갤러리 읽기 권한 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 갤러리 쓰기 권한 -->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <!-- 배터리 최적화 예외 권한 -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!-- 포그라운드 서비스 권한 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- 인터넷 사용권한 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 인터넷 접근 권한 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 카메라 사용 권한 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 갤러리 읽기 권한 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 갤러리 쓰기 권한 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature
@@ -38,10 +45,15 @@
         </activity>
         <activity
             android:name=".app.TitleActivity"
-            android:exported="false">
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".login.UserInfoEntryActivity"
@@ -92,15 +104,10 @@
         </activity>
         <activity
             android:name=".app.MainActivity"
-            android:exported="true">
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".login.LoginActivity"

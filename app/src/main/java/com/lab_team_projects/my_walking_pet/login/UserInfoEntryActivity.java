@@ -1,5 +1,7 @@
 package com.lab_team_projects.my_walking_pet.login;
 
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.SUCCESS;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -17,18 +19,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.NumberPicker;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.bumptech.glide.Glide;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.ServerConnection;
-import com.lab_team_projects.my_walking_pet.databinding.ActivityTitleBinding;
 import com.lab_team_projects.my_walking_pet.databinding.ActivityUserInfoEntryBinding;
 import com.lab_team_projects.my_walking_pet.helpers.PermissionsCheckHelper;
 
@@ -38,8 +32,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Objects;
-
 
 public class UserInfoEntryActivity extends AppCompatActivity {
     private final String PROFILE_SETTING = "URL 넣어야함"; // URL 넣어야 함
@@ -116,23 +108,21 @@ public class UserInfoEntryActivity extends AppCompatActivity {
                     serverRequest.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
                         if(response.isSuccessful()) {
                             try {
-                                if(Objects.requireNonNull(response.body()).string().equals("올바른 응답 메시지")) { // 응답 메시지 입력해야함
+                                JSONObject responseJson = new JSONObject(response.body().string());
+                                String result = responseJson.getString("result");
+                                if(result.equals(SUCCESS)) { // 응답 메시지 입력해야함
                                     // 회원가입에 성공 했을 경우
 
                                 } else {
                                     // 회원가입에 실패 했을 경우
 
                                 }
-                            } catch (IOException e) {
-                                Log.e("Email Duplication : ", "이메일 중복", e);
                             }
-                        } else {
-                            Log.e("Email Duplication - else : ", "응답 실패");
-                        }
+                            catch (IOException e) { Log.e("IOException :", "btnComplete", e); }
+                            catch (JSONException e) { Log.e("JSONException :", "btnComplete-serverRequest", e); }
+                        } else { Log.e("btnComplete", "응답 실패"); }
                     }));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                } catch (JSONException e) { Log.e("JSONException :", "btnComplete", e); }
             }
         });
     }

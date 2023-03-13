@@ -7,13 +7,8 @@ import androidx.annotation.NonNull;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-
-import kotlin._Assertions;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -21,7 +16,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ServerConnection {
-
 
     private String serverUrl = "http://203.232.193.164:5000/"; // 서버 기본 url
 

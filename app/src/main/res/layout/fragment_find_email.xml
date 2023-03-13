@@ -3,12 +3,66 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".login.FindEmailFragment">
 
-    <TextView
-        android:id="@+id/findId"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="아이디 찾기 화면" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal">
+
+        <EditText
+            android:id="@+id/etNickName"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:hint="닉네임을 입력해주세요"
+            android:background="@drawable/bg_corner_rectangle"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="20dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <DatePicker
+                android:id="@+id/dpUserBirthday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:datePickerMode="spinner"
+                android:calendarViewShown="false" />
+
+        </LinearLayout>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/rbMan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="남자"
+                android:layout_weight="1"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/rbWomen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="여자"
+                android:layout_weight="1"/>
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/btnFindEmail"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:text="이메일 찾기"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
 
 </FrameLayout>
