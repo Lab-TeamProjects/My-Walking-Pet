@@ -97,6 +97,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 // 사용 가능한 이메일일 경우
                                 binding.tvDuplicationResult.setText("사용가능한 이메일입니다.");
                                 binding.tvDuplicationResult.setTextColor(Color.GREEN);
+                                binding.etEmail.setEnabled(false);
                             } else {
                                 // 중복되거나 없는 이메일일 경우
                                 binding.tvDuplicationResult.setText("");
