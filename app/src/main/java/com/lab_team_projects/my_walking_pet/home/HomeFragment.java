@@ -10,7 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -32,12 +35,14 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
     private boolean isInteractionBtnClick = false;
-
+    long lastClickTime = 0;
+    int canDragTime = 3000;    // 드래그 쿨타임 현재 3초
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,8 +60,31 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
 
+        binding.pet.setOnTouchListener((v, event) -> {
+            v.performClick();
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    // 드래그 처음 시작시 동작
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    long currentTime = System.currentTimeMillis();
+                    if (currentTime - lastClickTime > canDragTime) {
+                        lastClickTime = currentTime;
+                        // 드래그 하면 동작할 것
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    // 드래그 종료시 동작
+                    break;
+            }
+
+
+            return true;
+        });
         return binding.getRoot();
     }
+
+
 
 
     @SuppressLint("ClickableViewAccessibility")
