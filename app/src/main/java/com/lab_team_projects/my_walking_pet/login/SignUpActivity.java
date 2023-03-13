@@ -1,5 +1,8 @@
 package com.lab_team_projects.my_walking_pet.login;
 
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.EMAIL_IS_DUPLICATION;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.SUCCESS;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,17 +10,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.ServerConnection;
 import com.lab_team_projects.my_walking_pet.databinding.ActivitySignUpBinding;
-import com.lab_team_projects.my_walking_pet.databinding.SettingsActivityBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,21 +91,30 @@ public class SignUpActivity extends AppCompatActivity {
                 sc.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
                     if(response.isSuccessful()) {
                         try {
-                            if(Objects.requireNonNull(response.body()).string().equals("사용가능한 이메일")) {
+                            JSONObject responseJson = new JSONObject(response.body().string());
+                            String result = (String) responseJson.get("result");
+
+                            if(result.equals(SUCCESS)) {
                                 // 사용 가능한 이메일일 경우
                                 binding.tvDuplicationResult.setText("사용가능한 이메일입니다.");
                                 binding.tvDuplicationResult.setTextColor(Color.GREEN);
+                            } else if (result.equals(EMAIL_IS_DUPLICATION)) {
+                                // 중복되거나
+                                binding.tvDuplicationResult.setText("중복된 이메일입니다.");
+                                binding.tvDuplicationResult.setTextColor(Color.RED);
                                 binding.etEmail.setEnabled(false);
                             } else {
-                                // 중복되거나 없는 이메일일 경우
-                                binding.tvDuplicationResult.setText("");
+                                binding.tvDuplicationResult.setText("사용할 수 없는 이메일입니다.");
                                 binding.tvDuplicationResult.setTextColor(Color.RED);
                             }
+                        } catch (JSONException e) {
+                            Log.e("JSONException : ", "btnDuplicationCheck", e);
                         } catch (IOException e) {
                             Log.e("IOException : ", "btnDuplicationCheck", e);
                         }
                     } else {
                         binding.tvDuplicationResult.setText("서버 연결이 불안정합니다.");
+                        binding.tvDuplicationResult.setTextColor(Color.RED);
                         Log.e("response failed : ", "btnDuplicationCheck");
                     }
                 }));
@@ -130,19 +137,25 @@ public class SignUpActivity extends AppCompatActivity {
             sc.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
                 if(response.isSuccessful()) {
                     try {
-                        if(Objects.requireNonNull(response.body()).string().equals("올바른 응답 메시지")) { // 응답 메시지 입력해야함
-                            // 회원가입에 성공 했을 경우
+                        JSONObject responseJson = new JSONObject(response.body().string());
+                        String result = (String) responseJson.get("result");
+
+                        if (result.equals(SUCCESS)) {
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                             finish();
                         } else {
                             // 회원가입에 실패 했을 경우
                             Toast.makeText(SignUpActivity.this, "회원가입에 실패했습니다.", Toast.LENGTH_SHORT).show();
                         }
+
                     } catch (IOException e) {
                         Log.e("IOException : ", "btnSignUp", e);
+                    } catch (JSONException e) {
+                        Log.e("JSONException : ", "btnSignUp", e);
                     }
                 } else {
                     binding.tvDuplicationResult.setText("서버 연결이 불안정합니다.");
+                    binding.tvDuplicationResult.setTextColor(Color.RED);
                     Log.e("response failed : ", "btnSignUp");
                 }
             }));

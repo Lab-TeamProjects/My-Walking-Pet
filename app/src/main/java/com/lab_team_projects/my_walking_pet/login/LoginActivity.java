@@ -1,5 +1,10 @@
 package com.lab_team_projects.my_walking_pet.login;
 
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_AUTH_EMAIL;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_CORRECT_PASSWORD;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_FOUND_EMAIL;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.SUCCESS;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -48,45 +53,59 @@ public class LoginActivity extends AppCompatActivity {
 
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject.put("email", binding.etEmail.getText().toString());
-                    jsonObject.put("password", binding.etPassWord.getText().toString());
-                } catch (JSONException e) {
-                    Log.e("JSONException : ", "btnLogin", e);
-                }
-                ServerConnection sc = new ServerConnection(SIGN_IN, jsonObject);
-                sc.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
-                    if(response.isSuccessful()) {
-                        try {
-                            if(Objects.requireNonNull(response.body()).string().equals("올바른 응답 메시지")) { // 응답 메시지 입력해야함
-                                /*
-                                 유저가 로그인을 했을 때,
-                                 DB에 사용자 정보가 있으면 MainActivity,
-                                 그렇지 않으면 UserInfoEntryActivity 이동
-                                 */
-                            } else {
-                                /*
-                                로그인에 실패했을 때,
-                                아이디는 놔두고 비밀번호를 초기화 하며
-                                토스트 메시지로 "로그인에 실패했습니다." 출력
-                                 */
+                public void onClick(View v) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("email", binding.etEmail.getText().toString());
+                        jsonObject.put("password", binding.etPassWord.getText().toString());
+                    } catch (JSONException e) { Log.e("JSONException : ", "btnLogin", e); }
+                    ServerConnection sc = new ServerConnection(SIGN_IN, jsonObject);
+                    sc.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
+                        if(response.isSuccessful()) {
+                            try {
+                                JSONObject responseJson = new JSONObject(response.body().string());
+                                String result = responseJson.getString("result");
+                                switch(result) {
+                                    case NOT_FOUND_EMAIL:
+                                        /*
+                                        아이디가 없는 경우
+                                         */
+                                        break;
+                                    case NOT_AUTH_EMAIL:
+                                        /*
+                                        인증되지 않은 이메일 일 경우
+                                         */
+                                        break;
+                                    case NOT_CORRECT_PASSWORD:
+                                        /*
+                                        비밀번호가 틀린 경우
+                                         */
+                                        break;
+                                    case SUCCESS:
+                                        /*
+                                        성공한 경우
+                                         */
+                                        break;
+                                    default:
+                                        /*
+                                        그 외
+                                         */
+                                        break;
+                                }
                             }
-                        } catch (IOException e) {
-                            Log.e("IOException : ", "btnLogin", e);
-                        }
-                    } else {
-                        Log.e("response failed : ", "btnLogin");
-                    }
-                }));
+                            catch (JSONException e) { Log.e("JSONException", "btnLogin", e); }
+                            catch (IOException e) { Log.e("IOException", "btnLogin", e); }
+                        } else { Log.e("response failed : ", "btnLogin"); }
+                    }));
                 };
             }
         );
 
         binding.tvFindPW.setOnClickListener(new View.OnClickListener() { // 비밀번호 찾기
             @Override
-            public void onClick(View v) {   }
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), FindAccountActivity.class));
+            }
         });
     }
 

@@ -19,6 +19,15 @@
         <!-- 글자 크기 -->
         <item name="android:textSize">20sp</item>
         <!-- 색상변경 -->
-        <item name="android:textColorPrimary"> @color/dark_gray </item>
+        <item name="android:textColorPrimary">@color/dark_gray</item>
     </style>
+
+    <style name="Theme.MyWalkingPet.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.MyWalkingPet.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.MyWalkingPet.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
