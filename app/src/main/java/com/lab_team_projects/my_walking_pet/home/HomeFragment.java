@@ -153,6 +153,11 @@ public class HomeFragment extends Fragment {
         });
 
         binding.ibAR.setOnClickListener(v -> Toast.makeText(requireContext(), "AR 이동 버튼", Toast.LENGTH_SHORT).show());
+
+        binding.ibExercise.setOnClickListener(v -> {
+            CustomExerciseDialog dialog = new CustomExerciseDialog(requireContext());
+            dialog.show();
+        });
     }
 
     private void navigateToFragment(View view, @IdRes int fragmentId) {

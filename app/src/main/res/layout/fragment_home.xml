@@ -146,6 +146,15 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
+            android:id="@+id/ibExercise"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintEnd_toStartOf="@id/ibSetting"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageButton
             android:id="@+id/ibSetting"
             android:layout_width="50dp"
             android:layout_height="50dp"
