@@ -23,7 +23,7 @@ public class User {
     private double bmi;
     private double bmr;    // 기초 대사량
 
-    private int money;
+    private int money = 1000000;
 
     private List<Item> itemLists;
     private List<Mission> missionList;

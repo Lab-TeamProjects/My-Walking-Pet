@@ -8,6 +8,14 @@ public class Item {
     @SerializedName("count")
     private Integer count;
 
+    public Item(Integer code, Integer count) {
+        this.code = code;
+        this.count = count;
+    }
+
+    public Item() {
+    }
+
     public Integer getCode() {
         return code;
     }

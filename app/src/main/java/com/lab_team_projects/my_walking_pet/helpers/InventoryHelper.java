@@ -1,8 +1,6 @@
 package com.lab_team_projects.my_walking_pet.helpers;
 
 import android.content.Context;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -11,7 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.home.Item;
-import com.lab_team_projects.my_walking_pet.home.ItemDetails;
+import com.lab_team_projects.my_walking_pet.home.ItemDetail;
 import com.lab_team_projects.my_walking_pet.login.User;
 
 import java.io.IOException;
@@ -25,7 +23,7 @@ public class InventoryHelper {
     private Item.ItemType itemType = Item.ItemType.DRINK;
     private Context context;
 
-    private final List<ItemDetails> detailsList;    // 파싱한 아이템 정보 리스트
+    private final List<ItemDetail> detailsList;    // 파싱한 아이템 정보 리스트
     private List<Item> items = new ArrayList<>();;
     private int currentItemIndex;
 
@@ -50,6 +48,14 @@ public class InventoryHelper {
         detailsList = itemCodeParseHelper.getItemDetailsList();
     }
 
+    public InventoryHelper (Context context) throws IOException {
+        this.context = context;
+        ItemCodeParseHelper itemCodeParseHelper = new ItemCodeParseHelper(context);
+        detailsList = itemCodeParseHelper.getItemDetailsList();
+    }
+
+
+
 
     public void setItemType(Item.ItemType itemType) {
         this.itemType = itemType;
@@ -63,8 +69,8 @@ public class InventoryHelper {
         currentItemIndex = 0;   // 초기값은 당연히 리스트의 첫번째로 선택
         items.clear();
         for(Item item : user.getItemLists()) {
-            ItemDetails itemDetails = findItem(item.getCode());
-            if (itemDetails.getType().equals(itemType.name())) {
+            ItemDetail itemDetail = findItem(item.getCode());
+            if (itemDetail.getType().equals(itemType.name())) {
                 items.add(item);
             }
         }
@@ -78,10 +84,10 @@ public class InventoryHelper {
 
     }
 
-    public ItemDetails findItem(int code) {
-        for(ItemDetails itemDetails : detailsList) {
-            if (itemDetails.getCode() == code) {
-                return itemDetails;
+    public ItemDetail findItem(int code) {
+        for(ItemDetail itemDetail : detailsList) {
+            if (itemDetail.getCode() == code) {
+                return itemDetail;
             }
         }
         return null;

@@ -3,7 +3,7 @@ package com.lab_team_projects.my_walking_pet.helpers;
 import android.content.Context;
 
 import com.lab_team_projects.my_walking_pet.R;
-import com.lab_team_projects.my_walking_pet.home.ItemDetails;
+import com.lab_team_projects.my_walking_pet.home.ItemDetail;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemCodeParseHelper {
-    private List<ItemDetails> itemDetailsList = new ArrayList<>();
+    private List<ItemDetail> itemDetailList = new ArrayList<>();
 
-    public List<ItemDetails> getItemDetailsList() {
-        return itemDetailsList;
+    public List<ItemDetail> getItemDetailsList() {
+        return itemDetailList;
     }
 
     public ItemCodeParseHelper(Context context) throws IOException {
@@ -29,7 +29,8 @@ public class ItemCodeParseHelper {
         * 아이템 이름,
         * 효과:값&효과:값&효과:값(만약 단일 효과면 그냥 효과:값 으로 표기,
         * 카테고리,
-        * 아이템 설명
+        * 아이템 설명,
+        * 아이템 가격
         * */
 
         InputStream is = context.getResources().openRawResource(R.raw.item);
@@ -39,9 +40,9 @@ public class ItemCodeParseHelper {
 
         while ((line = reader.readLine()) != null) {
             String[] tokens = line.split(",");
-            ItemDetails itemDetails = new ItemDetails();
-            itemDetails.setCode(Integer.parseInt(tokens[0]));
-            itemDetails.setName(tokens[1]);
+            ItemDetail itemDetail = new ItemDetail();
+            itemDetail.setCode(Integer.parseInt(tokens[0]));
+            itemDetail.setName(tokens[1]);
 
             String[] effects = tokens[2].split("&");
             List<String> effectsList = new ArrayList<>();
@@ -53,13 +54,14 @@ public class ItemCodeParseHelper {
                 valueList.add(Integer.valueOf(effectTokens[1]));
             }
 
-            itemDetails.setEffects(effectsList);
-            itemDetails.setValues(valueList);
+            itemDetail.setEffects(effectsList);
+            itemDetail.setValues(valueList);
+            itemDetail.setType(tokens[3]);
+            itemDetail.setExplanation(tokens[4]);
+            itemDetail.setPrice(Integer.parseInt(tokens[5]));
 
-            itemDetails.setType(tokens[3]);
-            itemDetails.setExplanation(tokens[4]);
 
-            itemDetailsList.add(itemDetails);
+            itemDetailList.add(itemDetail);
         }
 
         reader.close();

@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.lab_team_projects.my_walking_pet.R;
+import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
 import com.lab_team_projects.my_walking_pet.help.HelpActivity;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
@@ -89,29 +90,9 @@ public class HomeFragment extends Fragment {
 
     @SuppressLint("ClickableViewAccessibility")
     private void initInventory() throws IOException {
-        /* 임시 */
-        JSONObject jsonObject = new JSONObject();
-        JSONObject jsonObject2 = new JSONObject();
-        JSONObject jsonObject3 = new JSONObject();
-        try {
-            jsonObject.put("code", 1001).put("count", 3);
-            jsonObject2.put("code", 1006).put("count", 10);
-            jsonObject3.put("code", 1002).put("count", 5);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
-        JSONArray jsonArray = new JSONArray();
-        jsonArray.put(jsonObject);
-        jsonArray.put(jsonObject2);
-        jsonArray.put(jsonObject3);
+        InventoryHelper inventoryHelper = new InventoryHelper(requireContext());
 
-        String json = jsonArray.toString();
-
-        /*
-        * 인벤토리 조작
-        * */
-        InventoryHelper inventoryHelper = new InventoryHelper(json, requireContext());
         binding.fabWater.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.DRINK, inventoryHelper));
         binding.fabFood.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.FOOD, inventoryHelper));
         binding.fabWash.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.WASH, inventoryHelper));
@@ -179,6 +160,12 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        GameManager gameManager = GameManager.getInstance();
+        binding.tvMoney.setText(String.valueOf(gameManager.getUser().getMoney()));
+    }
 
     @Override
     public void onDestroy() {

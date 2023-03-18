@@ -2,13 +2,14 @@ package com.lab_team_projects.my_walking_pet.home;
 
 import java.util.List;
 
-public class ItemDetails {
+public class ItemDetail {
     private int code;
     private String name;
     private List<String> effects;
     private List<Integer> values;
     private String type;
     private String explanation;
+    private int price;
 
     public int getCode() {
         return code;
@@ -56,5 +57,13 @@ public class ItemDetails {
 
     public void setExplanation(String explanation) {
         this.explanation = explanation;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }
