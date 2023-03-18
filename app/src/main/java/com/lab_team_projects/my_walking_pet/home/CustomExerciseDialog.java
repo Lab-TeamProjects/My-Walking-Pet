@@ -27,7 +27,6 @@ public class CustomExerciseDialog extends Dialog {
         this.context = context;
 
         this.getWindow().setDimAmount(0);    // 배경 어두워지는 것 없애기
-
     }
 
     @Override
@@ -35,6 +34,8 @@ public class CustomExerciseDialog extends Dialog {
         super.onCreate(savedInstanceState);
         binding = CustomExerciseDialogBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        getWindow().setBackgroundDrawableResource(R.drawable.bg_dialog_yellow);
 
         // 스마트폰의 화면 크기를 가져옴
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
