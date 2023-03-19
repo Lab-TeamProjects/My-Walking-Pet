@@ -14,9 +14,15 @@ import androidx.navigation.ui.NavigationUI;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.ActivityMainBinding;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
+import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
 import com.lab_team_projects.my_walking_pet.login.User;
 import com.lab_team_projects.my_walking_pet.walk_count.Walk;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -115,6 +121,41 @@ public class MainActivity extends AppCompatActivity {
         binding.ibHome.setOnClickListener(v->{
             onBackPressed();
         });
+
+
+        setUserInventory();    // 임시
+
+
+    }
+
+    private void setUserInventory() {
+        /* 임시 */
+        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject2 = new JSONObject();
+        JSONObject jsonObject3 = new JSONObject();
+        try {
+            jsonObject.put("code", 1001).put("count", 3);
+            jsonObject2.put("code", 1006).put("count", 10);
+            jsonObject3.put("code", 1002).put("count", 5);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(jsonObject);
+        jsonArray.put(jsonObject2);
+        jsonArray.put(jsonObject3);
+
+        String json = jsonArray.toString();
+
+        /*
+         * 인벤토리 조작
+         * */
+        try {
+            InventoryHelper inventoryHelper = new InventoryHelper(json, this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onAppBarLoad(){
