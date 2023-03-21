@@ -13,13 +13,19 @@ import java.util.HashMap;
 import java.util.List;
 
 public class UserPreferenceHelper {
+    /*
+    * 해당 열거형의 이름은 임시로 저렇게 만들었음
+    * */
+    public enum UserTokenKey {
+        login, refresh
+    }
 
     public enum UserPreferenceKey {
         weight, height, age, gender
     }
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+    private final SharedPreferences sharedPreferences;
+    private final SharedPreferences.Editor editor;
 
     public UserPreferenceHelper(Context context, String name) {
         sharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE);
@@ -34,6 +40,18 @@ public class UserPreferenceHelper {
         for(HashMap.Entry<String, Float> entry : hashMap.entrySet()) {
             editor.putFloat(entry.getKey(), entry.getValue());
         }
+    }
+
+    /*
+    * 유저 로그인 토큰 저장하는 메서드
+    * */
+    public void saveUserToken(UserTokenKey key, String token) {
+        editor.putString(key.name(), token);
+    }
+
+    public String loadUserToken(UserTokenKey key) {
+        return sharedPreferences.getString(key.name(), "");
+
     }
 
     public void loadUserInfo(User user) {

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
+import com.lab_team_projects.my_walking_pet.home.Animal;
 import com.lab_team_projects.my_walking_pet.home.Item;
 import com.lab_team_projects.my_walking_pet.home.ItemDetail;
 import com.lab_team_projects.my_walking_pet.login.User;
@@ -24,8 +25,19 @@ public class InventoryHelper {
     private Context context;
 
     private final List<ItemDetail> detailsList;    // 파싱한 아이템 정보 리스트
-    private List<Item> items = new ArrayList<>();;
+    private List<Item> items = new ArrayList<>(); // 현재 카테고리 아이템 리스트
     private int currentItemIndex;
+    
+    private ItemUsingListener itemUsingListener = null;
+    public void setItemUsingListener(ItemUsingListener itemUsingListener) {
+        this.itemUsingListener = itemUsingListener;
+    }
+    public interface ItemUsingListener {
+        void onItemUse();
+    }
+    
+    
+    
 
     /*
     * 사용자의 인벤토리에 아이템 저장 및 사용을 도와줌
@@ -128,7 +140,11 @@ public class InventoryHelper {
 
     @NonNull
     private String getItemName(Item item) {
-        return String.format(Locale.getDefault(), "%s x %d개", findItem(item.getCode()).getName(), item.getCount());
+        if (item.getCount() > 0) {
+            return String.format(Locale.getDefault(), "%s x %d개", findItem(item.getCode()).getName(), item.getCount());
+        } else {
+            return String.format(Locale.getDefault(), "  %s  ", findItem(item.getCode()).getName());
+        }
     }
 
 
@@ -136,12 +152,26 @@ public class InventoryHelper {
         if (!items.isEmpty()) {
             Item item = items.get(currentItemIndex);
             if (item.getCount() > 0) {
-                item.setCount(item.getCount() - 1);
+                item.setCount(item.getCount() - 1);    // 인벤토리에서 아이템 사용
+
+                ItemDetail itemDetail = findItem(item.getCode());    // 디테일 아이템 가져옴
+                Animal animal = user.getAnimalList().get(user.getNowSelectedPet());
+                animal.useItem(itemDetail);    // 펫에게 아이템 사용
+                itemUsingListener.onItemUse();    // 아이템을 사용했다고 알림
+
                 if (item.getCount() == 0) {
                     user.getItemLists().remove(item);
                     items.remove(currentItemIndex);
                     return "아이템이 없습니다.";
                 }
+                return getItemName(item);
+            }
+
+            if (item.getCount() == -1) {
+                ItemDetail itemDetail = findItem(item.getCode());    // 디테일 아이템 가져옴
+                Animal animal = user.getAnimalList().get(user.getNowSelectedPet());
+                animal.useItem(itemDetail);    // 펫에게 아이템 사용
+                itemUsingListener.onItemUse();    // 아이템을 사용했다고 알림
                 return getItemName(item);
             }
         }

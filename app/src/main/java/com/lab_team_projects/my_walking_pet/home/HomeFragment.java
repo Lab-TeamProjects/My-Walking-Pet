@@ -10,8 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,10 +22,7 @@ import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
 import com.lab_team_projects.my_walking_pet.help.HelpActivity;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
 import com.lab_team_projects.my_walking_pet.helpers.OnSwipeTouchHelper;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.lab_team_projects.my_walking_pet.login.User;
 
 import java.io.IOException;
 
@@ -38,6 +33,7 @@ public class HomeFragment extends Fragment {
     private boolean isInteractionBtnClick = false;
     long lastClickTime = 0;
     int canDragTime = 3000;    // 드래그 쿨타임 현재 3초
+    private InventoryHelper inventoryHelper;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -49,9 +45,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-        binding.pbHunger.setProgress(70);
-        binding.pbThirst.setProgress(40);
-        binding.pbCleanliness.setProgress(50);
+
 
         bindingListener();
         try {
@@ -60,6 +54,8 @@ public class HomeFragment extends Fragment {
             // 임시
             e.printStackTrace();
         }
+
+        initPetGrower();
 
         binding.pet.setOnTouchListener((v, event) -> {
             v.performClick();
@@ -82,6 +78,9 @@ public class HomeFragment extends Fragment {
 
             return true;
         });
+
+
+
         return binding.getRoot();
     }
 
@@ -91,7 +90,7 @@ public class HomeFragment extends Fragment {
     @SuppressLint("ClickableViewAccessibility")
     private void initInventory() throws IOException {
 
-        InventoryHelper inventoryHelper = new InventoryHelper(requireContext());
+        inventoryHelper = new InventoryHelper(requireContext());
 
         binding.fabWater.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.DRINK, inventoryHelper));
         binding.fabFood.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.FOOD, inventoryHelper));
@@ -105,6 +104,51 @@ public class HomeFragment extends Fragment {
             }
         });
 
+    }
+
+    private void initPetGrower() {
+        User user = GameManager.getInstance().getUser();
+        setPetRate(user.getAnimalList().get(user.getNowSelectedPet()));
+
+        // 펫 이름 클릭시 정보 다이얼로그
+        binding.tvPetName.setOnClickListener(v->{
+            CustomPetInfoDialog dialog = new CustomPetInfoDialog(requireContext());
+            dialog.show();
+        });
+
+        //  펫 아이템 사용시 수치 다시 그리기
+        inventoryHelper.setItemUsingListener(() -> {
+            setPetRate(user.getAnimalList().get(user.getNowSelectedPet()));
+        });
+
+        /*
+         * 펫 변경
+         * */
+
+        binding.btnPrevPet.setOnClickListener(v->{
+            Animal animal;
+            if (0 < user.getNowSelectedPet()) {
+                user.setNowSelectedPet(user.getNowSelectedPet() - 1);
+                animal = user.getAnimalList().get(user.getNowSelectedPet());
+                setPetRate(animal);
+            }
+        });
+
+        binding.btnNextPet.setOnClickListener(v->{
+            Animal animal;
+            if (user.getNowSelectedPet() < user.getAnimalList().size() - 1) {
+                user.setNowSelectedPet(user.getNowSelectedPet() + 1);
+                animal = user.getAnimalList().get(user.getNowSelectedPet());
+                setPetRate(animal);
+            }
+        });
+    }
+
+    private void setPetRate(Animal currentPet) {
+        binding.tvPetName.setText(currentPet.getName());
+        binding.pbHunger.setProgress(currentPet.getHunger());
+        binding.pbThirst.setProgress(currentPet.getThirsty());
+        binding.pbCleanliness.setProgress(currentPet.getClean());
     }
 
     private void setFabOnClickListener(Item.ItemType itemType, InventoryHelper inventoryHelper) {
@@ -121,7 +165,7 @@ public class HomeFragment extends Fragment {
         binding.ibSetting.setOnClickListener(v -> navigateToFragment(v, R.id.settingFragment));
         binding.ibMission.setOnClickListener(v -> navigateToFragment(v, R.id.missionFragment));
         binding.ibCollection.setOnClickListener(v -> navigateToFragment(v, R.id.collectionFragment));
-        binding.tvWalkCount.setOnClickListener(v -> navigateToFragment(v, R.id.walkCountFragment));
+        binding.ibWalkCount.setOnClickListener(v -> navigateToFragment(v, R.id.walkCountFragment));
 
         binding.fabInteraction.setOnClickListener(v -> {
             isInteractionBtnClick = !isInteractionBtnClick;
@@ -139,6 +183,11 @@ public class HomeFragment extends Fragment {
             CustomExerciseDialog dialog = new CustomExerciseDialog(requireContext());
             dialog.show();
         });
+
+
+
+
+
     }
 
     private void navigateToFragment(View view, @IdRes int fragmentId) {

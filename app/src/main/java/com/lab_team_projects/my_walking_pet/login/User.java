@@ -26,9 +26,14 @@ public class User {
     private int money = 1000000;
 
     private List<Item> itemLists;
+
     private List<Mission> missionList;
+
     private List<Animal> animalList;
+    private int nowSelectedPet = 0;
+
     private List<Collection> collectionList;
+
 
 
     public double getBMR() {
@@ -59,7 +64,13 @@ public class User {
         return (Collections.max(list) + Collections.min(list)) / 2.0;
     }
 
+    public int getNowSelectedPet() {
+        return nowSelectedPet;
+    }
 
+    public void setNowSelectedPet(int nowSelectedPet) {
+        this.nowSelectedPet = nowSelectedPet;
+    }
 
     public String getEmail() {
         return email;
