@@ -15,6 +15,8 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.ActivityMainBinding;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
+import com.lab_team_projects.my_walking_pet.helpers.MissionCheckHelper;
+import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
 import com.lab_team_projects.my_walking_pet.home.Animal;
 import com.lab_team_projects.my_walking_pet.home.Broods;
 import com.lab_team_projects.my_walking_pet.login.User;
@@ -92,10 +94,14 @@ public class MainActivity extends AppCompatActivity {
 
                 // 리스트에 저장된 마지막 walk가 오늘 날짜와 다름
                 if (localDate.isAfter(walkLocalDate)) {
-                    // 오늘 walk를 만들어야함
+                    // 오늘 walk를 만들어야함 하루가 바뀜
                     walk = new Walk();
                     walk.setDate(time);
                     db.walkDao().insert(walk);
+
+                    MissionCheckHelper missionCheckHelper = new MissionCheckHelper(this);
+                    missionCheckHelper.resetToday();
+
                 }
             } catch (ParseException e) {
                 e.printStackTrace();

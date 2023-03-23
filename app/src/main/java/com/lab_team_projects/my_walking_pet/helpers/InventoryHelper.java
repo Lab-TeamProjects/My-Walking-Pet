@@ -159,6 +159,11 @@ public class InventoryHelper {
                 animal.useItem(itemDetail);    // 펫에게 아이템 사용
                 itemUsingListener.onItemUse();    // 아이템을 사용했다고 알림
 
+                // 사용한 아이템 체크 해서 미션 달성률 조종
+                MissionCheckHelper missionCheckHelper = new MissionCheckHelper(context);
+                missionCheckHelper.useItem(itemDetail.getType());
+
+
                 if (item.getCount() == 0) {
                     user.getItemLists().remove(item);
                     items.remove(currentItemIndex);
@@ -172,6 +177,11 @@ public class InventoryHelper {
                 Animal animal = user.getAnimalList().get(user.getNowSelectedPet());
                 animal.useItem(itemDetail);    // 펫에게 아이템 사용
                 itemUsingListener.onItemUse();    // 아이템을 사용했다고 알림
+
+                // 사용한 아이템 체크 해서 미션 달성률 조종
+                MissionCheckHelper missionCheckHelper = new MissionCheckHelper(context);
+                missionCheckHelper.useItem(itemDetail.getType());
+
                 return getItemName(item);
             }
         }

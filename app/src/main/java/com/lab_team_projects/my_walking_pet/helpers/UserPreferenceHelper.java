@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 
 import com.lab_team_projects.my_walking_pet.login.User;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,12 +15,17 @@ public class UserPreferenceHelper {
     /*
     * 해당 열거형의 이름은 임시로 저렇게 만들었음
     * */
+
     public enum UserTokenKey {
         login, refresh
     }
 
     public enum UserPreferenceKey {
         weight, height, age, gender
+    }
+
+    public enum TodayUserActiveKey {
+        walk, food, drink, wash
     }
 
     private final SharedPreferences sharedPreferences;
@@ -38,21 +42,39 @@ public class UserPreferenceHelper {
         * shared preferences를 이용해 기기에 저장한다
         * */
         for(HashMap.Entry<String, Float> entry : hashMap.entrySet()) {
-            editor.putFloat(entry.getKey(), entry.getValue());
+            editor.putFloat(entry.getKey(), entry.getValue()).commit();
         }
     }
 
     /*
-    * 유저 로그인 토큰 저장하는 메서드
+    * 유저 토큰을 키로 저장
     * */
     public void saveUserToken(UserTokenKey key, String token) {
-        editor.putString(key.name(), token);
+        editor.putString(key.name(), token).commit();
     }
 
     public String loadUserToken(UserTokenKey key) {
         return sharedPreferences.getString(key.name(), "");
 
     }
+
+
+    /*
+    * 유저가 오늘 동작했던거 저장
+    * */
+    public void saveActiveValue(TodayUserActiveKey key, int value) {
+        editor.putInt(key.name(), value).commit();
+    }
+
+    public int loadActiveValue(TodayUserActiveKey key) {
+        return sharedPreferences.getInt(key.name(), 0);
+    }
+
+
+
+
+
+
 
     public void loadUserInfo(User user) {
         List<Double> values = new ArrayList<>();
