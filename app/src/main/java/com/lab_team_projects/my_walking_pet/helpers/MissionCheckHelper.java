@@ -12,7 +12,6 @@ public class MissionCheckHelper {
 
     public MissionCheckHelper(Context context) {
         this.userPre = new UserPreferenceHelper(context, "user_active");
-
     }
 
     public void useItem(String type) {
@@ -27,24 +26,35 @@ public class MissionCheckHelper {
 
     public void completeMission(String type, int count) {
         if (type.equals(Item.ItemType.FOOD.name())) {
-            userPre.saveActiveValue(TodayUserActiveKey.food, userPre.loadActiveValue(TodayUserActiveKey.food) - count);
+            userPre.saveActiveValue(TodayUserActiveKey.food, getCount(Item.ItemType.FOOD.name()) - count);
         } else if (type.equals(Item.ItemType.DRINK.name())) {
-            userPre.saveActiveValue(TodayUserActiveKey.drink, userPre.loadActiveValue(TodayUserActiveKey.drink) - count);
+            userPre.saveActiveValue(TodayUserActiveKey.drink, getCount(Item.ItemType.DRINK.name()) - count);
         } else if (type.equals(Item.ItemType.WASH.name())) {
-            userPre.saveActiveValue(TodayUserActiveKey.wash, userPre.loadActiveValue(TodayUserActiveKey.wash) - count);
+            userPre.saveActiveValue(TodayUserActiveKey.wash, getCount(Item.ItemType.WASH.name()) - count);
+        }
+    }
+
+    public int getCount(String type) {
+        if (type.equals(Item.ItemType.FOOD.name())) {
+            return userPre.loadActiveValue(TodayUserActiveKey.food);
+        } else if (type.equals(Item.ItemType.DRINK.name())) {
+            return userPre.loadActiveValue(TodayUserActiveKey.drink);
+        } else {
+            return userPre.loadActiveValue(TodayUserActiveKey.wash);
         }
     }
 
     public int getRatio(String type) {
-        int food = userPre.loadActiveValue(TodayUserActiveKey.food);
-        int wash = userPre.loadActiveValue(TodayUserActiveKey.wash);
-        int drink = userPre.loadActiveValue(TodayUserActiveKey.drink);
+        int food = getCount(Item.ItemType.FOOD.name());
+        int drink = getCount(Item.ItemType.DRINK.name());
+        int wash = getCount(Item.ItemType.WASH.name());
 
+        Log.d("__walk", food + " " + drink);
 
         if (type.equals(Item.ItemType.FOOD.name())) {
-            return Math.min((food / 3) * 100, 100);
+            return Math.min((int)((food / 3.0) * 100), 100);
         } else if (type.equals(Item.ItemType.DRINK.name())) {
-            return Math.min((drink / 3) * 100, 100);
+            return Math.min((int)((drink / 3.0) * 100), 100);
         } else {
             return 0;
         }

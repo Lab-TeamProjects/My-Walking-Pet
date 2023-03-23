@@ -140,7 +140,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+        MissionCheckHelper mCheck = new MissionCheckHelper(this);
+        mCheck.resetToday();
 
     }
 

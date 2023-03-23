@@ -46,27 +46,37 @@ public class MissionFragment extends Fragment {
         binding.pbMissionBar2.setOnClickListener(v->{
             // 물주기 미션 클릭
 
-            missionCheckHelper.completeMission(Item.ItemType.DRINK.name(), 3);
-            Toast.makeText(requireContext(), "퀘스트 완료", Toast.LENGTH_SHORT).show();
-            binding.pbMissionBar2.setProgress(missionCheckHelper.getRatio(Item.ItemType.DRINK.name()));
+            if (missionCheckHelper.getCount(Item.ItemType.DRINK.name()) >= 3) {
+                missionCheckHelper.completeMission(Item.ItemType.DRINK.name(), 3);
+                Toast.makeText(requireContext(), "퀘스트 완료", Toast.LENGTH_SHORT).show();
+                binding.pbMissionBar2.setProgress(missionCheckHelper.getRatio(Item.ItemType.DRINK.name()));
+            }
         });
         
         binding.pbMissionBar3.setOnClickListener(v->{
+
             // 밥주기 미션 클릭
-
-            missionCheckHelper.completeMission(Item.ItemType.FOOD.name(), 3);
-            Toast.makeText(requireContext(), "퀘스트 완료", Toast.LENGTH_SHORT).show();
-            binding.pbMissionBar3.setProgress(missionCheckHelper.getRatio(Item.ItemType.FOOD.name()));
+            if (missionCheckHelper.getCount(Item.ItemType.FOOD.name()) >= 3) {
+                missionCheckHelper.completeMission(Item.ItemType.FOOD.name(), 3);
+                Toast.makeText(requireContext(), "퀘스트 완료", Toast.LENGTH_SHORT).show();
+                binding.pbMissionBar3.setProgress(missionCheckHelper.getRatio(Item.ItemType.FOOD.name()));
+            }
         });
-
-        setProgressRatio();
+        //setProgressRatio();
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setProgressRatio();
     }
 
     private void setProgressRatio() {
         MissionCheckHelper missionCheckHelper = new MissionCheckHelper(requireContext());
         binding.pbMissionBar2.setProgress(missionCheckHelper.getRatio(Item.ItemType.DRINK.name()));
         binding.pbMissionBar3.setProgress(missionCheckHelper.getRatio(Item.ItemType.FOOD.name()));
+        Toast.makeText(requireContext(), missionCheckHelper.getCount(Item.ItemType.FOOD.name()) + " " + missionCheckHelper.getCount(Item.ItemType.DRINK.name()), Toast.LENGTH_SHORT).show();
     }
 
 }
