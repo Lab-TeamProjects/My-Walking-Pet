@@ -71,6 +71,14 @@ public class UserPreferenceHelper {
     }
 
 
+    public void saveIntValue(String key, int value) {
+        editor.putInt(key, value).apply();
+    }
+
+    public int loadIntValue(String key) {
+        return sharedPreferences.getInt(key, 0);
+    }
+
 
 
 
