@@ -15,23 +15,17 @@ public class User {
     private String password;
     private String nickName;
     private String uid;
-
     private double weight;
     private double height;    // 단위 cm
     private int age;
     private int gender;
     private double bmi;
     private double bmr;    // 기초 대사량
-
     private int money = 1000000;
-
     private List<Item> itemLists;
-
     private List<Mission> missionList;
-
     private List<Animal> animalList;
     private int nowSelectedPet = 0;
-
     private List<Collection> collectionList;
 
 

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -67,6 +68,7 @@ public class HomeFragment extends Fragment {
                     long currentTime = System.currentTimeMillis();
                     if (currentTime - lastClickTime > canDragTime) {
                         lastClickTime = currentTime;
+                        Log.d("__walk", "asdasd");
                         // 드래그 하면 동작할 것
                     }
                     break;

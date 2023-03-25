@@ -94,6 +94,7 @@ public class NoticeSettingActivity extends AppCompatActivity {
         public void stopService() {
             // 서비스 종료 함수
             Intent serviceIntent;
+            service.stopTask();
             serviceIntent = new Intent(requireContext(), service.getClass());
             requireContext().stopService(serviceIntent);
         }
