@@ -65,6 +65,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -110,6 +111,8 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
     public void stopTask() {
         task.onCancelled();
+        task.cancel(true);
+        task = null;
     }
 
 
@@ -170,14 +173,14 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     @Override
     public void onSensorChanged(SensorEvent event) {
         switch (event.sensor.getType()) {
-            case Sensor.TYPE_STEP_DETECTOR:
+            /*case Sensor.TYPE_STEP_DETECTOR:
                 step(true);
-                Toast.makeText(getApplicationContext(), "걸음 디텍터", Toast.LENGTH_SHORT).show();
-                break;
-            /*case Sensor.TYPE_STEP_COUNTER:
-                step(true);
-                Toast.makeText(getApplicationContext(), "걸음 카운터", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "걸음 디텍터", Toast.LENGTH_SHORT).show();
                 break;*/
+            case Sensor.TYPE_STEP_COUNTER:
+                step(true);
+                //Toast.makeText(getApplicationContext(), "걸음 카운터", Toast.LENGTH_SHORT).show();
+                break;
             /*case Sensor.TYPE_ACCELEROMETER:
                 float[] accelValues = event.values.clone();
                 float[] filteredValues = highPassFilter(accelValues);
@@ -220,6 +223,8 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         }
     }
 
+
+
     private void step(boolean isWalking) {
         if (isWalking) {
             walk.setWalkCount(walk.getWalkCount() + 1);
@@ -251,8 +256,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     public void onDestroy() {
         super.onDestroy();
         Log.d("ForegroundService", "onDestroy");
-        task.cancel(true);
-        task = null;
+
     }
 
     public static void println(String msg) {
