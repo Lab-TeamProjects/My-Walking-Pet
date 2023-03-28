@@ -172,7 +172,6 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                 break;
             default:
                 break;
-
         }
     }
 

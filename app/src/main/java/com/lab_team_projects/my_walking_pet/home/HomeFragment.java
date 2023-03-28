@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -24,6 +25,7 @@ import com.lab_team_projects.my_walking_pet.help.HelpActivity;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
 import com.lab_team_projects.my_walking_pet.helpers.OnSwipeTouchHelper;
 import com.lab_team_projects.my_walking_pet.login.User;
+import com.lab_team_projects.my_walking_pet.walk_count.WalkViewModel;
 
 import java.io.IOException;
 
@@ -79,6 +81,12 @@ public class HomeFragment extends Fragment {
 
 
             return true;
+        });
+
+
+        WalkViewModel walkViewModel = new ViewModelProvider(this).get(WalkViewModel.class);
+        walkViewModel.getWalkLiveData().observe(getViewLifecycleOwner(), walk -> {
+            binding.tvWalkCount.setText(String.valueOf(walk.getCount()));
         });
 
 
