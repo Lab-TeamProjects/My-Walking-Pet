@@ -1,8 +1,14 @@
 package com.lab_team_projects.my_walking_pet.home;
 
+import static android.content.Context.BIND_AUTO_CREATE;
+
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -52,10 +58,31 @@ public class CustomExerciseDialog extends Dialog {
             // ok 버튼
             int selected = (int) binding.spExerciseTime.getSelectedItem();
             Toast.makeText(context, String.valueOf(selected), Toast.LENGTH_SHORT).show();
+
+            WalkingTimeCheckService service = new WalkingTimeCheckService(selected);
+            Intent intent = new Intent(context, service.getClass());
+            context.startService(intent);
+
+            context.bindService(intent, serviceConnection, BIND_AUTO_CREATE);
         });
 
         binding.btnCancel.setOnClickListener(v->{
             this.dismiss();
         });
     }
+
+    private ServiceInterface serviceInterface;
+
+    // 서비스 바인딩 처리
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            serviceInterface = (ServiceInterface) iBinder;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            serviceInterface = null;
+        }
+    };
 }

@@ -1,5 +1,6 @@
 package com.lab_team_projects.my_walking_pet.login;
 
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.PROFILE_SETTING;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.SUCCESS;
 
 import androidx.activity.result.ActivityResult;
@@ -13,15 +14,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.lab_team_projects.my_walking_pet.R;
+import com.lab_team_projects.my_walking_pet.app.GameManager;
+import com.lab_team_projects.my_walking_pet.app.MainActivity;
 import com.lab_team_projects.my_walking_pet.app.ServerConnection;
 import com.lab_team_projects.my_walking_pet.databinding.ActivityUserInfoEntryBinding;
 import com.lab_team_projects.my_walking_pet.helpers.PermissionsCheckHelper;
@@ -34,13 +38,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class UserInfoEntryActivity extends AppCompatActivity {
-    private final String PROFILE_SETTING = "URL 넣어야함"; // URL 넣어야 함
 
     private ActivityUserInfoEntryBinding binding;
 
-    private PermissionsCheckHelper pch;
-
     private Bitmap profilePhoto;
+
+    GameManager gm = GameManager.getInstance();
+    String accessToken =  gm.getUser().getAccessToken();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +79,7 @@ public class UserInfoEntryActivity extends AppCompatActivity {
         binding.ivUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    permissionCheck(); // 권한 체크
-                    pickImageFromGallery();
-                } else {
-                    pickImageFromGallery();
-                }
+                pickImageFromGallery();
             }
         });
 
@@ -91,31 +90,32 @@ public class UserInfoEntryActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject();
 
                 try {
-                    jsonObject.put("profilePhoto", profilePhoto.toString());
-                    jsonObject.put("nickName", binding.etNickName.getText().toString());
-                    jsonObject.put("statusMsg", binding.etStatusMsg.getText().toString());
-                    jsonObject.put("userBirthday", binding.dpUserBirthday.getYear() + "-" + (binding.dpUserBirthday.getMonth() + 1) + "-" + binding.dpUserBirthday.getDayOfMonth());
-                    jsonObject.put("userWeight", String.valueOf(binding.npUserWeight.getValue()));
-                    jsonObject.put("userHeight", String.valueOf(binding.npUserHeight.getValue()));
+                    jsonObject.put("nickname", binding.etNickName.getText().toString());
+                    jsonObject.put("status_message", binding.etStatusMsg.getText().toString());
+                    jsonObject.put("birthday", binding.dpUserBirthday.getYear() + "-" + (binding.dpUserBirthday.getMonth() + 1) + "-" + binding.dpUserBirthday.getDayOfMonth());
+                    jsonObject.put("weight", String.valueOf(binding.npUserWeight.getValue()));
+                    jsonObject.put("height", String.valueOf(binding.npUserHeight.getValue()));
                     if(binding.rbMan.isChecked()) {
-                        jsonObject.put("userGender", String.valueOf(binding.rbMan.getText()));
+                        jsonObject.put("sex", "male");
                     } else {
-                        jsonObject.put("userGender", String.valueOf(binding.rbWomen.getText()));
+                        jsonObject.put("sex", "female");
                     }
 
                     // 서버로 데이터 전송
-                    ServerConnection serverRequest = new ServerConnection(PROFILE_SETTING, jsonObject);
+                    ServerConnection serverRequest = new ServerConnection(PROFILE_SETTING, jsonObject, accessToken);
                     serverRequest.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
                         if(response.isSuccessful()) {
                             try {
                                 JSONObject responseJson = new JSONObject(response.body().string());
                                 String result = responseJson.getString("result");
                                 if(result.equals(SUCCESS)) { // 응답 메시지 입력해야함
-                                    // 회원가입에 성공 했을 경우
-
+                                    // 프로필 설정에 성공 했을 경우
+                                    Toast.makeText(UserInfoEntryActivity.this, "프로필 설정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    finish();
                                 } else {
-                                    // 회원가입에 실패 했을 경우
-
+                                    // 프로필 설정에 실패 했을 경우
+                                    Toast.makeText(UserInfoEntryActivity.this, "프로필 설정에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                             catch (IOException e) { Log.e("IOException :", "btnComplete", e); }
@@ -127,25 +127,7 @@ public class UserInfoEntryActivity extends AppCompatActivity {
         });
     }
 
-    // 권한 체크 함수
-    private void permissionCheck(){
-        if(Build.VERSION.SDK_INT >= 23){
-            pch =  new PermissionsCheckHelper(this, this);
 
-            if(!pch.checkPermission()){
-                pch.requestPermission();
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (!pch.permissionResult(requestCode, permissions, grantResults)){
-            pch.requestPermission();
-        }
-    }
 
     // 갤러리 접근 함수
     private void pickImageFromGallery() {
@@ -169,15 +151,23 @@ public class UserInfoEntryActivity extends AppCompatActivity {
                         try {
                             // 사진 지정
                             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                            Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(uri.toString()), 480,480);
 
                             // 저장 경로 지정
                             File directory = getFilesDir();
                             File photoFile = new File(directory, "photo.jpg");
+
                             // 사진 저장
                             FileOutputStream fos = new FileOutputStream(photoFile);
-                            Log.d("fos" , fos.toString());
-                            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fos);
+                            resizeBitmap.compress(Bitmap.CompressFormat.JPEG,100,fos);
                             fos.close();
+
+                            ServerConnection sc = new ServerConnection(directory, "photo.jpg", gm.getUser().getAccessToken());
+                            sc.setClientCallBackListener((call,response) -> runOnUiThread(()-> {
+                                if(response.isSuccessful()) {
+
+                                }
+                            }));
 
                         } catch (IOException e) {
                             e.printStackTrace();

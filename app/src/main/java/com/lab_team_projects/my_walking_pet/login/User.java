@@ -15,6 +15,7 @@ public class User {
     private String password;
     private String nickName;
     private String uid;
+    private String accessToken;
 
     private double weight;
     private double height;    // 단위 cm
@@ -30,6 +31,13 @@ public class User {
     private List<Animal> animalList;
     private List<Collection> collectionList;
 
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
 
     public double getBMR() {
         if (this.gender == 0) {
