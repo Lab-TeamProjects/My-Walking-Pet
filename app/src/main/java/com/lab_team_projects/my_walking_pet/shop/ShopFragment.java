@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.app.MainActivity;
+import com.lab_team_projects.my_walking_pet.databinding.CustomEggDialogBinding;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentShopBinding;
 
 import java.io.IOException;
@@ -60,12 +61,18 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
             itemId = 1001;
         } else if (btnId == R.id.btnFood2) {
             itemId = 1002;
+        } else if (btnId == R.id.ibPetEgg) {
+            try {
+                CustomEggDialog dialog = new CustomEggDialog(requireContext());
+                dialog.show();
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         else {
             Toast.makeText(requireContext(), "상품 준비중 입니다!", Toast.LENGTH_SHORT).show();
         }
-
-
         // 선택된 아이템으로 다이얼로그 표시
         try {
             if (itemId != -1) {
@@ -75,9 +82,7 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
                     binding.tvMoney.setText(String.valueOf(GameManager.getInstance().getUser().getMoney()));    // 아이템 구매 OK 버튼을 눌렀을 때 변경된 재화를 표시하기 위해
                 });
 
-                
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -96,6 +101,8 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setBtnOnClickListener() {
+        binding.ibPetEgg.setOnClickListener(this);
+
         binding.btnFood1.setOnClickListener(this);
         binding.btnFood2.setOnClickListener(this);
         binding.btnFood3.setOnClickListener(this);

@@ -7,11 +7,31 @@
     tools:context=".shop.ShopFragment"
     android:background="@color/transparent">
 
+    <ImageButton
+        android:id="@+id/ibPetEgg"
+        android:elevation="30dp"
+        android:background="@drawable/bg_ib_yello_ripple"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="30dp"
+        />
+
+    <TextView
+        android:textSize="30sp"
+        android:elevation="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="60dp"
+        android:text="알뽑기" />
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:paddingBottom="210dp"
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

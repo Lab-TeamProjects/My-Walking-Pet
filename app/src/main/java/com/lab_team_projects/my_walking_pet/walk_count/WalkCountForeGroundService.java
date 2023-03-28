@@ -30,7 +30,7 @@ import java.util.Locale;
 
 public class WalkCountForeGroundService extends Service implements SensorEventListener {
 
-    public static BackgroundTask task = new BackgroundTask();
+    public static BackgroundTask task;
     public static int value = 0;
     private NotificationManager notificationManager;
     private Walk walk;
@@ -56,7 +56,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     }
 
     public boolean isRunning(){
-        return task.getStatus() == AsyncTask.Status.RUNNING;
+        return task != null && task.getStatus() == AsyncTask.Status.RUNNING;
     }
 
     @Override
@@ -65,9 +65,11 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
+
     @Override
     public void onCreate() {
         super.onCreate();
+        task = new BackgroundTask();
 
         walk = gm.getWalk();
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -76,6 +78,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         Sensor accelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         Sensor stepDetectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         Sensor gyroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        Sensor stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         // 센서 리스너 등록
         if (accelSensor != null) {
@@ -83,7 +86,13 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         }
 
         if (stepDetectorSensor!= null) {
+            Log.d("__walk", "디텍터 있음");
             sensorManager.registerListener(this, stepDetectorSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+
+        if (stepCounter!= null) {
+            Log.d("__walk", "카운터 있음");
+            sensorManager.registerListener(this, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
         if (gyroSensor!= null) {
@@ -99,6 +108,13 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_NOT_STICKY;
     }
+
+    public void stopTask() {
+        task.onCancelled();
+        task.cancel(true);
+        task = null;
+    }
+
 
     public Notification makeNotification(){
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle()
@@ -157,10 +173,15 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     @Override
     public void onSensorChanged(SensorEvent event) {
         switch (event.sensor.getType()) {
-            case Sensor.TYPE_STEP_DETECTOR:
+            /*case Sensor.TYPE_STEP_DETECTOR:
                 step(true);
+                //Toast.makeText(getApplicationContext(), "걸음 디텍터", Toast.LENGTH_SHORT).show();
+                break;*/
+            case Sensor.TYPE_STEP_COUNTER:
+                step(true);
+                //Toast.makeText(getApplicationContext(), "걸음 카운터", Toast.LENGTH_SHORT).show();
                 break;
-            case Sensor.TYPE_ACCELEROMETER:
+            /*case Sensor.TYPE_ACCELEROMETER:
                 float[] accelValues = event.values.clone();
                 float[] filteredValues = highPassFilter(accelValues);
                 filteredValues = lowPass(accelValues, filteredValues);
@@ -171,39 +192,6 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                 float accelMagnitude = (float) Math.sqrt(x * x + y * y + z * z);
                 float delta = accelMagnitude - lastAccelValues[2];
                 lastAccelValues[2] = accelMagnitude;
-
-                /*// 걷기 타이머 시작
-                if (delta > THRESHOLD_WALK && !isWalking) {
-                    Log.d("WALK", "걷기시작");
-                    isWalking = true;
-                    walkStartTime = SystemClock.elapsedRealtime();
-                }
-
-                // 뛰기 타이머 시작
-                if (delta > THRESHOLD_RUN && !isRunning) {
-                    Log.d("WALK", "뛰기시작");
-                    isRunning = true;
-                    runStartTime = SystemClock.elapsedRealtime();
-                }
-
-                // 걷기 타이머 종료 및 뛰기 타이머 시작
-                if (delta < THRESHOLD_RUN && isRunning) {
-                    isRunning = false;
-                    runElapsedTime = (SystemClock.elapsedRealtime() - runStartTime);
-                    Log.d("WALK", "뛰기정지");
-                }
-
-                // 뛰기 타이머 종료 및 걷기 타이머 계산
-                if (delta < THRESHOLD_WALK && isWalking) {
-                    Log.d("WALK", "운동정지");
-                    isWalking = false;
-                    walkElapsedTime = (SystemClock.elapsedRealtime() - walkStartTime);
-                    walk.setSec((int) (walk.getSec() + (walkElapsedTime + runElapsedTime) / 1000));
-                    Log.d("WALK", String.format(Locale.getDefault(), "이번 운동으로 %d 초 만큼 운동했습니다.", walk.getSec()));
-                    walkElapsedTime = 0;
-                    runElapsedTime = 0;
-                    updateWalk();
-                }*/
 
                 // 걷기 임계값 이상이면 걷는중으로 인지
                 if (delta > THRESHOLD_WALK) {
@@ -228,10 +216,14 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                 float dt = (event.timestamp - lastTimestamp) * NS2S;
                 angle += gyroValues[2] * dt;
                 lastTimestamp = event.timestamp;
+                break;*/
+            default:
                 break;
 
         }
     }
+
+
 
     private void step(boolean isWalking) {
         if (isWalking) {
@@ -264,7 +256,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     public void onDestroy() {
         super.onDestroy();
         Log.d("ForegroundService", "onDestroy");
-        task.cancel(true);
+
     }
 
     public static void println(String msg) {

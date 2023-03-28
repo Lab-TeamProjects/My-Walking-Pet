@@ -1,7 +1,5 @@
 package com.lab_team_projects.my_walking_pet.login;
 
-import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.LOGIN;
-import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.LOGIN_TEST;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_AUTH_EMAIL;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_CORRECT_PASSWORD;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_FOUND_EMAIL;
@@ -11,9 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lab_team_projects.my_walking_pet.app.GameManager;
@@ -27,6 +29,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
 

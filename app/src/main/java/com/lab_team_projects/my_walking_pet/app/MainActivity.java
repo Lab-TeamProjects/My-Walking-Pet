@@ -1,6 +1,13 @@
 package com.lab_team_projects.my_walking_pet.app;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +22,10 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.ActivityMainBinding;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
+import com.lab_team_projects.my_walking_pet.helpers.MissionCheckHelper;
+import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
+import com.lab_team_projects.my_walking_pet.home.Animal;
+import com.lab_team_projects.my_walking_pet.home.Broods;
 import com.lab_team_projects.my_walking_pet.login.User;
 import com.lab_team_projects.my_walking_pet.walk_count.Walk;
 
@@ -27,6 +38,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -36,11 +49,26 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private NavController navController;
 
+    @SuppressLint("BatteryLife")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setUserPetList(); // 임시
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+
+        // 베터리 최적화 설정 요청
+        Intent intent = new Intent();
+        String packageName = getPackageName();
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+
+        if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + packageName));
+            startActivity(intent);
+        }
+
 
         /*
          * 게임매니저를 통해서 유저 정보를 세팅함
@@ -50,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         GameManager gameManager = GameManager.getInstance();
         gameManager.loadUser(this);
+
 
         /*
          * 현재 데이터베이스를 확인해서 전날 db가 있는지 확인해야함
@@ -86,10 +115,14 @@ public class MainActivity extends AppCompatActivity {
 
                 // 리스트에 저장된 마지막 walk가 오늘 날짜와 다름
                 if (localDate.isAfter(walkLocalDate)) {
-                    // 오늘 walk를 만들어야함
+                    // 오늘 walk를 만들어야함 하루가 바뀜
                     walk = new Walk();
                     walk.setDate(time);
                     db.walkDao().insert(walk);
+
+                    MissionCheckHelper missionCheckHelper = new MissionCheckHelper(this);
+                    missionCheckHelper.resetToday();
+
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -97,6 +130,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         gameManager.setWalk(walk);
+
+        setUserInventory();    // 임시
+
+
 
         // 앱바 설정
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -123,9 +160,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        setUserInventory();    // 임시
 
+        MissionCheckHelper mCheck = new MissionCheckHelper(this);
+        mCheck.resetToday();
 
+    }
+
+    private void setUserPetList() {
+        User user = GameManager.getInstance().getUser();
+        Animal pet1 = new Animal("착한아이", Broods.DOG, user, user);
+        Animal pet2 = new Animal("멋진아이", Broods.CAT, user, user);
+        Animal pet3 = new Animal("천재아이", Broods.MONKEY, user, user);
+        List<Animal> list = new ArrayList<>();
+        list.add(pet1);
+        list.add(pet2);
+        list.add(pet3);
+        GameManager.getInstance().getUser().setAnimalList(list);
     }
 
     private void setUserInventory() {
@@ -133,10 +183,12 @@ public class MainActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject();
         JSONObject jsonObject2 = new JSONObject();
         JSONObject jsonObject3 = new JSONObject();
+        JSONObject jsonObject4 = new JSONObject();
         try {
             jsonObject.put("code", 1001).put("count", 3);
             jsonObject2.put("code", 1006).put("count", 10);
             jsonObject3.put("code", 1002).put("count", 5);
+            jsonObject4.put("code", 1004).put("count", -1);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -145,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
         jsonArray.put(jsonObject);
         jsonArray.put(jsonObject2);
         jsonArray.put(jsonObject3);
+        jsonArray.put(jsonObject4);
 
         String json = jsonArray.toString();
 
@@ -156,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public void onAppBarLoad(){
