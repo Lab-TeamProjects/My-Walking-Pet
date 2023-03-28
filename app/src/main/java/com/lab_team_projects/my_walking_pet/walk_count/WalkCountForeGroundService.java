@@ -38,6 +38,9 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     private final User user = gm.getUser();
     private final AppDatabase db = AppDatabase.getInstance(this);
 
+    private int lastStep = 0;
+    private boolean isFirstRun = false;
+
     private boolean isWalking = false;
     private boolean isRunning = false;
     private final float[] lastAccelValues = new float[3];
@@ -148,27 +151,6 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         startForeground(1, makeNotification());
     }
 
-    private static final float ALPHA = 0.65f; // 필터 계수, 계수가 높을 수록 필터되는 값이 줄어듬
-
-    private float[] lowPass(float[] input, float[] output) {
-        if (output == null) return input;
-
-        for (int i = 0; i < input.length; i++) {
-            output[i] = output[i] + ALPHA * (input[i] - output[i]);
-        }
-        return output;
-    }
-
-    public float[] highPassFilter(float[] input) {
-        final float ALPHA = 0.65f;
-        float[] lastValues = input.clone();
-
-        for (int i = 0; i < input.length; i++) {
-            lastValues[i] = ALPHA * (lastValues[i] + input[i] - lastValues[i]);
-        }
-
-        return lastValues;
-    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -178,45 +160,16 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                 //Toast.makeText(getApplicationContext(), "걸음 디텍터", Toast.LENGTH_SHORT).show();
                 break;*/
             case Sensor.TYPE_STEP_COUNTER:
-                step(true);
-                //Toast.makeText(getApplicationContext(), "걸음 카운터", Toast.LENGTH_SHORT).show();
-                break;
-            /*case Sensor.TYPE_ACCELEROMETER:
-                float[] accelValues = event.values.clone();
-                float[] filteredValues = highPassFilter(accelValues);
-                filteredValues = lowPass(accelValues, filteredValues);
-
-                float x = filteredValues[0];
-                float y = filteredValues[1];
-                float z = filteredValues[2];
-                float accelMagnitude = (float) Math.sqrt(x * x + y * y + z * z);
-                float delta = accelMagnitude - lastAccelValues[2];
-                lastAccelValues[2] = accelMagnitude;
-
-                // 걷기 임계값 이상이면 걷는중으로 인지
-                if (delta > THRESHOLD_WALK) {
-                    long timestamp = event.timestamp;
-                    if (lastTimestamp != 0) {
-                        // 자이로스코프 이벤트 시간 차이 계산
-                        float dt = (timestamp - lastTimestamp) * NS2S;
-                        // 현재 기기의 방향을 측정하고 보정
-                        angle += event.values[2] * dt;
-                        if (angle >= Math.PI / 2) {
-                            angle -= Math.PI / 2;
-                            // 현재 걷고 있는지, 뛰고 있는지에 맞춰서 걸음 수 증가
-                            step(!(delta > THRESHOLD_RUN));
-                        }
-                    }
-                    lastTimestamp = timestamp;
+                if (!isFirstRun) {
+                    step(1);
+                    lastStep = (int) event.values[0];
+                    isFirstRun = true;
+                } else {
+                    step((int) event.values[0] - lastStep);
+                    lastStep = (int) event.values[0];
                 }
+                Log.d("__walk__", String.valueOf(lastStep));
                 break;
-            case Sensor.TYPE_GYROSCOPE:
-                float[] gyroValues = event.values.clone();
-                // 자이로스코프 값을 적분하여 보정
-                float dt = (event.timestamp - lastTimestamp) * NS2S;
-                angle += gyroValues[2] * dt;
-                lastTimestamp = event.timestamp;
-                break;*/
             default:
                 break;
 
@@ -225,12 +178,8 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
 
 
-    private void step(boolean isWalking) {
-        if (isWalking) {
-            walk.setWalkCount(walk.getWalkCount() + 1);
-        } else {
-            walk.setRunCount(walk.getRunCount() + 1);
-        }
+    private void step(int step) {
+        walk.setWalkCount(walk.getWalkCount() + step);
         walk.setCount(walk.getWalkCount() + walk.getRunCount());
         walk.calculateSec(user);
         updateWalk();
