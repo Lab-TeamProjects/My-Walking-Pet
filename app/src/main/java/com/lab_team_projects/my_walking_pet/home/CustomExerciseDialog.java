@@ -21,6 +21,8 @@ public class CustomExerciseDialog extends Dialog {
     private CustomExerciseDialogBinding binding;
     private final Context context;
     private final List<Integer> exerciseTimes = Arrays.asList(30, 40, 50, 60);
+    int selected = 30;
+
 
     public CustomExerciseDialog(@NonNull Context context) {
         super(context);
@@ -41,16 +43,27 @@ public class CustomExerciseDialog extends Dialog {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int screenWidth = metrics.widthPixels;
         int screenHeight = metrics.heightPixels;
-        this.getWindow().setLayout((int)(screenWidth * 0.9), (int)(screenHeight * 0.5));
+        this.getWindow().setLayout((int)(screenWidth * 0.9), (int)(screenHeight * 0.4));
 
-        // 스피너 등록
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, exerciseTimes);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        binding.spExerciseTime.setAdapter(adapter);
+        selected = Integer.parseInt(binding.tvTime.getText().toString());
+
+        binding.btnPlus.setOnClickListener(v->{
+            if (selected < 100) {
+                selected += 10;
+                binding.tvTime.setText(String.valueOf(selected));
+            }
+        });
+
+        binding.btnMinus.setOnClickListener(v->{
+            if (selected > 30) {
+                selected -= 10;
+                binding.tvTime.setText(String.valueOf(selected));
+            }
+        });
 
         binding.btnOK.setOnClickListener(v->{
             // ok 버튼
-            int selected = (int) binding.spExerciseTime.getSelectedItem();
+            selected = Integer.parseInt(binding.tvTime.getText().toString());
             Toast.makeText(context, String.valueOf(selected), Toast.LENGTH_SHORT).show();
         });
 

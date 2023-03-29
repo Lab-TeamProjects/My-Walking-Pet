@@ -158,10 +158,6 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     @Override
     public void onSensorChanged(SensorEvent event) {
         switch (event.sensor.getType()) {
-            /*case Sensor.TYPE_STEP_DETECTOR:
-                step(true);
-                //Toast.makeText(getApplicationContext(), "걸음 디텍터", Toast.LENGTH_SHORT).show();
-                break;*/
             case Sensor.TYPE_STEP_COUNTER:
                 if (!isFirstRun) {
                     step(1);
