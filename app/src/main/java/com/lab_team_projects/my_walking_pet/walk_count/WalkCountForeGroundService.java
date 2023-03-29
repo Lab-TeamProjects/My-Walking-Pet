@@ -22,6 +22,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
+import com.lab_team_projects.my_walking_pet.app.MainActivity;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
 import com.lab_team_projects.my_walking_pet.login.User;
 import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
@@ -135,11 +136,13 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                 .setWhen(0)
                 .setShowWhen(false);
 
-        Intent notificationIntent = new Intent(this, NoticeSettingActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+        // 알림창을 클릭했을 때 액티비티 이동
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         builder.setContentIntent(pendingIntent);
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             manager.createNotificationChannel(new NotificationChannel("1","포그라운드 서비스", NotificationManager.IMPORTANCE_NONE));
         }
