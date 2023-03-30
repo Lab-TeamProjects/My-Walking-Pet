@@ -2,7 +2,9 @@ package com.lab_team_projects.my_walking_pet.home;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.IdRes;
@@ -24,6 +26,7 @@ import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
 import com.lab_team_projects.my_walking_pet.help.HelpActivity;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
 import com.lab_team_projects.my_walking_pet.helpers.OnSwipeTouchHelper;
+import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
 import com.lab_team_projects.my_walking_pet.login.User;
 import com.lab_team_projects.my_walking_pet.walk_count.WalkViewModel;
 
@@ -89,6 +92,18 @@ public class HomeFragment extends Fragment {
             binding.tvWalkCount.setText(String.valueOf(walk.getCount()));
         });
 
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences(UserPreferenceHelper.UserTokenKey.login.name(), Context.MODE_PRIVATE);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                if (key.equals(UserPreferenceHelper.UserPreferenceKey.money.name())) {
+                    int money = sharedPreferences.getInt(key, GameManager.getInstance().getUser().getMoney());
+                    GameManager.getInstance().getUser().setMoney(money);
+                    binding.tvMoney.setText(String.valueOf(money));
+                }
+            }
+        });
+
 
 
         return binding.getRoot();
@@ -101,7 +116,6 @@ public class HomeFragment extends Fragment {
     private void initInventory() throws IOException {
 
         inventoryHelper = new InventoryHelper(requireContext());
-
         binding.fabWater.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.DRINK, inventoryHelper));
         binding.fabFood.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.FOOD, inventoryHelper));
         binding.fabWash.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.WASH, inventoryHelper));

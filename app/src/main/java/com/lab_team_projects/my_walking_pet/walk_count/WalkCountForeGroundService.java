@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -24,9 +25,14 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.app.MainActivity;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
+import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
 import com.lab_team_projects.my_walking_pet.login.User;
 import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class WalkCountForeGroundService extends Service implements SensorEventListener {
@@ -73,7 +79,11 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     @Override
     public void onCreate() {
         super.onCreate();
-        task = new BackgroundTask();
+        try {
+            task = new BackgroundTask(gm, getApplicationContext());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         walk = gm.getWalk();
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -157,21 +167,28 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        switch (event.sensor.getType()) {
-            case Sensor.TYPE_STEP_COUNTER:
-                if (!isFirstRun) {
-                    step(1);
-                    lastStep = (int) event.values[0];
-                    isFirstRun = true;
-                } else {
-                    step((int) event.values[0] - lastStep);
-                    lastStep = (int) event.values[0];
-                }
-                Log.d("__walk__", String.valueOf(lastStep));
-                break;
-            default:
-                break;
+        if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
+            if (!isFirstRun) {
+                step(1);
+                userMoneyUpdate(1);
+                lastStep = (int) event.values[0];
+                isFirstRun = true;
+            } else {
+                int increaseValue = (int) event.values[0] - lastStep;
+                step(increaseValue);
+                userMoneyUpdate(increaseValue);
+                lastStep = (int) event.values[0];
+            }
         }
+    }
+
+    private void userMoneyUpdate(int addMoney) {
+        UserPreferenceHelper helper =
+                new UserPreferenceHelper(getApplicationContext()
+                        , UserPreferenceHelper.UserTokenKey.login.name());
+
+        helper.saveIntValue(UserPreferenceHelper.UserPreferenceKey.money.name()
+                , addMoney + gm.getUser().getMoney());
     }
 
 
@@ -214,11 +231,34 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     // 쓰레드
     static class BackgroundTask extends AsyncTask<Integer, String, Integer> {
 
+        Date currentDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+        Date walkDate;
+        Context context;
+        GameManager gm;
+
+        public BackgroundTask(GameManager gm, Context context) throws ParseException {
+            this.gm = gm;
+            this.walkDate = sdf.parse(gm.getWalk().getDate());
+            this.context = context;
+        };
+
         @Override
         protected Integer doInBackground(Integer... values) {
 
-            while (isCancelled() == false) {
+            while (!isCancelled()) {
                 try {
+                    currentDate = Calendar.getInstance().getTime(); // 현재 시간을 Date 객체로 변환
+
+                    if (currentDate.before(walkDate)) {
+                        Toast.makeText(context, "날짜가 변경되었습니다", Toast.LENGTH_SHORT).show();
+
+                        Walk walk = new Walk();
+                        walk.setDate(sdf.format(currentDate));
+                        gm.setWalk(walk);
+                        AppDatabase.getInstance(context).walkDao().insert(walk);
+                    }
+
                     Thread.sleep(1000);
                 } catch (Exception ex) { }
             }
