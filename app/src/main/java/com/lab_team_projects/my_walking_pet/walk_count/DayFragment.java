@@ -103,7 +103,7 @@ public class DayFragment extends Fragment {
 
     private void loadValue() {
         loadPieChartData(this.walk);
-        loadBarData(this.walk);
+        loadBarData();
         binding.tvKcalValue.setText(String.format(Locale.getDefault(),"%.2f", walk.getKcal()));    // 오늘 칼로리 소모량을 화면에 표시한다.
         binding.tvKmValue.setText(String.format(Locale.getDefault(),"%.2f", walk.getDistance()));    // 오늘 걸은 거리를 화면에 표시한다.
         binding.tvMinValue.setText(walk.calculateHours());    // 오늘 걸은 시간을 화면에 표시한다.
@@ -277,12 +277,12 @@ public class DayFragment extends Fragment {
 
     }
 
-    private void loadBarData(Walk walk) {
+    private void loadBarData() {
         ArrayList<BarEntry> valueList = new ArrayList<>();
         String title = "걸음 수";
 
         for (int i = 0; i < walks.size(); i++) {
-            valueList.add(new BarEntry((float) i, walk.getCount()));
+            valueList.add(new BarEntry(i, walks.get(i).getCount()));
         }
 
         BarDataSet barDataSet = new BarDataSet(valueList, title);
