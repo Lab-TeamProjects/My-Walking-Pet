@@ -1,11 +1,10 @@
 package com.lab_team_projects.my_walking_pet.login;
 
-import com.lab_team_projects.my_walking_pet.collection.Collection;
+import com.lab_team_projects.my_walking_pet.shop.collection.Collection;
 import com.lab_team_projects.my_walking_pet.home.Animal;
 import com.lab_team_projects.my_walking_pet.home.Item;
 import com.lab_team_projects.my_walking_pet.mission.Mission;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;

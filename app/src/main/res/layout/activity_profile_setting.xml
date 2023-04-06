@@ -139,10 +139,10 @@
                     android:id="@+id/etID"
                     android:layout_width="300dp"
                     android:layout_height="45dp"
-                    android:background="@drawable/bg_corner_rectangle"
                     android:layout_marginTop="5dp"
-                    android:text="abcd1234@naver.com"
+                    android:background="@drawable/bg_corner_rectangle"
                     android:padding="10dp"
+                    android:text="abcd1234@naver.com"
                     app:layout_constraintStart_toStartOf="@id/tvID"
                     app:layout_constraintTop_toBottomOf="@id/tvID" />
 

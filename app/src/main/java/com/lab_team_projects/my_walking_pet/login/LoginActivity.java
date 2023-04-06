@@ -1,5 +1,6 @@
 package com.lab_team_projects.my_walking_pet.login;
 
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.LOGIN;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_AUTH_EMAIL;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_CORRECT_PASSWORD;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_FOUND_EMAIL;
