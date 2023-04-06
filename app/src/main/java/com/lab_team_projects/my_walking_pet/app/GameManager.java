@@ -20,7 +20,7 @@ public class GameManager {
     }
 
     public void loadUser(Context context) {
-        SharedPreferences pref = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences pref = context.getSharedPreferences("login", Context.MODE_PRIVATE);
         /*
         * 아직 프리페어런스 저장되는 코드가 없음
         * 그래서 임의의 사용자 정보를 대입
@@ -30,6 +30,7 @@ public class GameManager {
         user.setAge(pref.getInt("age", 24));
         user.setGender(pref.getInt("gender", 0));
         user.setBMI();
+        user.setMoney(pref.getInt("money", 10000));
     }
 
     public User getUser() {

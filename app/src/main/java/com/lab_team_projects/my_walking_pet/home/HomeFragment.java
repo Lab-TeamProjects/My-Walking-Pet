@@ -2,12 +2,15 @@ package com.lab_team_projects.my_walking_pet.home;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -23,14 +26,17 @@ import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
 import com.lab_team_projects.my_walking_pet.help.HelpActivity;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
 import com.lab_team_projects.my_walking_pet.helpers.OnSwipeTouchHelper;
+import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
 import com.lab_team_projects.my_walking_pet.login.User;
+import com.lab_team_projects.my_walking_pet.walk_count.WalkViewModel;
 
 import java.io.IOException;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener;
     private boolean isInteractionBtnClick = false;
     long lastClickTime = 0;
     int canDragTime = 3000;    // 드래그 쿨타임 현재 3초
@@ -82,6 +88,26 @@ public class HomeFragment extends Fragment {
         });
 
 
+        WalkViewModel walkViewModel = new ViewModelProvider(this).get(WalkViewModel.class);
+        walkViewModel.getWalkLiveData().observe(getViewLifecycleOwner(), walk -> {
+            binding.tvWalkCount.setText(String.valueOf(walk.getCount()));
+        });
+
+        sharedPreferences = requireContext().getSharedPreferences(UserPreferenceHelper.UserTokenKey.login.name(), Context.MODE_PRIVATE);
+
+        sharedPreferenceChangeListener =
+                new SharedPreferences.OnSharedPreferenceChangeListener() {
+                    @Override
+                    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                        if (key.equals(UserPreferenceHelper.UserPreferenceKey.money.name())) {
+                            int money = sharedPreferences.getInt(key, GameManager.getInstance().getUser().getMoney());
+                            GameManager.getInstance().getUser().setMoney(money);
+                            binding.tvMoney.setText(String.valueOf(money));
+                        }
+                    }
+                };
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
 
         return binding.getRoot();
     }
@@ -93,7 +119,6 @@ public class HomeFragment extends Fragment {
     private void initInventory() throws IOException {
 
         inventoryHelper = new InventoryHelper(requireContext());
-
         binding.fabWater.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.DRINK, inventoryHelper));
         binding.fabFood.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.FOOD, inventoryHelper));
         binding.fabWash.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.WASH, inventoryHelper));
@@ -216,12 +241,14 @@ public class HomeFragment extends Fragment {
         super.onResume();
         GameManager gameManager = GameManager.getInstance();
         binding.tvMoney.setText(String.valueOf(gameManager.getUser().getMoney()));
+        //Log.d("__walk", String.valueOf(binding.tvMoney.getId()));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         // 바인딩은 생명주기 이슈 때문에 프래그먼트가 종료되면 널을 넣어줘야 함
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
         binding = null;
     }
 }

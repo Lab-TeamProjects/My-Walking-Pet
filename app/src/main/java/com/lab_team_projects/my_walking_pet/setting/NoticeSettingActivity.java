@@ -88,7 +88,7 @@ public class NoticeSettingActivity extends AppCompatActivity {
             // 서비스 시작 함수
             Intent serviceIntent;
             serviceIntent = new Intent(requireContext(), service.getClass());
-            requireActivity().startService(serviceIntent);
+            requireActivity().startForegroundService(serviceIntent);
         }
 
         public void stopService() {

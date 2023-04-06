@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -22,10 +23,16 @@ import androidx.core.app.NotificationCompat;
 
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
+import com.lab_team_projects.my_walking_pet.app.MainActivity;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
+import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
 import com.lab_team_projects.my_walking_pet.login.User;
 import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class WalkCountForeGroundService extends Service implements SensorEventListener {
@@ -37,6 +44,9 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     private final GameManager gm = GameManager.getInstance();
     private final User user = gm.getUser();
     private final AppDatabase db = AppDatabase.getInstance(this);
+
+    private int lastStep = 0;
+    private boolean isFirstRun = false;
 
     private boolean isWalking = false;
     private boolean isRunning = false;
@@ -69,7 +79,11 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     @Override
     public void onCreate() {
         super.onCreate();
-        task = new BackgroundTask();
+        try {
+            task = new BackgroundTask(gm, getApplicationContext());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         walk = gm.getWalk();
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -132,11 +146,13 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                 .setWhen(0)
                 .setShowWhen(false);
 
-        Intent notificationIntent = new Intent(this, NoticeSettingActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+        // 알림창을 클릭했을 때 액티비티 이동
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         builder.setContentIntent(pendingIntent);
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             manager.createNotificationChannel(new NotificationChannel("1","포그라운드 서비스", NotificationManager.IMPORTANCE_NONE));
         }
@@ -148,89 +164,37 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         startForeground(1, makeNotification());
     }
 
-    private static final float ALPHA = 0.65f; // 필터 계수, 계수가 높을 수록 필터되는 값이 줄어듬
-
-    private float[] lowPass(float[] input, float[] output) {
-        if (output == null) return input;
-
-        for (int i = 0; i < input.length; i++) {
-            output[i] = output[i] + ALPHA * (input[i] - output[i]);
-        }
-        return output;
-    }
-
-    public float[] highPassFilter(float[] input) {
-        final float ALPHA = 0.65f;
-        float[] lastValues = input.clone();
-
-        for (int i = 0; i < input.length; i++) {
-            lastValues[i] = ALPHA * (lastValues[i] + input[i] - lastValues[i]);
-        }
-
-        return lastValues;
-    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        switch (event.sensor.getType()) {
-            /*case Sensor.TYPE_STEP_DETECTOR:
-                step(true);
-                //Toast.makeText(getApplicationContext(), "걸음 디텍터", Toast.LENGTH_SHORT).show();
-                break;*/
-            case Sensor.TYPE_STEP_COUNTER:
-                step(true);
-                //Toast.makeText(getApplicationContext(), "걸음 카운터", Toast.LENGTH_SHORT).show();
-                break;
-            /*case Sensor.TYPE_ACCELEROMETER:
-                float[] accelValues = event.values.clone();
-                float[] filteredValues = highPassFilter(accelValues);
-                filteredValues = lowPass(accelValues, filteredValues);
-
-                float x = filteredValues[0];
-                float y = filteredValues[1];
-                float z = filteredValues[2];
-                float accelMagnitude = (float) Math.sqrt(x * x + y * y + z * z);
-                float delta = accelMagnitude - lastAccelValues[2];
-                lastAccelValues[2] = accelMagnitude;
-
-                // 걷기 임계값 이상이면 걷는중으로 인지
-                if (delta > THRESHOLD_WALK) {
-                    long timestamp = event.timestamp;
-                    if (lastTimestamp != 0) {
-                        // 자이로스코프 이벤트 시간 차이 계산
-                        float dt = (timestamp - lastTimestamp) * NS2S;
-                        // 현재 기기의 방향을 측정하고 보정
-                        angle += event.values[2] * dt;
-                        if (angle >= Math.PI / 2) {
-                            angle -= Math.PI / 2;
-                            // 현재 걷고 있는지, 뛰고 있는지에 맞춰서 걸음 수 증가
-                            step(!(delta > THRESHOLD_RUN));
-                        }
-                    }
-                    lastTimestamp = timestamp;
-                }
-                break;
-            case Sensor.TYPE_GYROSCOPE:
-                float[] gyroValues = event.values.clone();
-                // 자이로스코프 값을 적분하여 보정
-                float dt = (event.timestamp - lastTimestamp) * NS2S;
-                angle += gyroValues[2] * dt;
-                lastTimestamp = event.timestamp;
-                break;*/
-            default:
-                break;
-
+        if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
+            if (!isFirstRun) {
+                step(1);
+                userMoneyUpdate(1);
+                lastStep = (int) event.values[0];
+                isFirstRun = true;
+            } else {
+                int increaseValue = (int) event.values[0] - lastStep;
+                step(increaseValue);
+                userMoneyUpdate(increaseValue);
+                lastStep = (int) event.values[0];
+            }
         }
+    }
+
+    private void userMoneyUpdate(int addMoney) {
+        UserPreferenceHelper helper =
+                new UserPreferenceHelper(getApplicationContext()
+                        , UserPreferenceHelper.UserTokenKey.login.name());
+
+        helper.saveIntValue(UserPreferenceHelper.UserPreferenceKey.money.name()
+                , addMoney + gm.getUser().getMoney());
     }
 
 
 
-    private void step(boolean isWalking) {
-        if (isWalking) {
-            walk.setWalkCount(walk.getWalkCount() + 1);
-        } else {
-            walk.setRunCount(walk.getRunCount() + 1);
-        }
+    private void step(int step) {
+        walk.setWalkCount(walk.getWalkCount() + step);
         walk.setCount(walk.getWalkCount() + walk.getRunCount());
         walk.calculateSec(user);
         updateWalk();
@@ -267,11 +231,34 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     // 쓰레드
     static class BackgroundTask extends AsyncTask<Integer, String, Integer> {
 
+        Date currentDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+        Date walkDate;
+        Context context;
+        GameManager gm;
+
+        public BackgroundTask(GameManager gm, Context context) throws ParseException {
+            this.gm = gm;
+            this.walkDate = sdf.parse(gm.getWalk().getDate());
+            this.context = context;
+        };
+
         @Override
         protected Integer doInBackground(Integer... values) {
 
-            while (isCancelled() == false) {
+            while (!isCancelled()) {
                 try {
+                    currentDate = Calendar.getInstance().getTime(); // 현재 시간을 Date 객체로 변환
+
+                    if (currentDate.before(walkDate)) {
+                        Toast.makeText(context, "날짜가 변경되었습니다", Toast.LENGTH_SHORT).show();
+
+                        Walk walk = new Walk();
+                        walk.setDate(sdf.format(currentDate));
+                        gm.setWalk(walk);
+                        AppDatabase.getInstance(context).walkDao().insert(walk);
+                    }
+
                     Thread.sleep(1000);
                 } catch (Exception ex) { }
             }

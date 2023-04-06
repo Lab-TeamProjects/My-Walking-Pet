@@ -23,9 +23,7 @@ public class User {
     private int gender;
     private double bmi;
     private double bmr;    // 기초 대사량
-
-    private int money = 1000000;
-
+    private int money;
     private List<Item> itemLists;
     private List<Mission> missionList;
     private List<Animal> animalList;

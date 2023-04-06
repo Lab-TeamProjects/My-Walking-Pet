@@ -21,7 +21,7 @@ public class UserPreferenceHelper {
     }
 
     public enum UserPreferenceKey {
-        weight, height, age, gender
+        weight, height, age, gender, money
     }
 
     public enum TodayUserActiveKey {
@@ -81,9 +81,6 @@ public class UserPreferenceHelper {
 
 
 
-
-
-
     public void loadUserInfo(User user) {
         List<Double> values = new ArrayList<>();
 
@@ -104,5 +101,6 @@ public class UserPreferenceHelper {
         user.setAge(values.get(age.ordinal()).intValue());
         user.setGender(values.get(gender.ordinal()).intValue());
         user.setBMI();
+        user.setMoney(values.get(money.ordinal()).intValue());
     }
 }

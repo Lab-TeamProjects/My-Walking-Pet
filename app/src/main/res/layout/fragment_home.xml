@@ -223,6 +223,7 @@
             app:layout_constraintVertical_bias="0.2" />
 
         <TextView
+            android:id="@+id/tvWalkCount"
             android:text="여기에 얼마나 걸었는지"
             android:gravity="center"
             android:textAlignment="center"
