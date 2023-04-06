@@ -88,6 +88,8 @@ public class DayFragment extends Fragment {
 
         db = AppDatabase.getInstance(requireContext());
         walks = db.walkDao().getAll();    // 일단 내부저장소에 저장되어있는 Walk 데이터들을 리스트로 만든다.
+
+
         walk = walks.get(walks.size() - 1);    // walks 리스트 마지막에는 오늘 날짜의 walk가 저장되어 있기 때문에 가져온다.
         walk.setDistance(walk.calculateDistance(user));
 
