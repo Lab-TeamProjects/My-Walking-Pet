@@ -29,11 +29,11 @@ public class CustomExerciseDialog extends Dialog {
     private final List<Integer> exerciseTimes = Arrays.asList(30, 40, 50, 60);
     int selected = 30;
 
+    private ServiceInterface serviceInterface;
 
     public CustomExerciseDialog(@NonNull Context context) {
         super(context);
         this.context = context;
-
         this.getWindow().setDimAmount(0);    // 배경 어두워지는 것 없애기
     }
 
@@ -72,8 +72,9 @@ public class CustomExerciseDialog extends Dialog {
             selected = Integer.parseInt(binding.tvTime.getText().toString());
             Toast.makeText(context, String.valueOf(selected), Toast.LENGTH_SHORT).show();
 
-            WalkingTimeCheckService service = new WalkingTimeCheckService(selected);
+            WalkingTimeCheckService service = new WalkingTimeCheckService();
             Intent intent = new Intent(context, service.getClass());
+            intent.putExtra("time", selected);
             context.startService(intent);
 
             context.bindService(intent, serviceConnection, BIND_AUTO_CREATE);
@@ -83,8 +84,6 @@ public class CustomExerciseDialog extends Dialog {
             this.dismiss();
         });
     }
-
-    private ServiceInterface serviceInterface;
 
     // 서비스 바인딩 처리
     private ServiceConnection serviceConnection = new ServiceConnection() {

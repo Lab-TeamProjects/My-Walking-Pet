@@ -11,6 +11,7 @@ public class ConnectionProtocol {
     public static final String INVALID_ACCESS_TOKEN = "A06"; // 엑세스토큰이 유효하지 않은 경우
 
     public static final String INVALID_IMAGE_DATA = "D01"; // 잘못된 이미지 파일
+    public static final String UNCORRECTABLE_DATA = "D02"; // 수정할 수 없는 데이터
 
 
     // 요청 url
