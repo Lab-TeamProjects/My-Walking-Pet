@@ -20,6 +20,8 @@ public class Walk {
     private int walkCount;
     private int runCount;
     private int exerciseCount;
+    private int exerciseRunCount;
+    private int exerciseWalkCount;
 
     public double calculateKcal(User user) {
         // 칼로리 계산
@@ -122,5 +124,21 @@ public class Walk {
 
     public void setExerciseCount(int exerciseCount) {
         this.exerciseCount = exerciseCount;
+    }
+
+    public int getExerciseRunCount() {
+        return exerciseRunCount;
+    }
+
+    public void setExerciseRunCount(int exerciseRunCount) {
+        this.exerciseRunCount = exerciseRunCount;
+    }
+
+    public int getExerciseWalkCount() {
+        return exerciseWalkCount;
+    }
+
+    public void setExerciseWalkCount(int exerciseWalkCount) {
+        this.exerciseWalkCount = exerciseWalkCount;
     }
 }

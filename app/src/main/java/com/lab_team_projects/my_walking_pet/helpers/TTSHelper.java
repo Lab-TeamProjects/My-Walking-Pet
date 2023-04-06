@@ -1,6 +1,8 @@
 package com.lab_team_projects.my_walking_pet.helpers;
 
 import android.content.Context;
+import android.media.AudioManager;
+import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 
 import java.util.Locale;
@@ -26,8 +28,12 @@ public class TTSHelper {
 
     public void speak(String text) {
         int speakMode = TextToSpeech.QUEUE_ADD;
+
+        Bundle params = new Bundle();
+        params.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 1.0f);
+
         if (isTtsInitialized) {
-            tts.speak(text, speakMode, null, SPEAK_ID);
+            tts.speak(text, speakMode, params, SPEAK_ID);
         }
     }
 

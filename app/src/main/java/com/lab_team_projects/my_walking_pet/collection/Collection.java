@@ -1,4 +1,4 @@
-package com.lab_team_projects.my_walking_pet.shop.collection;
+package com.lab_team_projects.my_walking_pet.collection;
 
 import com.lab_team_projects.my_walking_pet.home.Broods;
 

@@ -42,6 +42,9 @@ public class HomeFragment extends Fragment {
     int canDragTime = 3000;    // 드래그 쿨타임 현재 3초
     private InventoryHelper inventoryHelper;
 
+
+    private boolean isExercising = false;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -207,7 +210,14 @@ public class HomeFragment extends Fragment {
         binding.ibAR.setOnClickListener(v -> Toast.makeText(requireContext(), "AR 이동 버튼", Toast.LENGTH_SHORT).show());
 
         binding.ibExercise.setOnClickListener(v -> {
-            CustomExerciseDialog dialog = new CustomExerciseDialog(requireContext());
+            CustomExerciseDialog dialog = new CustomExerciseDialog(requireContext(), isExercising);
+            dialog.setOnExerciseListener(new CustomExerciseDialog.OnExerciseListener() {
+                @Override
+                public void exercise(boolean flag) {
+                    isExercising = flag;
+                }
+            });
+
             dialog.show();
         });
 
