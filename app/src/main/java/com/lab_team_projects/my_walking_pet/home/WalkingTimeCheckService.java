@@ -4,12 +4,12 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.IInterface;
@@ -37,6 +37,9 @@ import java.util.function.BiConsumer;
 
 public class WalkingTimeCheckService extends Service implements SensorEventListener {
 
+    private MyBinder binder = new MyBinder();
+    private ServiceConnection conn;
+
     private int time;
     private TTSHelper thr;
     private GameManager gm;
@@ -44,16 +47,16 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
     private AppDatabase db;
 
     private final Handler ttsHandler = new Handler();
+
     private int lastStep = 0;
     private boolean isFirstRun = false;
+
     private Walk walk;
-    private Intent intent;
 
     public WalkingTimeCheckService(){ }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        this.intent = intent;
         this.time = intent.getIntExtra("time",0);
         Log.e("tts", String.valueOf(this.time));
 
@@ -84,6 +87,7 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
                         thr.speak(s);
 
                         if (integer == time / 5 + 1) {
+                            binder.flag = false;
                             onDestroy();
                         }
 
@@ -92,13 +96,23 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
             }
         });
 
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Nullable
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    public MyBinder onBind(Intent intent) {
+        startService(intent);
+        return binder;
+    }
+
+    public void setConn(ServiceConnection conn) {
+        this.conn = conn;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -125,10 +139,6 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        this.stopSelf();
-        stopService(intent);
-
-        ExerciseHelper.getInstance().getListener().onFinish(false);
     }
 
     @Override
@@ -163,5 +173,14 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    public class MyBinder extends Binder {
+
+        public boolean flag = true;
+
+        public WalkingTimeCheckService getService() {
+            return WalkingTimeCheckService.this;
+        }
     }
 }
