@@ -8,19 +8,29 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Binder;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.IInterface;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.Parcel;
+import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
+import com.lab_team_projects.my_walking_pet.helpers.ExerciseHelper;
 import com.lab_team_projects.my_walking_pet.helpers.TTSHelper;
 import com.lab_team_projects.my_walking_pet.login.User;
 import com.lab_team_projects.my_walking_pet.walk_count.Walk;
 
+import java.io.FileDescriptor;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -28,24 +38,22 @@ import java.util.function.BiConsumer;
 public class WalkingTimeCheckService extends Service implements SensorEventListener {
 
     private int time;
-
     private TTSHelper thr;
-
     private GameManager gm;
     private User user;
     private AppDatabase db;
 
     private final Handler ttsHandler = new Handler();
-
     private int lastStep = 0;
     private boolean isFirstRun = false;
-
     private Walk walk;
+    private Intent intent;
 
     public WalkingTimeCheckService(){ }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        this.intent = intent;
         this.time = intent.getIntExtra("time",0);
         Log.e("tts", String.valueOf(this.time));
 
@@ -76,7 +84,7 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
                         thr.speak(s);
 
                         if (integer == time / 5 + 1) {
-
+                            onDestroy();
                         }
 
                     }
@@ -84,7 +92,7 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
             }
         });
 
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
     @Nullable
@@ -92,7 +100,6 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
     public IBinder onBind(Intent intent) {
         return null;
     }
-
 
     @Override
     public void onCreate() {
@@ -114,6 +121,16 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
     }
 
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.stopSelf();
+        stopService(intent);
+
+        ExerciseHelper.getInstance().getListener().onFinish(false);
+    }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
@@ -127,9 +144,7 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
                 lastStep = (int) event.values[0];
             }
         }
-
     }
-
 
     private void step(int step) {
         walk.setExerciseWalkCount(walk.getExerciseWalkCount() + step);
@@ -143,7 +158,6 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
             walk.setKcal(walk.calculateKcal(user));
         }
         db.walkDao().update(walk);
-
     }
 
     @Override

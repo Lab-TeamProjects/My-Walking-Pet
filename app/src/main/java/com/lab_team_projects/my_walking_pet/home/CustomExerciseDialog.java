@@ -8,11 +8,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.CustomExerciseDialogBinding;
@@ -33,9 +38,7 @@ public class CustomExerciseDialog extends Dialog {
 
     private boolean isExercising;
 
-
     private ServiceInterface serviceInterface;
-
 
     private OnExerciseListener onExerciseListener;
 
@@ -44,10 +47,8 @@ public class CustomExerciseDialog extends Dialog {
     }
 
     public interface OnExerciseListener {
-        void exercise(boolean flag);
+        void exercise(boolean flag, int selected);
     }
-
-
 
     public CustomExerciseDialog(@NonNull Context context, boolean isExercising) {
         super(context);
@@ -55,6 +56,7 @@ public class CustomExerciseDialog extends Dialog {
         this.getWindow().setDimAmount(0);    // 배경 어두워지는 것 없애기
         this.isExercising = isExercising;
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +67,7 @@ public class CustomExerciseDialog extends Dialog {
             setContentView(exerciseBinding.getRoot());
 
             getWindow().setBackgroundDrawableResource(R.drawable.bg_dialog_yellow);
-
             setWindowPixels();
-
             selected = Integer.parseInt(exerciseBinding.tvTime.getText().toString());
 
             exerciseBinding.btnPlus.setOnClickListener(v->{
@@ -86,37 +86,21 @@ public class CustomExerciseDialog extends Dialog {
 
             exerciseBinding.btnOK.setOnClickListener(v->{
                 // ok 버튼
-
-                onExerciseListener.exercise(true);
-
                 selected = Integer.parseInt(exerciseBinding.tvTime.getText().toString());
                 Toast.makeText(context, String.valueOf(selected), Toast.LENGTH_SHORT).show();
-
-                WalkingTimeCheckService service = new WalkingTimeCheckService();
-
-
-                Intent intent = new Intent(context, service.getClass());
-                intent.putExtra("time", selected);
-                context.startService(intent);
-
-                context.bindService(intent, serviceConnection, BIND_AUTO_CREATE);
+                onExerciseListener.exercise(true, selected);
+                dismiss();
             });
 
             exerciseBinding.btnCancel.setOnClickListener(v->{
-                this.dismiss();
+                dismiss();
             });
 
         } else {
             exercisingBinding = CustomExercisingDialogBinding.inflate(getLayoutInflater());
             setContentView(exercisingBinding.getRoot());
-
-
             setWindowPixels();
         }
-
-
-
-
     }
 
     private void setWindowPixels() {
@@ -127,16 +111,4 @@ public class CustomExerciseDialog extends Dialog {
         this.getWindow().setLayout((int)(screenWidth * 0.9), (int)(screenHeight * 0.4));
     }
 
-    // 서비스 바인딩 처리
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            serviceInterface = (ServiceInterface) iBinder;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            serviceInterface = null;
-        }
-    };
 }

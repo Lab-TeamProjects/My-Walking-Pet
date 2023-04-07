@@ -1,9 +1,13 @@
 package com.lab_team_projects.my_walking_pet.home;
 
 
+import static android.content.Context.BIND_AUTO_CREATE;
+
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -13,6 +17,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,6 +32,7 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
 import com.lab_team_projects.my_walking_pet.help.HelpActivity;
+import com.lab_team_projects.my_walking_pet.helpers.ExerciseHelper;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
 import com.lab_team_projects.my_walking_pet.helpers.OnSwipeTouchHelper;
 import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
@@ -41,7 +50,6 @@ public class HomeFragment extends Fragment {
     long lastClickTime = 0;
     int canDragTime = 3000;    // 드래그 쿨타임 현재 3초
     private InventoryHelper inventoryHelper;
-
 
     private boolean isExercising = false;
 
@@ -111,6 +119,16 @@ public class HomeFragment extends Fragment {
                 };
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
+
+
+        ExerciseHelper.getInstance().setListener(new ExerciseHelper.OnExerciseListener() {
+            @Override
+            public void onFinish(boolean flag) {
+                isExercising = flag;
+                Log.d("exe", String.valueOf(isExercising));
+            }
+        });
+
 
         return binding.getRoot();
     }
@@ -210,22 +228,23 @@ public class HomeFragment extends Fragment {
         binding.ibAR.setOnClickListener(v -> Toast.makeText(requireContext(), "AR 이동 버튼", Toast.LENGTH_SHORT).show());
 
         binding.ibExercise.setOnClickListener(v -> {
+            Log.d("walk", "현재플래그: " + isExercising);
             CustomExerciseDialog dialog = new CustomExerciseDialog(requireContext(), isExercising);
             dialog.setOnExerciseListener(new CustomExerciseDialog.OnExerciseListener() {
                 @Override
-                public void exercise(boolean flag) {
+                public void exercise(boolean flag, int selected) {
                     isExercising = flag;
+
+                    Intent intent = new Intent(requireContext(), WalkingTimeCheckService.class);
+                    intent.putExtra("time", selected);
+                    requireContext().startService(intent);
                 }
             });
 
             dialog.show();
         });
-
-
-
-
-
     }
+
 
     private void navigateToFragment(View view, @IdRes int fragmentId) {
         Navigation.findNavController(view).navigate(fragmentId, null);
