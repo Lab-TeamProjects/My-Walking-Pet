@@ -18,7 +18,6 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.CustomExerciseDialogBinding;
 import com.lab_team_projects.my_walking_pet.databinding.CustomExercisingDialogBinding;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,15 +26,14 @@ public class CustomExerciseDialog extends Dialog {
     private CustomExerciseDialogBinding exerciseBinding;
     private CustomExercisingDialogBinding exercisingBinding;
 
+    private final HomeFragment homeFragment;
     private final Context context;
     private final List<Integer> exerciseTimes = Arrays.asList(30, 40, 50, 60);
     int selected = 30;
 
     private boolean isExercising;
 
-
     private ServiceInterface serviceInterface;
-
 
     private OnExerciseListener onExerciseListener;
 
@@ -49,9 +47,10 @@ public class CustomExerciseDialog extends Dialog {
 
 
 
-    public CustomExerciseDialog(@NonNull Context context, boolean isExercising) {
+    public CustomExerciseDialog(@NonNull Context context, boolean isExercising, HomeFragment homeFragment) {
         super(context);
         this.context = context;
+        this.homeFragment = homeFragment;
         this.getWindow().setDimAmount(0);    // 배경 어두워지는 것 없애기
         this.isExercising = isExercising;
     }
@@ -92,14 +91,16 @@ public class CustomExerciseDialog extends Dialog {
                 selected = Integer.parseInt(exerciseBinding.tvTime.getText().toString());
                 Toast.makeText(context, String.valueOf(selected), Toast.LENGTH_SHORT).show();
 
-                WalkingTimeCheckService service = new WalkingTimeCheckService();
+                homeFragment.serviceCreateAndBind(selected);
+
+                /*WalkingTimeCheckService service = new WalkingTimeCheckService();
 
 
                 Intent intent = new Intent(context, service.getClass());
                 intent.putExtra("time", selected);
                 context.startService(intent);
 
-                context.bindService(intent, serviceConnection, BIND_AUTO_CREATE);
+                context.bindService(intent, serviceConnection, BIND_AUTO_CREATE);*/
             });
 
             exerciseBinding.btnCancel.setOnClickListener(v->{

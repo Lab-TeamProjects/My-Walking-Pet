@@ -2,8 +2,10 @@ package com.lab_team_projects.my_walking_pet.home;
 
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -13,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -33,6 +37,8 @@ import com.lab_team_projects.my_walking_pet.walk_count.WalkViewModel;
 import java.io.IOException;
 
 public class HomeFragment extends Fragment {
+
+    WalkingTimeCheckService.MyBinder svc;
 
     private FragmentHomeBinding binding;
     private SharedPreferences sharedPreferences;
@@ -210,21 +216,28 @@ public class HomeFragment extends Fragment {
         binding.ibAR.setOnClickListener(v -> Toast.makeText(requireContext(), "AR 이동 버튼", Toast.LENGTH_SHORT).show());
 
         binding.ibExercise.setOnClickListener(v -> {
-            CustomExerciseDialog dialog = new CustomExerciseDialog(requireContext(), isExercising);
-            dialog.setOnExerciseListener(new CustomExerciseDialog.OnExerciseListener() {
-                @Override
-                public void exercise(boolean flag) {
-                    isExercising = flag;
-                }
-            });
+            CustomExerciseDialog dialog;
+            if (svc != null) {
+                dialog = new CustomExerciseDialog(requireContext(), svc.flag, this);
+                dialog.setOnExerciseListener(new CustomExerciseDialog.OnExerciseListener() {
+                    @Override
+                    public void exercise(boolean flag) {
+                        isExercising = flag;
+                    }
+                });
+            }
+            else {
+                dialog = new CustomExerciseDialog(requireContext(), false, this);
+                dialog.setOnExerciseListener(new CustomExerciseDialog.OnExerciseListener() {
+                    @Override
+                    public void exercise(boolean flag) {
+                        isExercising = flag;
+                    }
+                });
+            }
 
             dialog.show();
         });
-
-
-
-
-
     }
 
     private void navigateToFragment(View view, @IdRes int fragmentId) {
@@ -261,4 +274,28 @@ public class HomeFragment extends Fragment {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
         binding = null;
     }
+
+    public void serviceCreateAndBind(int selected) {
+        Intent intent = new Intent(getContext(), WalkingTimeCheckService.class);
+        intent.putExtra("time", selected);
+        getContext().bindService(intent,mServiceConnection,Context.BIND_AUTO_CREATE);
+
+
+
+        //+
+        // getContext().unbindService(b);
+    }
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            svc = (WalkingTimeCheckService.MyBinder) service;
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.e("asdf","asdfasdfas");
+        }
+    };
 }

@@ -4,10 +4,12 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -26,6 +28,9 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class WalkingTimeCheckService extends Service implements SensorEventListener {
+
+    private MyBinder binder = new MyBinder();
+    private ServiceConnection conn;
 
     private int time;
 
@@ -76,7 +81,8 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
                         thr.speak(s);
 
                         if (integer == time / 5 + 1) {
-
+                            binder.flag = false;
+                            onDestroy();
                         }
 
                     }
@@ -89,10 +95,19 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
 
     @Nullable
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    public MyBinder onBind(Intent intent) {
+        startService(intent);
+        return binder;
     }
 
+    public void setConn(ServiceConnection conn) {
+        this.conn = conn;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
     @Override
     public void onCreate() {
@@ -149,5 +164,14 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    public class MyBinder extends Binder {
+
+        public boolean flag = true;
+
+        public WalkingTimeCheckService getService() {
+            return WalkingTimeCheckService.this;
+        }
     }
 }
