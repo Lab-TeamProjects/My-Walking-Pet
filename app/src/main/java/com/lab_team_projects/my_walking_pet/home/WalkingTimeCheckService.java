@@ -1,45 +1,31 @@
 package com.lab_team_projects.my_walking_pet.home;
 
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Binder;
 import android.os.Handler;
-import android.os.IBinder;
-import android.os.IInterface;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.Parcel;
-import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
-import com.lab_team_projects.my_walking_pet.helpers.ExerciseHelper;
 import com.lab_team_projects.my_walking_pet.helpers.TTSHelper;
 import com.lab_team_projects.my_walking_pet.login.User;
 import com.lab_team_projects.my_walking_pet.walk_count.Walk;
 
-import java.io.FileDescriptor;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class WalkingTimeCheckService extends Service implements SensorEventListener {
 
-    private MyBinder binder = new MyBinder();
-    private ServiceConnection conn;
-
+    private final MyBinder binder = new MyBinder();
     private int time;
     private TTSHelper thr;
     private GameManager gm;
@@ -53,7 +39,7 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
 
     private Walk walk;
 
-    public WalkingTimeCheckService(){ }
+    public WalkingTimeCheckService(){}
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -87,10 +73,9 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
                         thr.speak(s);
 
                         if (integer == time / 5 + 1) {
-                            binder.flag = false;
+                            binder.getListener().onExercise(false);
                             onDestroy();
                         }
-
                     }
                 }, integer * 1000 * 2);
             }
@@ -104,10 +89,6 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
     public MyBinder onBind(Intent intent) {
         startService(intent);
         return binder;
-    }
-
-    public void setConn(ServiceConnection conn) {
-        this.conn = conn;
     }
 
     @Override
@@ -132,13 +113,6 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
             sensorManager.registerListener(this, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
-    }
-
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     @Override
@@ -175,12 +149,5 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
 
     }
 
-    public class MyBinder extends Binder {
 
-        public boolean flag = true;
-
-        public WalkingTimeCheckService getService() {
-            return WalkingTimeCheckService.this;
-        }
-    }
 }

@@ -1,8 +1,6 @@
 package com.lab_team_projects.my_walking_pet.home;
 
 
-import static android.content.Context.BIND_AUTO_CREATE;
-
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
@@ -17,12 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.IBinder;
-import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -34,7 +27,6 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
 import com.lab_team_projects.my_walking_pet.help.HelpActivity;
-import com.lab_team_projects.my_walking_pet.helpers.ExerciseHelper;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
 import com.lab_team_projects.my_walking_pet.helpers.OnSwipeTouchHelper;
 import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
@@ -45,7 +37,7 @@ import java.io.IOException;
 
 public class HomeFragment extends Fragment {
 
-    WalkingTimeCheckService.MyBinder svc;
+    MyBinder svc;
 
     private FragmentHomeBinding binding;
     private SharedPreferences sharedPreferences;
@@ -127,9 +119,6 @@ public class HomeFragment extends Fragment {
         return binding.getRoot();
     }
 
-
-
-
     @SuppressLint("ClickableViewAccessibility")
     private void initInventory() throws IOException {
 
@@ -201,7 +190,6 @@ public class HomeFragment extends Fragment {
         binding.tvItemName.setText(inventoryHelper.setItemName());
     }
 
-
     private void bindingListener() {
         binding.ibShop.setOnClickListener(v -> navigateToFragment(v, R.id.shopFragment));
         binding.ibSetting.setOnClickListener(v -> navigateToFragment(v, R.id.settingFragment));
@@ -222,31 +210,17 @@ public class HomeFragment extends Fragment {
         binding.ibAR.setOnClickListener(v -> Toast.makeText(requireContext(), "AR 이동 버튼", Toast.LENGTH_SHORT).show());
 
         binding.ibExercise.setOnClickListener(v -> {
-            CustomExerciseDialog dialog;
-            if (svc != null) {
-                dialog = new CustomExerciseDialog(requireContext(), svc.flag, this);
-                dialog.setOnExerciseListener(new CustomExerciseDialog.OnExerciseListener() {
-                    @Override
-                    public void exercise(boolean flag) {
-                        isExercising = flag;
-                    }
-                });
-            }
-            else {
-                dialog = new CustomExerciseDialog(requireContext(), false, this);
-                dialog.setOnExerciseListener(new CustomExerciseDialog.OnExerciseListener() {
-                    @Override
-                    public void exercise(boolean flag) {
-                        isExercising = flag;
-                    }
-                });
-            }
-
+            CustomExerciseDialog dialog = new CustomExerciseDialog(requireContext(), isExercising);
+            dialog.setOnExerciseListener(new CustomExerciseDialog.OnExerciseListener() {
+                @Override
+                public void exercise(boolean flag, int selected) {
+                    isExercising = flag;
+                    serviceCreateAndBind(selected);
+                }
+            });
             dialog.show();
         });
     }
-
-
 
     private void navigateToFragment(View view, @IdRes int fragmentId) {
         Navigation.findNavController(view).navigate(fragmentId, null);
@@ -272,7 +246,6 @@ public class HomeFragment extends Fragment {
         super.onResume();
         GameManager gameManager = GameManager.getInstance();
         binding.tvMoney.setText(String.valueOf(gameManager.getUser().getMoney()));
-        //Log.d("__walk", String.valueOf(binding.tvMoney.getId()));
     }
 
     @Override
@@ -286,19 +259,20 @@ public class HomeFragment extends Fragment {
     public void serviceCreateAndBind(int selected) {
         Intent intent = new Intent(getContext(), WalkingTimeCheckService.class);
         intent.putExtra("time", selected);
-        getContext().bindService(intent,mServiceConnection,Context.BIND_AUTO_CREATE);
+        requireContext().bindService(intent,mServiceConnection,Context.BIND_AUTO_CREATE);
 
-
-
-        //+
-        // getContext().unbindService(b);
     }
 
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            svc = (WalkingTimeCheckService.MyBinder) service;
-
+            svc = (MyBinder) service;
+            svc.setListener(new MyBinder.OnBinderListener() {
+                @Override
+                public void onExercise(boolean flag) {
+                    isExercising = flag;
+                }
+            });
         }
 
         @Override

@@ -1,23 +1,12 @@
 package com.lab_team_projects.my_walking_pet.home;
 
-import static android.content.Context.BIND_AUTO_CREATE;
-
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.CustomExerciseDialogBinding;
@@ -30,16 +19,10 @@ public class CustomExerciseDialog extends Dialog {
 
     private CustomExerciseDialogBinding exerciseBinding;
     private CustomExercisingDialogBinding exercisingBinding;
-
-    private final HomeFragment homeFragment;
     private final Context context;
-    private final List<Integer> exerciseTimes = Arrays.asList(30, 40, 50, 60);
     int selected = 30;
 
-    private boolean isExercising;
-
-    private ServiceInterface serviceInterface;
-
+    private final boolean isExercising;
     private OnExerciseListener onExerciseListener;
 
     public void setOnExerciseListener(OnExerciseListener onExerciseListener) {
@@ -50,11 +33,9 @@ public class CustomExerciseDialog extends Dialog {
         void exercise(boolean flag, int selected);
     }
 
-    public CustomExerciseDialog(@NonNull Context context, boolean isExercising, HomeFragment homeFragment) {
+    public CustomExerciseDialog(@NonNull Context context, boolean isExercising) {
         super(context);
         this.context = context;
-
-        this.homeFragment = homeFragment;
         this.getWindow().setDimAmount(0);    // 배경 어두워지는 것 없애기
         this.isExercising = isExercising;
     }
@@ -90,17 +71,6 @@ public class CustomExerciseDialog extends Dialog {
                 // ok 버튼
                 selected = Integer.parseInt(exerciseBinding.tvTime.getText().toString());
                 Toast.makeText(context, String.valueOf(selected), Toast.LENGTH_SHORT).show();
-
-                homeFragment.serviceCreateAndBind(selected);
-
-                /*WalkingTimeCheckService service = new WalkingTimeCheckService();
-
-
-                Intent intent = new Intent(context, service.getClass());
-                intent.putExtra("time", selected);
-                context.startService(intent);
-
-                context.bindService(intent, serviceConnection, BIND_AUTO_CREATE);*/
                 onExerciseListener.exercise(true, selected);
                 dismiss();
             });
