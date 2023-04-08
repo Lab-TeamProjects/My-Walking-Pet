@@ -28,7 +28,7 @@ public class CustomExerciseDialog extends Dialog {
     }
 
     public interface OnExerciseListener {
-        void exercise(boolean flag, int selected);
+        void onExercise(boolean flag, int selected);
     }
 
     public CustomExerciseDialog(@NonNull Context context, boolean isExercising, MyBinder svc) {
@@ -70,7 +70,7 @@ public class CustomExerciseDialog extends Dialog {
                 // ok 버튼
                 selected = Integer.parseInt(exerciseBinding.tvTime.getText().toString());
                 Toast.makeText(context, String.valueOf(selected), Toast.LENGTH_SHORT).show();
-                onExerciseListener.exercise(true, selected);
+                onExerciseListener.onExercise(true, selected);
                 dismiss();
             });
 

@@ -7,7 +7,7 @@ public class MyBinder extends Binder {
     private String state;
 
     public interface OnBinderListener {
-        void onExercise(boolean flag);
+        void onFinish(boolean flag);
     }
 
     public interface OnBinderStateListener {

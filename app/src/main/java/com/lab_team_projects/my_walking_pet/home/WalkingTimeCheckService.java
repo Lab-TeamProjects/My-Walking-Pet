@@ -36,7 +36,6 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
 
     private int lastStep = 0;
     private boolean isFirstRun = false;
-
     private Walk walk;
 
     public WalkingTimeCheckService(){}
@@ -51,7 +50,7 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
 
         Map<Integer,String> map = new LinkedHashMap<>();
 
-        map.put(1, "운동 전 준비 운동을 하세요");
+        map.put(1, "준비 운동을 하세요");
         for(int i = 2; i < (this.time / 5); i++) {
             if(i%2 == 1) {
                 map.put(i,"뛰세요");
@@ -59,7 +58,7 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
                 map.put(i,"걸으세요");
             }
         }
-        map.put((this.time / 5), "마무리 운동 시간 입니다");
+        map.put((this.time / 5), "몸풀기 시간 입니다");
         map.put((this.time / 5) + 1, "수고 하셨습니다");
 
         map.forEach(new BiConsumer<Integer, String>() {
@@ -78,8 +77,7 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
                         thr.speak(s);
 
                         if (integer == time / 5 + 1) {
-                            binder.getListener().onExercise(false);
-                            onDestroy();
+                            binder.getListener().onFinish(false);
                         }
                     }
                 }, integer * 1000 * 2);
@@ -92,7 +90,6 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
     @Nullable
     @Override
     public MyBinder onBind(Intent intent) {
-        startService(intent);
         return binder;
     }
 

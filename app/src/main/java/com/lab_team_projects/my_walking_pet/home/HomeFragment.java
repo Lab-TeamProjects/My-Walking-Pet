@@ -213,7 +213,7 @@ public class HomeFragment extends Fragment {
             CustomExerciseDialog dialog = new CustomExerciseDialog(requireContext(), isExercising, isExercising ? svc : null);
             dialog.setOnExerciseListener(new CustomExerciseDialog.OnExerciseListener() {
                 @Override
-                public void exercise(boolean flag, int selected) {
+                public void onExercise(boolean flag, int selected) {
                     isExercising = flag;
                     serviceCreateAndBind(selected);
                 }
@@ -257,27 +257,34 @@ public class HomeFragment extends Fragment {
     }
 
     public void serviceCreateAndBind(int selected) {
+        svc = null;
         Intent intent = new Intent(getContext(), WalkingTimeCheckService.class);
         intent.putExtra("time", selected);
-        requireContext().bindService(intent,mServiceConnection,Context.BIND_AUTO_CREATE);
 
+        mServiceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                svc = (MyBinder) service;
+                svc.setListener(new MyBinder.OnBinderListener() {
+                    @Override
+                    public void onFinish(boolean flag) {
+                        isExercising = flag;
+                        requireContext().stopService(intent);
+                        requireContext().unbindService(mServiceConnection);
+                        mServiceConnection = null;
+                    }
+                });
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                Log.e("asdf","asdfasdfas");
+            }
+        };
+
+        requireContext().bindService(intent,mServiceConnection,Context.BIND_AUTO_CREATE);
+        requireContext().startService(intent);
     }
 
-    private final ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            svc = (MyBinder) service;
-            svc.setListener(new MyBinder.OnBinderListener() {
-                @Override
-                public void onExercise(boolean flag) {
-                    isExercising = flag;
-                }
-            });
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            Log.e("asdf","asdfasdfas");
-        }
-    };
+    private ServiceConnection mServiceConnection;
 }
