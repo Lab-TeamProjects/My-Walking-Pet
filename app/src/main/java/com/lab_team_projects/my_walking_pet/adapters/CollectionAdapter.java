@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lab_team_projects.my_walking_pet.R;
-import com.lab_team_projects.my_walking_pet.collection.Collection;
+import com.lab_team_projects.my_walking_pet.home.collection.Collection;
 
 import java.util.List;
 

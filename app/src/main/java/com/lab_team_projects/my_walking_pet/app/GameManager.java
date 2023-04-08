@@ -24,7 +24,8 @@ public class GameManager {
         /*
         * 아직 프리페어런스 저장되는 코드가 없음
         * 그래서 임의의 사용자 정보를 대입
-        * */
+        * ****서버에서 가져오는 코드로 바꿔야 함*****
+        */
         user.setWeight(pref.getFloat("weight", 70.0f));
         user.setHeight(pref.getFloat("height", 177.0f));
         user.setAge(pref.getInt("age", 24));

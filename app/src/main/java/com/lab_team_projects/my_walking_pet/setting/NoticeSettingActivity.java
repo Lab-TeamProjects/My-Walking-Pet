@@ -3,17 +3,12 @@ package com.lab_team_projects.my_walking_pet.setting;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.lab_team_projects.my_walking_pet.R;
-import com.lab_team_projects.my_walking_pet.databinding.ActivityProfileSettingBinding;
 import com.lab_team_projects.my_walking_pet.databinding.SettingsActivityBinding;
 import com.lab_team_projects.my_walking_pet.walk_count.WalkCountForeGroundService;
 

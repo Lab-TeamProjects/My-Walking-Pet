@@ -13,7 +13,7 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/collectionFragment"
-        android:name="com.lab_team_projects.my_walking_pet.collection.CollectionFragment"
+        android:name="com.lab_team_projects.my_walking_pet.home.collection.CollectionFragment"
         android:label="도감" />
     <fragment
         android:id="@+id/missionFragment"

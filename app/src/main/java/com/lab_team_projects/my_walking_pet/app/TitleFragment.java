@@ -2,14 +2,12 @@ package com.lab_team_projects.my_walking_pet.app;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lab_team_projects.my_walking_pet.R;
+import androidx.fragment.app.Fragment;
+
 import com.lab_team_projects.my_walking_pet.databinding.FragmentTitleBinding;
 import com.lab_team_projects.my_walking_pet.login.LoginActivity;
 import com.lab_team_projects.my_walking_pet.login.SignUpActivity;

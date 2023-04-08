@@ -1,14 +1,12 @@
 package com.lab_team_projects.my_walking_pet.login;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.lab_team_projects.my_walking_pet.R;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.lab_team_projects.my_walking_pet.databinding.ActivityEmailAuthNoticeBinding;
-import com.lab_team_projects.my_walking_pet.databinding.ActivitySignUpBinding;
 
 public class EmailAuthNoticeActivity extends AppCompatActivity {
     ActivityEmailAuthNoticeBinding binding;

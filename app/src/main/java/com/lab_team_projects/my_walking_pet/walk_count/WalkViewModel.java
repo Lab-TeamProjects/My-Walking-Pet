@@ -4,7 +4,6 @@ import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
 

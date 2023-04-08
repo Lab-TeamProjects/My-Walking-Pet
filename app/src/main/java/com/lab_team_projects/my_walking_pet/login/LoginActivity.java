@@ -1,44 +1,42 @@
 package com.lab_team_projects.my_walking_pet.login;
 
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.GAME_DATA_VIEW;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.LOGIN;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_AUTH_EMAIL;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_CORRECT_PASSWORD;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_FOUND_EMAIL;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.PROFILE_VIEW;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.SUCCESS;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
-import com.lab_team_projects.my_walking_pet.app.MainActivity;
-import com.lab_team_projects.my_walking_pet.app.ServerConnection;
+import com.lab_team_projects.my_walking_pet.helpers.ServerConnectionHelper;
 import com.lab_team_projects.my_walking_pet.databinding.ActivityLoginBinding;
 import com.lab_team_projects.my_walking_pet.helpers.PermissionsCheckHelper;
+import com.lab_team_projects.my_walking_pet.home.Animal;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
-
-import okhttp3.Call;
-import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
     private PermissionsCheckHelper pch;
 
-    ActivityLoginBinding binding;
+    private ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +59,12 @@ public class LoginActivity extends AppCompatActivity {
                         jsonObject.put("email", binding.etEmail.getText().toString());
                         jsonObject.put("password", binding.etPassWord.getText().toString());
                     } catch (JSONException e) { Log.e("JSONException : ", "btnLogin", e); }
-                    ServerConnection sc = new ServerConnection(LOGIN, jsonObject);
+                    ServerConnectionHelper sc = new ServerConnectionHelper(LOGIN, jsonObject);
                     sc.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
                         if(response.isSuccessful()) {
                             try {
                                 JSONObject responseJson = new JSONObject(Objects.requireNonNull(response.body()).string());
                                 String result = responseJson.getString("result");
-                                Log.d("result : ", result);
-                                Log.d("send Pw : ", binding.etPassWord.getText().toString());
                                 switch(result) {
                                     case NOT_FOUND_EMAIL:
                                         /*
@@ -94,12 +90,49 @@ public class LoginActivity extends AppCompatActivity {
                                          */
                                         permissionCheck(); // 권한 체크
                                         GameManager gm = GameManager.getInstance();
-                                        gm.getUser().setAccessToken(responseJson.getString("access_token"));
+                                        User user = gm.getUser();
+                                        user.setAccessToken(responseJson.getString("access_token"));
+
+                                        ServerConnectionHelper loadData = new ServerConnectionHelper(PROFILE_VIEW, user.getAccessToken());
+                                        loadData.setClientCallBackListener((c,r) -> runOnUiThread(() -> {
+                                            if (r.isSuccessful()) {
+                                                try {
+                                                    JSONObject data = new JSONObject(Objects.requireNonNull(r.body()).string());
+
+                                                    //gm.loadUser()함수 수정해서 서버에서 가져온 데이터를 대입해야 함
+
+                                                } catch (JSONException e) {
+                                                    Log.e("loadData_user", "JSONException", e);
+                                                } catch (IOException e) {
+                                                    Log.e("loadData_user", "IOException", e);
+                                                }
+                                            }
+                                        }));
+
+                                        loadData = new ServerConnectionHelper(GAME_DATA_VIEW, user.getAccessToken());
+                                        loadData.setClientCallBackListener((c, r) -> runOnUiThread(() -> {
+                                            if (r.isSuccessful()) {
+                                                try {
+                                                    JSONObject data = new JSONObject(Objects.requireNonNull(r.body()).string());
+
+                                                    String animalData = data.getString("animals");
+                                                    List<Animal> animalList = new Gson().fromJson(animalData, new TypeToken<List<Animal>>(){}.getType());
+                                                    user.setAnimalList(animalList);
+                                                    /*
+                                                    다른 게임 정보도 받아야 함
+                                                     */
+
+                                                } catch (JSONException e) {
+                                                    Log.e("loadData_game", "JSONException", e);
+                                                } catch (IOException e) {
+                                                    Log.e("loadData_game", "IOException", e);
+                                                }
+                                            }
+                                        }));
 
                                         startActivity(new Intent(getApplicationContext(), UserInfoEntryActivity.class));
                                         finish();
                                         break;
-
                                     default:
                                         /*
                                         그 외

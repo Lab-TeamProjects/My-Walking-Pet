@@ -7,7 +7,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -15,7 +14,6 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -27,7 +25,6 @@ import com.lab_team_projects.my_walking_pet.app.MainActivity;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
 import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
 import com.lab_team_projects.my_walking_pet.login.User;
-import com.lab_team_projects.my_walking_pet.setting.NoticeSettingActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

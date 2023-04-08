@@ -8,13 +8,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-
 import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +15,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
@@ -37,7 +36,7 @@ import java.io.IOException;
 
 public class HomeFragment extends Fragment {
 
-    MyBinder svc;
+    private MyBinder svc;
 
     private FragmentHomeBinding binding;
     private SharedPreferences sharedPreferences;
@@ -49,9 +48,7 @@ public class HomeFragment extends Fragment {
 
     private boolean isExercising = false;
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+    public HomeFragment() { }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -59,14 +56,11 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-
-
         bindingListener();
         try {
             initInventory();
         } catch (IOException e) {
-            // 임시
-            e.printStackTrace();
+            Log.e("Homefragment_onCreateView", "IOException", e);
         }
 
         initPetGrower();
@@ -127,14 +121,13 @@ public class HomeFragment extends Fragment {
         binding.fabFood.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.FOOD, inventoryHelper));
         binding.fabWash.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.WASH, inventoryHelper));
         binding.ibItemNext.setOnClickListener(v -> binding.tvItemName.setText(inventoryHelper.setNextItem()));
-        binding.ibItemPreview.setOnClickListener(v -> binding.tvItemName.setText(inventoryHelper.setPreviewItem()));
+        binding.ibItemPreview.setOnClickListener(v -> binding.tvItemName.setText(inventoryHelper.setBeforeItem()));
         binding.tvItemName.setOnTouchListener(new OnSwipeTouchHelper(requireContext()) {
             @Override
             public void onSwipeTop() {
                 binding.tvItemName.setText(inventoryHelper.useCurrentItem());
             }
         });
-
     }
 
     private void initPetGrower() {
@@ -147,15 +140,12 @@ public class HomeFragment extends Fragment {
             dialog.show();
         });
 
-        //  펫 아이템 사용시 수치 다시 그리기
+        // 펫 아이템 사용시 수치 다시 그리기
         inventoryHelper.setItemUsingListener(() -> {
             setPetRate(user.getAnimalList().get(user.getNowSelectedPet()));
         });
 
-        /*
-         * 펫 변경
-         * */
-
+        // 펫 변경 왼쪽
         binding.btnPrevPet.setOnClickListener(v->{
             Animal animal;
             if (0 < user.getNowSelectedPet()) {
@@ -165,6 +155,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // 펫 변경 오른쪽
         binding.btnNextPet.setOnClickListener(v->{
             Animal animal;
             if (user.getNowSelectedPet() < user.getAnimalList().size() - 1) {
@@ -175,6 +166,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    // 성장 수치들(목마름,청결....) 프로그래스바 세팅
     private void setPetRate(Animal currentPet) {
         binding.tvPetName.setText(currentPet.getName());
         binding.pbHunger.setProgress(currentPet.getHunger());
@@ -182,6 +174,7 @@ public class HomeFragment extends Fragment {
         binding.pbCleanliness.setProgress(currentPet.getClean());
     }
 
+    // 플로팅 액션버튼 설정
     private void setFabOnClickListener(Item.ItemType itemType, InventoryHelper inventoryHelper) {
         binding.tvItemName.setVisibility(View.VISIBLE);
         binding.ibItemPreview.setVisibility(View.VISIBLE);
@@ -190,6 +183,7 @@ public class HomeFragment extends Fragment {
         binding.tvItemName.setText(inventoryHelper.setItemName());
     }
 
+    // 각종 리스너 바인딩
     private void bindingListener() {
         binding.ibShop.setOnClickListener(v -> navigateToFragment(v, R.id.shopFragment));
         binding.ibSetting.setOnClickListener(v -> navigateToFragment(v, R.id.settingFragment));
@@ -202,12 +196,9 @@ public class HomeFragment extends Fragment {
             clickInteractionBtn(isInteractionBtnClick);
         });
 
-        binding.ibHelp.setOnClickListener(v -> {
-            startActivity(new Intent(requireContext(), HelpActivity.class));
-            Toast.makeText(requireContext(), "도움말 버튼", Toast.LENGTH_SHORT).show();
-        });
+        binding.ibHelp.setOnClickListener(v -> startActivity(new Intent(requireContext(), HelpActivity.class)) );
 
-        binding.ibAR.setOnClickListener(v -> Toast.makeText(requireContext(), "AR 이동 버튼", Toast.LENGTH_SHORT).show());
+        binding.ibAR.setOnClickListener(v -> Toast.makeText(requireContext(), "AR 이동 버튼", Toast.LENGTH_SHORT).show()); // Toast -> "카메라 실행"으로 변경 필요
 
         binding.ibExercise.setOnClickListener(v -> {
             CustomExerciseDialog dialog = new CustomExerciseDialog(requireContext(), isExercising, isExercising ? svc : null);
@@ -278,7 +269,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
-                Log.e("asdf","asdfasdfas");
+                Log.e("운동 시작 서비스","비정상적 종료");
             }
         };
 

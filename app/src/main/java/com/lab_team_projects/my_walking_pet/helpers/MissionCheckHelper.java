@@ -1,6 +1,6 @@
 package com.lab_team_projects.my_walking_pet.helpers;
 
-import static com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper.*;
+import static com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper.TodayUserActiveKey;
 
 import android.content.Context;
 import android.util.Log;

@@ -1,8 +1,8 @@
 package com.lab_team_projects.my_walking_pet.login;
 
-import com.lab_team_projects.my_walking_pet.collection.Collection;
 import com.lab_team_projects.my_walking_pet.home.Animal;
 import com.lab_team_projects.my_walking_pet.home.Item;
+import com.lab_team_projects.my_walking_pet.home.collection.Collection;
 import com.lab_team_projects.my_walking_pet.mission.Mission;
 
 import java.util.Arrays;
@@ -18,6 +18,7 @@ public class User {
 
     private double weight;
     private double height;    // 단위 cm
+    private String birthday;
     private int age;
     private int gender;
     private double bmi;
@@ -63,6 +64,12 @@ public class User {
 
         // cm로 반환함
         return (Collections.max(list) + Collections.min(list)) / 2.0;
+    }
+
+    public String getBirthday() { return birthday; }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
     public int getNowSelectedPet() {

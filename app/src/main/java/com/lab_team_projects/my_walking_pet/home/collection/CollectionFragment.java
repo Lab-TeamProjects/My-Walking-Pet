@@ -1,4 +1,4 @@
-package com.lab_team_projects.my_walking_pet.collection;
+package com.lab_team_projects.my_walking_pet.home.collection;
 
 import android.content.Context;
 import android.os.Bundle;

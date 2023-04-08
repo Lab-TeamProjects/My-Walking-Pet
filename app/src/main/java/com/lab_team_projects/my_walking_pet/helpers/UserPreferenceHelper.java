@@ -1,12 +1,16 @@
 package com.lab_team_projects.my_walking_pet.helpers;
 
-import static com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper.UserPreferenceKey.*;
 import static com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper.UserPreferenceKey.age;
+import static com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper.UserPreferenceKey.gender;
+import static com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper.UserPreferenceKey.height;
+import static com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper.UserPreferenceKey.money;
+import static com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper.UserPreferenceKey.weight;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.lab_team_projects.my_walking_pet.login.User;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

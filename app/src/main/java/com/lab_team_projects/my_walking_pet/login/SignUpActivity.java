@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.lab_team_projects.my_walking_pet.app.ServerConnection;
+import com.lab_team_projects.my_walking_pet.helpers.ServerConnectionHelper;
 import com.lab_team_projects.my_walking_pet.databinding.ActivitySignUpBinding;
 
 import org.json.JSONException;
@@ -86,7 +86,7 @@ public class SignUpActivity extends AppCompatActivity {
                 binding.tvDuplicationResult.setTextColor(Color.RED);
             }
             else {
-                ServerConnection sc = new ServerConnection(CHECK_EMAIL_DUPLICATION, jsonObject);
+                ServerConnectionHelper sc = new ServerConnectionHelper(CHECK_EMAIL_DUPLICATION, jsonObject);
                 sc.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
                     if(response.isSuccessful()) {
                         try {
@@ -121,12 +121,12 @@ public class SignUpActivity extends AppCompatActivity {
         }
     };
 
+    // 회원가입 버튼
     View.OnClickListener btnSignUpListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (binding.tvDuplicationResult.getText().equals("사용가능한 이메일입니다.")) {
-                Log.e("etPassWord : ", "pwd : " + binding.etPassWord.getText() + " pwdck : " + binding.etPassWordCheck.getText());
-                if ( binding.etPassWord.getText().toString().equals(binding.etPassWordCheck.getText().toString())) {
+                if (binding.etPassWord.getText().toString().equals(binding.etPassWordCheck.getText().toString())) {
                     JSONObject jsonObject = new JSONObject();
                     try {
                         jsonObject.put("email", binding.etEmail.getText().toString());
@@ -135,14 +135,12 @@ public class SignUpActivity extends AppCompatActivity {
                         Log.e("JSONException : ", "btnSignUp", e);
                     }
 
-                    ServerConnection sc = new ServerConnection(SIGN_UP, jsonObject);
+                    ServerConnectionHelper sc = new ServerConnectionHelper(SIGN_UP, jsonObject);
                     sc.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
                         if(response.isSuccessful()) {
                             try {
                                 JSONObject responseJson = new JSONObject(Objects.requireNonNull(response.body()).string());
                                 String result = (String) responseJson.get("result");
-                                Log.d("sign_up_result : ", result);
-                                Log.d("send Pw : ", binding.etPassWord.getText().toString() + ", " + binding.etPassWordCheck.getText().toString());
 
                                 if (result.equals(SUCCESS)) {
                                     startActivity(new Intent(getApplicationContext(), EmailAuthNoticeActivity.class));

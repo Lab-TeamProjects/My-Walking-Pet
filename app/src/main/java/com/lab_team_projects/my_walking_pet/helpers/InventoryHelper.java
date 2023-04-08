@@ -35,9 +35,6 @@ public class InventoryHelper {
     public interface ItemUsingListener {
         void onItemUse();
     }
-    
-    
-    
 
     /*
     * 사용자의 인벤토리에 아이템 저장 및 사용을 도와줌
@@ -47,15 +44,13 @@ public class InventoryHelper {
 
     public InventoryHelper(String json, Context context) throws IOException {
         this.context = context;
-
         /*
         * 사용자의 인벤토리 아이템 json 문자열을 클래스 타입에 맞게 대입
-        * */
+        */
         user.setItemLists(new Gson().fromJson(json, new TypeToken<List<Item>>(){}.getType()));
-
         /*
         * csv 파일을 파싱하는 클래스
-        * */
+        */
         ItemCodeParseHelper itemCodeParseHelper = new ItemCodeParseHelper(context);
         detailsList = itemCodeParseHelper.getItemDetailsList();
     }
@@ -66,9 +61,6 @@ public class InventoryHelper {
         detailsList = itemCodeParseHelper.getItemDetailsList();
     }
 
-
-
-
     public void setItemType(Item.ItemType itemType) {
         this.itemType = itemType;
     }
@@ -77,8 +69,8 @@ public class InventoryHelper {
         /*
         * 상호작용 버튼을 눌렀을 때 나오는 물, 밥, 씻기 버튼을 클릭하면
         * 카테고리에 맞게 유저의 인벤토리 리스트에서 아이템을 가져온다
-        * */
-        currentItemIndex = 0;   // 초기값은 당연히 리스트의 첫번째로 선택
+        */
+        currentItemIndex = 0;   // 초기값은 리스트의 첫번째로 선택
         items.clear();
         for(Item item : user.getItemLists()) {
             ItemDetail itemDetail = findItem(item.getCode());
@@ -110,32 +102,25 @@ public class InventoryHelper {
         /*
         * 현재 선택중인 아이템 에서 다음 버튼을 클릭시
         * 현재 아이템 인덱스가 변경되고 텍스트뷰도 변경
-        * */
-        if(items.isEmpty()) {
-            return "아이템이 없습니다.";
+        */
+        if (currentItemIndex < items.size() - 1) {
+            currentItemIndex++;
         } else {
-            if (currentItemIndex < items.size() - 1) {
-                currentItemIndex++;
-            } else {
-                Toast.makeText(context, "마지막 아이템 입니다.", Toast.LENGTH_SHORT).show();
-            }
-            Item firstItem = items.get(currentItemIndex);
-            return getItemName(firstItem);
+            Toast.makeText(context, "마지막 아이템 입니다.", Toast.LENGTH_SHORT).show();
         }
+        Item firstItem = items.get(currentItemIndex);
+        return getItemName(firstItem);
+
     }
 
-    public String setPreviewItem() {
-        if(items.isEmpty()) {
-            return "아이템이 없습니다.";
+    public String setBeforeItem() {
+        if (currentItemIndex > 0) {
+            currentItemIndex--;
         } else {
-            if (currentItemIndex > 0) {
-                currentItemIndex--;
-            } else {
-                Toast.makeText(context, "첫 번째 아이템 입니다.", Toast.LENGTH_SHORT).show();
-            }
-            Item firstItem = items.get(currentItemIndex);
-            return getItemName(firstItem);
+            Toast.makeText(context, "첫 번째 아이템 입니다.", Toast.LENGTH_SHORT).show();
         }
+        Item firstItem = items.get(currentItemIndex);
+        return getItemName(firstItem);
     }
 
     @NonNull
@@ -146,7 +131,6 @@ public class InventoryHelper {
             return String.format(Locale.getDefault(), "  %s  ", findItem(item.getCode()).getName());
         }
     }
-
 
     public String useCurrentItem() {
         if (!items.isEmpty()) {
@@ -162,7 +146,6 @@ public class InventoryHelper {
                 // 사용한 아이템 체크 해서 미션 달성률 조종
                 MissionCheckHelper missionCheckHelper = new MissionCheckHelper(context);
                 missionCheckHelper.useItem(itemDetail.getType());
-
 
                 if (item.getCount() == 0) {
                     user.getItemLists().remove(item);

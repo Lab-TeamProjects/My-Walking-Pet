@@ -9,7 +9,6 @@ import androidx.room.RoomDatabase;
 import com.lab_team_projects.my_walking_pet.walk_count.Walk;
 import com.lab_team_projects.my_walking_pet.walk_count.WalkDao;
 
-import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

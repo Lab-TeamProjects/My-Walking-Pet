@@ -1,14 +1,12 @@
 package com.lab_team_projects.my_walking_pet.app;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lab_team_projects.my_walking_pet.R;
+import androidx.fragment.app.Fragment;
+
 import com.lab_team_projects.my_walking_pet.adapters.FragmentPagerAdapter;
 import com.lab_team_projects.my_walking_pet.app.onborarding.OnBoardingFirstFragment;
 import com.lab_team_projects.my_walking_pet.app.onborarding.OnBoardingSecondFragment;

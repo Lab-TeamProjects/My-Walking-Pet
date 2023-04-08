@@ -1,19 +1,17 @@
 package com.lab_team_projects.my_walking_pet.home;
 
-import com.lab_team_projects.my_walking_pet.login.User;
-
 public class Animal {
     private String name;
-    private User originalOwner;
-    private User currentOwner;
-    private Boolean isRunAway;
+    private String originalOwnerUid;
+    private String currentOwnerUid;
+    private Integer isRunAway;
     private Integer level;
     private Integer clean;
     private Integer hunger;
     private Integer growth;
     private Integer thirsty;
     private Integer liking;    // 이게 기분인가????
-    private Broods brood;
+    private Integer brood;
     public enum Feelings {
         HAPPY,
         NORMAL,
@@ -22,12 +20,12 @@ public class Animal {
     }
 
 
-    public Animal(String name, Broods brood, User originalOwner, User currentOwner) {
+    public Animal(String name, Integer brood, String originalOwnerUid, String currentOwnerUid) {
         this.name = name;
         this.brood = brood;
-        this.originalOwner = originalOwner;
-        this.currentOwner = currentOwner;
-        this.isRunAway = false;
+        this.originalOwnerUid = originalOwnerUid;
+        this.currentOwnerUid = currentOwnerUid;
+        this.isRunAway = 0;
         this.level = 0;
         this.clean = 50;
         this.hunger = 50;
@@ -94,28 +92,28 @@ public class Animal {
         this.name = name;
     }
 
-    public User getOriginalOwner() {
-        return originalOwner;
+    public String getOriginalOwnerUid() {
+        return originalOwnerUid;
     }
 
-    public void setOriginalOwner(User originalOwner) {
-        this.originalOwner = originalOwner;
+    public void setOriginalOwnerUid(String originalOwnerUid) {
+        this.originalOwnerUid = originalOwnerUid;
     }
 
-    public User getCurrentOwner() {
-        return currentOwner;
+    public String getCurrentOwnerUid() {
+        return currentOwnerUid;
     }
 
-    public void setCurrentOwner(User currentOwner) {
-        this.currentOwner = currentOwner;
+    public void setCurrentOwnerUid(String currentOwnerUid) {
+        this.currentOwnerUid = currentOwnerUid;
     }
 
-    public Boolean getRunAway() {
+    public Integer getIsRunAway() {
         return isRunAway;
     }
 
-    public void setRunAway(Boolean runAway) {
-        isRunAway = runAway;
+    public void setIsRunAway(Integer isRunAway) {
+        this.isRunAway = isRunAway;
     }
 
     public Integer getLevel() {
@@ -158,11 +156,11 @@ public class Animal {
         this.liking = liking;
     }
 
-    public Broods getBrood() {
+    public Integer getBrood() {
         return brood;
     }
 
-    public void setBrood(Broods brood) {
+    public void setBrood(Integer brood) {
         this.brood = brood;
     }
 }

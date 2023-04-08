@@ -3,13 +3,6 @@ package com.lab_team_projects.my_walking_pet.login;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.PROFILE_SETTING;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.SUCCESS;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,13 +15,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.app.MainActivity;
-import com.lab_team_projects.my_walking_pet.app.ServerConnection;
+import com.lab_team_projects.my_walking_pet.helpers.ServerConnectionHelper;
 import com.lab_team_projects.my_walking_pet.databinding.ActivityUserInfoEntryBinding;
-import com.lab_team_projects.my_walking_pet.helpers.PermissionsCheckHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -102,7 +100,7 @@ public class UserInfoEntryActivity extends AppCompatActivity {
                     }
 
                     // 서버로 데이터 전송
-                    ServerConnection serverRequest = new ServerConnection(PROFILE_SETTING, jsonObject, accessToken);
+                    ServerConnectionHelper serverRequest = new ServerConnectionHelper(PROFILE_SETTING, jsonObject, accessToken);
                     serverRequest.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
                         if(response.isSuccessful()) {
                             try {
@@ -126,8 +124,6 @@ public class UserInfoEntryActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     // 갤러리 접근 함수
     private void pickImageFromGallery() {
@@ -162,10 +158,10 @@ public class UserInfoEntryActivity extends AppCompatActivity {
                             resizeBitmap.compress(Bitmap.CompressFormat.JPEG,100,fos);
                             fos.close();
 
-                            ServerConnection sc = new ServerConnection(directory, "photo.jpg", gm.getUser().getAccessToken());
+                            ServerConnectionHelper sc = new ServerConnectionHelper(directory, "photo.jpg", gm.getUser().getAccessToken());
                             sc.setClientCallBackListener((call,response) -> runOnUiThread(()-> {
                                 if(response.isSuccessful()) {
-
+                                    // 사진 서버로 전송 구현 필요
                                 }
                             }));
 

@@ -1,8 +1,7 @@
-package com.lab_team_projects.my_walking_pet.app;
+package com.lab_team_projects.my_walking_pet.helpers;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -14,18 +13,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.HashMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ServerConnection {
+public class ServerConnectionHelper {
     private MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private String serverUrl = "http://203.232.193.164:5000/"; // 서버 기본 url
@@ -40,7 +37,7 @@ public class ServerConnection {
         void onResponse(@NonNull Call call, @NonNull Response response) throws IOException;
     }
 
-    public ServerConnection(String url, String accessToken) {
+    public ServerConnectionHelper(String url, String accessToken) {
         serverUrl = serverUrl.concat(url);
 
         Request request = new Request.Builder()
@@ -56,7 +53,7 @@ public class ServerConnection {
      * @param url : 서버주소
      * @param jsonObject : 보낼 메시지를 담은 객체
      */
-    public ServerConnection(String url, JSONObject jsonObject) {
+    public ServerConnectionHelper(String url, JSONObject jsonObject) {
         serverUrl = serverUrl.concat(url);
 
         RequestBody reqBody = RequestBody.create(
@@ -78,7 +75,7 @@ public class ServerConnection {
      * @param jsonObject : 보낼 메시지를 담은 객체
      * @param accessToken : 사용자를 구분하기위한 액세스 토큰
      */
-    public ServerConnection(String url, JSONObject jsonObject, String accessToken) {
+    public ServerConnectionHelper(String url, JSONObject jsonObject, String accessToken) {
         serverUrl = serverUrl.concat(url);
 
         Log.e("json", jsonObject.toString());
@@ -99,7 +96,7 @@ public class ServerConnection {
 
 
     // 이미지 전송(인코딩 -> base64) 추가해야하고,
-    public ServerConnection(File dir, String photoName, String accessToken) {
+    public ServerConnectionHelper(File dir, String photoName, String accessToken) {
         serverUrl = serverUrl.concat("/imgAdd");
         File file = new File(dir, photoName);
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());

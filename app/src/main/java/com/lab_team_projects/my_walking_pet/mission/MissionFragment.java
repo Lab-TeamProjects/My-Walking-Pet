@@ -10,10 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.MainActivity;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentMissionBinding;
-import com.lab_team_projects.my_walking_pet.databinding.FragmentSettingBinding;
 import com.lab_team_projects.my_walking_pet.helpers.MissionCheckHelper;
 import com.lab_team_projects.my_walking_pet.home.Item;
 

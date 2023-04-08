@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.app.MainActivity;
-import com.lab_team_projects.my_walking_pet.databinding.CustomEggDialogBinding;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentShopBinding;
 
 import java.io.IOException;
@@ -24,9 +23,7 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
     private FragmentShopBinding binding;
     private MainActivity mMainActivity;
 
-    public ShopFragment() {
-        // Required empty public constructor
-    }
+    public ShopFragment() { }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -40,20 +37,17 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
         binding = FragmentShopBinding.inflate(inflater, container, false);
 
         mMainActivity.onAppBarLoad();
-        setBtnOnClickListener();    // 버튼 클릭 리스너 등록
-
+        setBtnOnClickListener();
 
         return binding.getRoot();
     }
 
     @Override
     public void onClick(View v) {
-
         /*
-         * 실질적으로 버큰이 클릭되었을 때
+         * 실질적으로 버튼이 클릭되었을 때
          * 동작하는 메서드
-         * */
-
+         */
         int btnId = v.getId();
         int itemId = -1;
 
@@ -67,7 +61,7 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
                 dialog.show();
                 return;
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("ShopFragment_onClick_ibPetEgg_dialog", "IOException", e);
             }
         }
         else {
@@ -79,12 +73,11 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
                 CustomPurchaseDialog dialog = new CustomPurchaseDialog(requireContext(), itemId);
                 dialog.show();
                 dialog.setItemPurchaseListener(() -> {
-                    binding.tvMoney.setText(String.valueOf(GameManager.getInstance().getUser().getMoney()));    // 아이템 구매 OK 버튼을 눌렀을 때 변경된 재화를 표시하기 위해
+                    binding.tvMoney.setText(String.valueOf(GameManager.getInstance().getUser().getMoney())); // 아이템 구매 OK 버튼을 눌렀을 때 변경된 재화를 표시하기 위해
                 });
-
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("ShopFragment_onClick_item_dialog", "IOException", e);
         }
     }
 

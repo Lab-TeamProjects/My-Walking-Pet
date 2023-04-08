@@ -4,18 +4,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.lab_team_projects.my_walking_pet.R;
-import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.databinding.CustomEggDialogBinding;
-import com.lab_team_projects.my_walking_pet.databinding.CustomPurchaseDialogBinding;
-import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
-import com.lab_team_projects.my_walking_pet.home.Item;
-import com.lab_team_projects.my_walking_pet.home.ItemDetail;
-import com.lab_team_projects.my_walking_pet.login.User;
 
 import java.io.IOException;
 

@@ -4,18 +4,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.lab_team_projects.my_walking_pet.R;
-import com.lab_team_projects.my_walking_pet.databinding.CustomExerciseDialogBinding;
 import com.lab_team_projects.my_walking_pet.databinding.CustomPetInfoDialogBinding;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class CustomPetInfoDialog extends Dialog {
 

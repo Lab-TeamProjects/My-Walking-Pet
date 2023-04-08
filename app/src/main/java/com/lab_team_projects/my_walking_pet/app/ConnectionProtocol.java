@@ -25,6 +25,7 @@ public class ConnectionProtocol {
     public static final String PROFILE_VIEW = "user/profile/view";
     public static final String PROFILE_PHOTO_UPLOAD = "user/profile_photo/upload";
     public static final String PROFILE_PHOTO_VIEW = "user/profile_photo/view";
+    public static final String GAME_DATA_VIEW = "user/game/view";
 
 
 

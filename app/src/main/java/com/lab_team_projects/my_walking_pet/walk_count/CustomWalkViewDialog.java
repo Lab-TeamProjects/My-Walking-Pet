@@ -7,14 +7,10 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
-import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.databinding.CustomWalkViewDialogBinding;
-import com.lab_team_projects.my_walking_pet.login.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 

@@ -1,13 +1,12 @@
 package com.lab_team_projects.my_walking_pet.app.onborarding;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentOnBoardingSecondBinding;

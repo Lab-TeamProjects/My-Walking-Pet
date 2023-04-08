@@ -1,7 +1,6 @@
 package com.lab_team_projects.my_walking_pet.helpers;
 
 import android.content.Context;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 

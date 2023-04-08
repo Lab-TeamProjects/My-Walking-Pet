@@ -1,15 +1,14 @@
 package com.lab_team_projects.my_walking_pet.app;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentSplashBinding;
