@@ -12,15 +12,13 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.CustomExerciseDialogBinding;
 import com.lab_team_projects.my_walking_pet.databinding.CustomExercisingDialogBinding;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class CustomExerciseDialog extends Dialog {
 
     private CustomExerciseDialogBinding exerciseBinding;
     private CustomExercisingDialogBinding exercisingBinding;
     private final Context context;
     int selected = 30;
+    private MyBinder myBinder;
 
     private final boolean isExercising;
     private OnExerciseListener onExerciseListener;
@@ -33,11 +31,12 @@ public class CustomExerciseDialog extends Dialog {
         void exercise(boolean flag, int selected);
     }
 
-    public CustomExerciseDialog(@NonNull Context context, boolean isExercising) {
+    public CustomExerciseDialog(@NonNull Context context, boolean isExercising, MyBinder svc) {
         super(context);
         this.context = context;
         this.getWindow().setDimAmount(0);    // 배경 어두워지는 것 없애기
         this.isExercising = isExercising;
+        this.myBinder = svc;
     }
 
 
@@ -67,7 +66,7 @@ public class CustomExerciseDialog extends Dialog {
                 }
             });
 
-            exerciseBinding.btnOK.setOnClickListener(v->{
+            exerciseBinding.tvOK.setOnClickListener(v->{
                 // ok 버튼
                 selected = Integer.parseInt(exerciseBinding.tvTime.getText().toString());
                 Toast.makeText(context, String.valueOf(selected), Toast.LENGTH_SHORT).show();
@@ -75,14 +74,32 @@ public class CustomExerciseDialog extends Dialog {
                 dismiss();
             });
 
-            exerciseBinding.btnCancel.setOnClickListener(v->{
+            exerciseBinding.tvCancel.setOnClickListener(v->{
                 dismiss();
+            });
+
+            exerciseBinding.tvResult.setOnClickListener(v->{
+                CustomResultDialog customResultDialog = new CustomResultDialog(context);
+                customResultDialog.show();
+
             });
 
         } else {
             exercisingBinding = CustomExercisingDialogBinding.inflate(getLayoutInflater());
             setContentView(exercisingBinding.getRoot());
+
+            getWindow().setBackgroundDrawableResource(R.drawable.bg_dialog_yellow);
             setWindowPixels();
+
+            exercisingBinding.tvCurrent.setText(myBinder.getState());
+
+            myBinder.setStateListener(new MyBinder.OnBinderStateListener() {
+                @Override
+                public void onChange(String state) {
+                    exercisingBinding.tvCurrent.setText(state);
+                }
+            });
+
         }
     }
 
@@ -91,7 +108,7 @@ public class CustomExerciseDialog extends Dialog {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int screenWidth = metrics.widthPixels;
         int screenHeight = metrics.heightPixels;
-        this.getWindow().setLayout((int)(screenWidth * 0.9), (int)(screenHeight * 0.4));
+        this.getWindow().setLayout((int)(screenWidth * 0.9), (int)(screenHeight * 0.5));
     }
 
 }

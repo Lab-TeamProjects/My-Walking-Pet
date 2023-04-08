@@ -210,7 +210,7 @@ public class HomeFragment extends Fragment {
         binding.ibAR.setOnClickListener(v -> Toast.makeText(requireContext(), "AR 이동 버튼", Toast.LENGTH_SHORT).show());
 
         binding.ibExercise.setOnClickListener(v -> {
-            CustomExerciseDialog dialog = new CustomExerciseDialog(requireContext(), isExercising);
+            CustomExerciseDialog dialog = new CustomExerciseDialog(requireContext(), isExercising, isExercising ? svc : null);
             dialog.setOnExerciseListener(new CustomExerciseDialog.OnExerciseListener() {
                 @Override
                 public void exercise(boolean flag, int selected) {

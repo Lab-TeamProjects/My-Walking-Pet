@@ -70,6 +70,11 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
                     public void run() {
                         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                         Log.e("tts", integer + " : " + s);
+
+                        binder.setState(s);
+                        if (binder.getStateListener() != null) {
+                            binder.getStateListener().onChange(s);
+                        }
                         thr.speak(s);
 
                         if (integer == time / 5 + 1) {
