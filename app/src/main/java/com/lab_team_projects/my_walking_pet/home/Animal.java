@@ -11,7 +11,7 @@ public class Animal {
     private Integer growth;
     private Integer thirsty;
     private Integer liking;    // 이게 기분인가????
-    private Integer brood;
+    private String brood;
     public enum Feelings {
         HAPPY,
         NORMAL,
@@ -20,7 +20,7 @@ public class Animal {
     }
 
 
-    public Animal(String name, Integer brood, String originalOwnerUid, String currentOwnerUid) {
+    public Animal(String name, String brood, String originalOwnerUid, String currentOwnerUid) {
         this.name = name;
         this.brood = brood;
         this.originalOwnerUid = originalOwnerUid;
@@ -156,11 +156,11 @@ public class Animal {
         this.liking = liking;
     }
 
-    public Integer getBrood() {
+    public String getBrood() {
         return brood;
     }
 
-    public void setBrood(Integer brood) {
+    public void setBrood(String brood) {
         this.brood = brood;
     }
 }

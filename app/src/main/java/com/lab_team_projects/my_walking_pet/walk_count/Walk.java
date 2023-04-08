@@ -11,17 +11,22 @@ import java.util.Locale;
 public class Walk {
     @PrimaryKey(autoGenerate = true)
     private int id;    // db id
-    private int count;    // 걸음 수
     private String date;    // 현재 날짜
     private int goal = 1000;    // 목표
-    private int sec;    // 걸은 초
-    private double kcal;
-    private double distance;    // 총 거리
+
+    private int count;    // 걸음 수
     private int walkCount;
     private int runCount;
+    private double kcal;
+    private double distance;    // 총 거리
+    private int sec;    // 걸은 초
+
     private int exerciseCount;
     private int exerciseRunCount;
     private int exerciseWalkCount;
+    private double exerciseKcal;
+    private double exerciseDistance;
+    private int exerciseWalkSec;
 
     public double calculateKcal(User user) {
         // 칼로리 계산
@@ -140,5 +145,29 @@ public class Walk {
 
     public void setExerciseWalkCount(int exerciseWalkCount) {
         this.exerciseWalkCount = exerciseWalkCount;
+    }
+
+    public double getExerciseKcal() {
+        return exerciseKcal;
+    }
+
+    public void setExerciseKcal(double exerciseKcal) {
+        this.exerciseKcal = exerciseKcal;
+    }
+
+    public double getExerciseDistance() {
+        return exerciseDistance;
+    }
+
+    public void setExerciseDistance(double exerciseDistance) {
+        this.exerciseDistance = exerciseDistance;
+    }
+
+    public int getExerciseWalkSec() {
+        return exerciseWalkSec;
+    }
+
+    public void setExerciseWalkSec(int exerciseWalkSec) {
+        this.exerciseWalkSec = exerciseWalkSec;
     }
 }
