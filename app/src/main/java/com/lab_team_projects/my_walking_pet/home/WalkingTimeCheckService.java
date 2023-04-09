@@ -44,12 +44,8 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
     public int onStartCommand(Intent intent, int flags, int startId) {
         this.time = intent.getIntExtra("time",0);
         Log.e("tts", String.valueOf(this.time));
-
-
         thr = new TTSHelper(getApplicationContext());
-
         Map<Integer,String> map = new LinkedHashMap<>();
-
         map.put(1, "준비 운동을 하세요");
         for(int i = 2; i < (this.time / 5); i++) {
             if(i%2 == 1) {
@@ -60,30 +56,20 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
         }
         map.put((this.time / 5), "몸풀기 시간 입니다");
         map.put((this.time / 5) + 1, "수고 하셨습니다");
+        map.forEach((integer, s) -> ttsHandler.postDelayed(() -> {
+            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+            Log.e("tts", integer + " : " + s);
 
-        map.forEach(new BiConsumer<Integer, String>() {
-            @Override
-            public void accept(Integer integer, String s) {
-                ttsHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-                        Log.e("tts", integer + " : " + s);
-
-                        binder.setState(s);
-                        if (binder.getStateListener() != null) {
-                            binder.getStateListener().onChange(s);
-                        }
-                        thr.speak(s);
-
-                        if (integer == time / 5 + 1) {
-                            binder.getListener().onFinish(false);
-                        }
-                    }
-                }, integer * 1000 * 2);
+            binder.setState(s);
+            if (binder.getStateListener() != null) {
+                binder.getStateListener().onChange(s);
             }
-        });
+            thr.speak(s);
 
+            if (integer == time / 5 + 1) {
+                binder.getListener().onFinish(false);
+            }
+        }, integer * 1000 * 2));
         return START_STICKY;
     }
 
