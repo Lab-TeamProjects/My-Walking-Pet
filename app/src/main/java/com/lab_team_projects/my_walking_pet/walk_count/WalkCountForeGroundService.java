@@ -226,7 +226,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
 
     // 쓰레드
-    static class BackgroundTask extends AsyncTask<Integer, String, Integer> {
+    class BackgroundTask extends AsyncTask<Integer, String, Integer> {
 
         Date currentDate;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
@@ -254,6 +254,12 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                         walk.setDate(sdf.format(currentDate));
                         gm.setWalk(walk);
                         AppDatabase.getInstance(context).walkDao().insert(walk);
+
+                        // 센서 리로딩
+
+
+                        notificationManager = getSystemService(NotificationManager.class);
+                        notificationManager.notify(1, makeNotification());
                     }
 
                     Thread.sleep(1000);
