@@ -1,5 +1,6 @@
 package com.lab_team_projects.my_walking_pet.home;
 
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -107,30 +108,31 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
             if (!isFirstRun) {
-                step(1);
                 lastStep = (int) event.values[0];
                 isFirstRun = true;
             } else {
                 int increaseValue = (int) event.values[0] - lastStep;
-                step(increaseValue);
+                step(increaseValue, false);
                 lastStep = (int) event.values[0];
             }
         }
     }
 
-    private void step(int step) {
-        walk.setExerciseWalkCount(walk.getExerciseWalkCount() + step);
-        walk.setExerciseCount(walk.getExerciseWalkCount());
-        walk.calculateSec(user);
-        updateWalk();
+    private void step(int step, boolean isRunning) {
+        if (isRunning) {
+            walk.setExerciseRunCount(walk.getExerciseRunCount() + step);
+            walk.setExerciseDistance(walk.getExerciseDistance() + (step * (user.calculateRunStride() * 0.01) * 0.001));
+        } else {
+            walk.setExerciseWalkCount(walk.getExerciseWalkCount() + step);
+            walk.setExerciseDistance(walk.getExerciseDistance() + (step * (user.calculateStride() * 0.01) * 0.001));
+        }
+        walk.setExerciseCount(walk.getExerciseWalkCount() + walk.getExerciseRunCount());
+        walk.setExerciseWalkSec(walk.exerciseCalculateSec(user));
+        if (gm != null) {
+            walk.exCalculateKcal(user);
+        }
     }
 
-    private void updateWalk() {
-        if (gm != null) {
-            walk.setKcal(walk.calculateKcal(user));
-        }
-        db.walkDao().update(walk);
-    }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {

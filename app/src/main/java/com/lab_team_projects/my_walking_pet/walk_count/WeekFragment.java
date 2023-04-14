@@ -88,7 +88,12 @@ public class WeekFragment extends Fragment {
                     currentCal.setTime(currentDate);
                     // 현재 걸음 데이터의 날짜와 비교 데이터와 같지 않으면
                     // 사이사이 비어있다는 뜻
-                    if (nextCal.equals(currentCal)) {
+
+                    boolean isSameDate = nextCal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR) &&
+                            nextCal.get(Calendar.MONTH) == currentCal.get(Calendar.MONTH) &&
+                            nextCal.get(Calendar.DAY_OF_MONTH) == currentCal.get(Calendar.DAY_OF_MONTH);
+
+                    if (isSameDate) {
                         break;
                     } else {
                         // 현재 데이터에 하루를 더한다
@@ -131,14 +136,12 @@ public class WeekFragment extends Fragment {
 
 
         BarChartHelper barChartHelper = new BarChartHelper(binding.barChart, false);
-        barChartHelper.setData(AppDatabase.getInstance(requireContext()).walkDao().getAll());
+        barChartHelper.setData(walkList);
 
         binding.barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                AppDatabase db = AppDatabase.getInstance(requireContext());
-                CustomWalkViewDialog dialog = new CustomWalkViewDialog(requireContext(),
-                        db.walkDao().getAll().get((int) e.getX()));
+                CustomWalkViewDialog dialog = new CustomWalkViewDialog(requireContext(), walkList.get((int) e.getX()));
                 dialog.setDialogCancelListener(() -> binding.barChart.highlightValue(null));
                 dialog.show();
             }

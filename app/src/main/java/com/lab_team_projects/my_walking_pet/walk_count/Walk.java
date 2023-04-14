@@ -28,15 +28,25 @@ public class Walk {
     private double exerciseDistance;
     private int exerciseWalkSec;
 
-    public double calculateKcal(User user) {
-        // 칼로리 계산
-        // 몸무게 kg * 거리 km * 단위 면적당 칼로리 소모량 (걷기는 약 30 ~ 40)
-        return user.getWeight() * calculateDistance(user) * 0.57;
+    public void calculateKcal(User user) {
+        this.kcal = (3.8 * (3.5 * user.getWeight() * ((user.calculateStride() / 100 * this.walkCount / 1.6) / 60)) / 1000 * 5) +
+                (10 * (3.5 * user.getWeight() * ((user.calculateRunStride() / 100 * this.runCount / 2.7) / 60)) / 1000 * 5);
+
     }
 
-    public void calculateSec(User user) {
-        this.sec = (int) ((user.getWalkRunStride()[0] * walkCount) / (14 / 7 * user.getWalkRunStride()[0])
-                        + (user.getWalkRunStride()[1] * runCount) / (15 / 8 * user.getWalkRunStride()[1]));
+    public void exCalculateKcal(User user) {
+        this.exerciseKcal = (3.8 * (3.5 * user.getWeight() * ((user.calculateStride() / 100 * this.exerciseWalkCount / 1.6) / 60)) / 1000 * 5) +
+                (10 * (3.5 * user.getWeight() * ((user.calculateRunStride() / 100 * this.exerciseRunCount / 2.7) / 60)) / 1000 * 5);
+    }
+
+    public int calculateSec(User user) {
+        return (int) (user.calculateStride() / 100 * this.walkCount / 1.6) +
+                (int) (user.calculateRunStride() / 100 * this.runCount / 2.7);
+    }
+
+    public int exerciseCalculateSec(User user) {
+        return (int) (user.calculateStride() / 100 * this.exerciseWalkCount / 1.6) +
+                (int) (user.calculateRunStride() / 100 * this.exerciseRunCount / 2.7);
     }
 
     public double calculateDistance(User user) {

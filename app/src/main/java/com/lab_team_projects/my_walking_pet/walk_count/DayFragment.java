@@ -50,7 +50,6 @@ public class DayFragment extends Fragment {
         WalkViewModel walkViewModel = new ViewModelProvider(this).get(WalkViewModel.class);
         walkViewModel.getWalkLiveData().observe(getViewLifecycleOwner(), walk->{
             this.walk = walk;
-            this.walk.setDistance(walk.calculateDistance(user));
 
             if (pieChartHelper != null && barchartHelper != null) {
                 pieChartHelper.setData(walk);
@@ -62,8 +61,6 @@ public class DayFragment extends Fragment {
         walks = db.walkDao().getAll();    // 일단 내부저장소에 저장되어있는 Walk 데이터들을 리스트로 만든다.
 
         walk = walks.get(walks.size() - 1);    // walks 리스트 마지막에는 오늘 날짜의 walk가 저장되어 있기 때문에 가져온다.
-        walk.setDistance(walk.calculateDistance(user));
-
         binding.tvKcalValue.setText(String.format(Locale.getDefault(),"%.2f", walk.getKcal()));    // 오늘 칼로리 소모량을 화면에 표시한다.
         binding.tvKmValue.setText(String.format(Locale.getDefault(),"%.2f", walk.getDistance()));    // 오늘 걸은 거리를 화면에 표시한다.
         binding.tvMinValue.setText(walk.calculateHours());    // 오늘 걸은 시간을 화면에 표시한다.
