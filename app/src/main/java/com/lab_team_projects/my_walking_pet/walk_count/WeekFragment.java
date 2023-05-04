@@ -79,7 +79,7 @@ public class WeekFragment extends Fragment {
                 Calendar nextCal = Calendar.getInstance();
                 nextCal.setTime(nextDate);
                 // 다음 데이터에서 하루를 빼고 비교 데이터로 만든다
-                nextCal.add(Calendar.DATE, -1);
+                //nextCal.add(Calendar.DATE, -1);
 
                 Calendar currentCal = Calendar.getInstance();
 
@@ -89,13 +89,15 @@ public class WeekFragment extends Fragment {
                     // 현재 걸음 데이터의 날짜와 비교 데이터와 같지 않으면
                     // 사이사이 비어있다는 뜻
 
-                    boolean isSameDate = nextCal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR) &&
-                            nextCal.get(Calendar.MONTH) == currentCal.get(Calendar.MONTH) &&
-                            nextCal.get(Calendar.DAY_OF_MONTH) == currentCal.get(Calendar.DAY_OF_MONTH);
+                    boolean isSameDate = nextCal.get(Calendar.YEAR) <= currentCal.get(Calendar.YEAR) &&
+                            nextCal.get(Calendar.MONTH) <= currentCal.get(Calendar.MONTH) &&
+                            nextCal.get(Calendar.DAY_OF_MONTH) <= currentCal.get(Calendar.DAY_OF_MONTH);
 
-                    if (isSameDate) {
+                    if (isSameDate && walkList.size() % 7 == 0) {
                         break;
                     } else {
+
+
                         // 현재 데이터에 하루를 더한다
                         currentCal.add(Calendar.DATE, 1);
 
@@ -108,25 +110,20 @@ public class WeekFragment extends Fragment {
                         Walk newWalk = new Walk();
                         newWalk.setDate(newDate);
 
-                        // 걸음 리스트에 추가
-                        walkList.add(newWalk);
-
                         // 새로 만든 날짜 스트링을 date
                         currentDate = dateFormat.parse(newWalk.getDate());
-                        walkList.sort(new Comparator<Walk>() {
-                            @Override
-                            public int compare(Walk o1, Walk o2) {
-                                try {
-                                    Date date1 = dateFormat.parse(o1.getDate());
-                                    Date date2 = dateFormat.parse(o2.getDate());
-                                    return date1.compareTo(date2);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    return 0;
-                                }
-                            }
-                        });
+
                         next++;
+
+                        if (nextCal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR) &&
+                                nextCal.get(Calendar.MONTH) == currentCal.get(Calendar.MONTH) &&
+                                nextCal.get(Calendar.DAY_OF_MONTH) == currentCal.get(Calendar.DAY_OF_MONTH)) {
+                            continue;
+                        }
+
+                        walkList.add(newWalk);
+
+
                     }
                 }
             } catch (ParseException e) {
@@ -134,6 +131,19 @@ public class WeekFragment extends Fragment {
             }
         }
 
+        walkList.sort(new Comparator<Walk>() {
+            @Override
+            public int compare(Walk o1, Walk o2) {
+                try {
+                    Date date1 = dateFormat.parse(o1.getDate());
+                    Date date2 = dateFormat.parse(o2.getDate());
+                    return date1.compareTo(date2);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+        });
 
         BarChartHelper barChartHelper = new BarChartHelper(binding.barChart, false);
         barChartHelper.setData(walkList);
