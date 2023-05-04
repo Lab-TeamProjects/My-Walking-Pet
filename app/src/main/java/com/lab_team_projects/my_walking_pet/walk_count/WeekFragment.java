@@ -79,7 +79,7 @@ public class WeekFragment extends Fragment {
                 Calendar nextCal = Calendar.getInstance();
                 nextCal.setTime(nextDate);
                 // 다음 데이터에서 하루를 빼고 비교 데이터로 만든다
-                //nextCal.add(Calendar.DATE, -1);
+                nextCal.add(Calendar.DATE, -1);
 
                 Calendar currentCal = Calendar.getInstance();
 
@@ -101,7 +101,7 @@ public class WeekFragment extends Fragment {
 
                         // 새로운 데이터를 만들어준다
                         String newDate = String.format(Locale.getDefault()
-                                , "%d-%d-%d 00:00:00"
+                                , "%04d-%02d-%02d 00:00:00"
                                 , currentCal.get(Calendar.YEAR)
                                 , currentCal.get(Calendar.MONTH) + 1
                                 , currentCal.get(Calendar.DATE));
