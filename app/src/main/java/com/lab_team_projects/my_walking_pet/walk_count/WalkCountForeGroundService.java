@@ -45,18 +45,12 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     private int lastStep = 0;
     private boolean isFirstRun = false;
 
-    private boolean isWalking = false;
-    private boolean isRunning = false;
-    private final float[] lastAccelValues = new float[3];
-    private static final float THRESHOLD_WALK = 5.0f; // 걷는 동작 판별 임계값
-    private static final float THRESHOLD_RUN = 12.5f; // 뛰는 동작 판별 임계값
-    private static final float NS2S = 1.0f / 1000000000.0f;
-    private long lastTimestamp = 0;
-    private float angle = 0;
-    private long walkStartTime = 0;
-    private long runStartTime = 0;
-    private long runElapsedTime;
-    private long walkElapsedTime;
+    private double currentVelocity = 0.0;  // 초기 속도는 0으로 설정
+    private double lastUpdateVelocityKmH = 0.0; // 이전 속도
+    private long lastUpdateTime = 0;  // 마지막 가속도 측정 시간을 저장하는 변수
+    private long lastResetTime = 0;     // 1 초 기준 저장 변수
+    private double accelerationMagnitudeAtLastUpdate = 0.0;  // 마지막 가속도 측정 값
+
 
     public WalkCountForeGroundService() {
         // 빈 생성자
@@ -86,7 +80,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         // 가속도 센서, 걸음 감지 센서, 자이로스코프 센서 등록 등록
-        Sensor accelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        Sensor accelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         Sensor stepDetectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         Sensor gyroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         Sensor stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
@@ -161,23 +155,67 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         startForeground(1, makeNotification());
     }
 
-
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
             if (!isFirstRun) {
-                step(1);
-                userMoneyUpdate(1);
                 lastStep = (int) event.values[0];
                 isFirstRun = true;
             } else {
                 int increaseValue = (int) event.values[0] - lastStep;
-                step(increaseValue);
+                if (lastUpdateVelocityKmH > 5.0) {
+                    step(increaseValue, true);
+                } else {
+                    step(increaseValue, false);
+                }
                 userMoneyUpdate(increaseValue);
                 lastStep = (int) event.values[0];
             }
         }
+
+        if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
+            double xAcceleration = event.values[0];
+            double yAcceleration = event.values[1];
+            double zAcceleration = event.values[2];
+
+
+            double accelerationMagnitude = Math.sqrt(Math.pow(xAcceleration, 2) + Math.pow(yAcceleration, 2) + Math.pow(zAcceleration, 2)); // 총 가속도 계산
+
+            long currentTime = System.currentTimeMillis();  // 현재 시간을 저장
+            if (lastUpdateTime == 0) {
+                // 첫 번째 가속도 측정 값인 경우, 시간과 가속도를 저장하고 리턴
+
+                lastUpdateTime = currentTime;
+                accelerationMagnitudeAtLastUpdate = accelerationMagnitude;
+                lastUpdateVelocityKmH = 0;
+                return;
+            }
+
+            // 시간 간격과 마지막 가속도 측정 값에서 현재 가속도 측정 값까지의 변화량을 구함
+            double deltaTime = (currentTime - lastUpdateTime) / 1000.0;  // 시간 간격을 초 단위로 변환
+            double accelerationDelta = accelerationMagnitude + accelerationMagnitudeAtLastUpdate;
+
+
+            if (currentTime - lastResetTime > 1000) {
+                // 현재 속도를 구함 m/s
+                currentVelocity = 0.5 * accelerationDelta * deltaTime;
+
+                // 현재 시간, 가속도, 속도를 저장
+                lastUpdateTime = currentTime;
+                accelerationMagnitudeAtLastUpdate = accelerationMagnitude;
+                lastUpdateVelocityKmH = currentVelocity / 3.6;  // km/h로 변환
+
+                // 가만히 있는것으로 간주 하고 현재 속도 0으로 초기화
+                if ((accelerationMagnitude > -1 && accelerationMagnitude < 1) && (Math.floor(accelerationMagnitude * 100) / 100 == Math.floor(accelerationMagnitudeAtLastUpdate * 100) / 100)) {
+                    currentVelocity = 0;
+                    lastUpdateTime = 0;
+                }
+
+                lastResetTime = currentTime;
+            }
+        }
     }
+
 
     private void userMoneyUpdate(int addMoney) {
         UserPreferenceHelper helper =
@@ -190,23 +228,26 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
 
 
-    private void step(int step) {
-        walk.setWalkCount(walk.getWalkCount() + step);
+    private void step(int step, boolean isRunning) {
+        if (isRunning) {
+            walk.setRunCount(walk.getRunCount() + step);
+            walk.setDistance(walk.getDistance() + (step * (user.calculateRunStride() * 0.01) * 0.001));
+        } else {
+            walk.setWalkCount(walk.getWalkCount() + step);
+            walk.setDistance(walk.getDistance() + (step * (user.calculateStride() * 0.01) * 0.001));
+        }
         walk.setCount(walk.getWalkCount() + walk.getRunCount());
-        walk.calculateSec(user);
-        updateWalk();
-    }
-
-    private void updateWalk() {
+        walk.setSec(walk.calculateSec(user));
         if (gm != null) {
-            walk.setKcal(walk.calculateKcal(user));
+            walk.calculateKcal(user);
         }
         db.walkDao().update(walk);
-        
+
         // 센서 리로딩
         notificationManager = getSystemService(NotificationManager.class);
         notificationManager.notify(1, makeNotification());
     }
+
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -226,7 +267,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
 
     // 쓰레드
-    static class BackgroundTask extends AsyncTask<Integer, String, Integer> {
+    class BackgroundTask extends AsyncTask<Integer, String, Integer> {
 
         Date currentDate;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
@@ -254,6 +295,12 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                         walk.setDate(sdf.format(currentDate));
                         gm.setWalk(walk);
                         AppDatabase.getInstance(context).walkDao().insert(walk);
+
+                        // 센서 리로딩
+
+
+                        notificationManager = getSystemService(NotificationManager.class);
+                        notificationManager.notify(1, makeNotification());
                     }
 
                     Thread.sleep(1000);

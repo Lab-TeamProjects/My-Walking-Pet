@@ -66,6 +66,10 @@ public class User {
         return (Collections.max(list) + Collections.min(list)) / 2.0;
     }
 
+    public double calculateRunStride() {
+        return height * 0.6;
+    }
+
     public String getBirthday() { return birthday; }
 
     public void setBirthday(String birthday) {
