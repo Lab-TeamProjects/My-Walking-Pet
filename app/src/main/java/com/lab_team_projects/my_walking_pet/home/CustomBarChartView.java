@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 public class CustomBarChartView extends View {
@@ -15,14 +16,23 @@ public class CustomBarChartView extends View {
     * */
 
     private final Bar bgBar = new Bar(0.4f, 0.8f, 0.0f, Color.WHITE);
-    private final Bar contentBar = new Bar(0.4f, 0.8f, 0.4f, Color.LTGRAY);
+    private final Bar contentBar = new Bar(0.4f, 0.8f, 0.0f, Color.GREEN);
 
+    /**
+     *
+     * @param s : only '+' or '-'
+     */
     public void setBarLength(String s) {
         if (s.equals("+")) {
-            contentBar.increaseLength();
+            contentBar.increaseLength(1);
         } else if (s.equals("-")) {
-            contentBar.decreaseLength();
+            contentBar.decreaseLength(970);
         }
+        invalidate();
+    }
+
+    public void setContentBar(float nowGrowth, float maxGrowth) {
+        contentBar.setAmount(nowGrowth, maxGrowth);
         invalidate();
     }
 
@@ -44,7 +54,6 @@ public class CustomBarChartView extends View {
         contentBar.init();
     }
 
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -52,7 +61,7 @@ public class CustomBarChartView extends View {
         contentBar.draw(canvas);
     }
 
-    class Bar {
+    private class Bar {
         Paint paint;
         RectF rect;
         float width;
@@ -77,7 +86,6 @@ public class CustomBarChartView extends View {
             this.paint = new Paint();
             this.paint.setColor(this.color);
             this.rect = new RectF();
-
         }
 
         public void draw(Canvas canvas) {
@@ -92,14 +100,18 @@ public class CustomBarChartView extends View {
             this.canvas.drawRoundRect(rect, 20, 20, paint);
         }
 
-
-        public void increaseLength() {
-            this.amount -= 50.0f;
+        public void setAmount(float nowGrowth, float maxGrowth) {
+            this.amount = (nowGrowth / maxGrowth) * this.barHeight;
             this.rect.set(barX, barY + this.amount, barX + barWidth, barY + barHeight);
         }
 
-        public void decreaseLength() {
-            this.amount += 50.0f;
+        public void increaseLength(float amount) {
+            this.amount -= amount;
+            this.rect.set(barX, barY + this.amount, barX + barWidth, barY + barHeight);
+        }
+
+        public void decreaseLength(float amount) {
+            this.amount += amount;
             this.rect.set(barX, barY + this.amount, barX + barWidth, barY + barHeight);
         }
     }

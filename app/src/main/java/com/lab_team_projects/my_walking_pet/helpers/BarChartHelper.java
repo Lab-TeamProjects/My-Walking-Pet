@@ -24,9 +24,8 @@ public class BarChartHelper {
         this.barChart = barChart;
         this.isDay = isDay;
         initLayout(isDay);
-
-
     }
+
     public void setData(List<Walk> walkList) {
         List<BarEntry> valueList = new ArrayList<>();
         String title = "걸음 수";

@@ -24,6 +24,7 @@ import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.app.MainActivity;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
 import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
+import com.lab_team_projects.my_walking_pet.home.Animal;
 import com.lab_team_projects.my_walking_pet.login.User;
 
 import java.text.ParseException;
@@ -120,7 +121,37 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         task = null;
     }
 
+    // 진화 알람
+    public Notification evolutionNotification() {
+        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle()
+                .bigText(String.format(Locale.getDefault(), "\uD83D\uDC36 펫 다음 성장까지 %d걸음\n\uD83D\uDC5F 목표 걸음까지 %d걸음 남았습니다!", walk.getCount(), walk.getGoal()))
+                .setBigContentTitle(String.format(Locale.getDefault(), "%d 걸음", walk.getCount()));
 
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setStyle(bigTextStyle)
+                .setContentText(String.format(Locale.getDefault(), "\uD83D\uDC36 펫 다음 성장까지 %d걸음 남았습니다!", walk.getCount()))
+                .setContentTitle(String.format(Locale.getDefault(), "%d 걸음", walk.getCount()))
+                .setOngoing(true)
+                .setNumber(0)    // 앱 뱃지 뜨는 것이 별로라서 없애고 싶은데 안없어짐
+                .setWhen(0)
+                .setShowWhen(false);
+
+        // 알림창을 클릭했을 때 액티비티 이동
+        Intent intent = new Intent(this, MainActivity.class);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        builder.setContentIntent(pendingIntent);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            manager.createNotificationChannel(new NotificationChannel("1","포그라운드 서비스", NotificationManager.IMPORTANCE_NONE));
+        }
+
+        return builder.build();
+    }
+
+    // 펫 현황
     public Notification makeNotification(){
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle()
                 .bigText(String.format(Locale.getDefault(), "\uD83D\uDC36 펫 다음 성장까지 %d걸음\n\uD83D\uDC5F 목표 걸음까지 %d걸음 남았습니다!", walk.getCount(), walk.getGoal()))
@@ -216,7 +247,6 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         }
     }
 
-
     private void userMoneyUpdate(int addMoney) {
         UserPreferenceHelper helper =
                 new UserPreferenceHelper(getApplicationContext()
@@ -226,8 +256,6 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                 , addMoney + gm.getUser().getMoney());
     }
 
-
-
     private void step(int step, boolean isRunning) {
         if (isRunning) {
             walk.setRunCount(walk.getRunCount() + step);
@@ -236,6 +264,27 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
             walk.setWalkCount(walk.getWalkCount() + step);
             walk.setDistance(walk.getDistance() + (step * (user.calculateStride() * 0.01) * 0.001));
         }
+
+        // 평균 수치(배고픔, 목마름, 청결도)에 따른 성장치 증가
+        Animal animal = user.getAnimalList().get(user.getNowSelectedPet());
+        float ave = animal.getStateAverage();
+        if(ave >= 90) {
+            animal.setGrowth(animal.getGrowth() - 3.0f);
+        } else if (ave < 90 && ave >= 50) {
+            animal.setGrowth(animal.getGrowth() - 2.0f);
+        } else {
+            animal.setGrowth(animal.getGrowth() - 1.0f);
+        }
+
+        if (animal.getGrowthCallback() != null) {
+            animal.getGrowthCallback().onCall();
+        }
+
+        // 걷는 도중에 진화할 시 알람
+        if (animal.getGrowth() >= animal.getMaxGrowth()) {
+            startForeground(2, evolutionNotification());
+        }
+
         walk.setCount(walk.getWalkCount() + walk.getRunCount());
         walk.setSec(walk.calculateSec(user));
         if (gm != null) {
@@ -247,7 +296,6 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         notificationManager = getSystemService(NotificationManager.class);
         notificationManager.notify(1, makeNotification());
     }
-
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
