@@ -15,8 +15,8 @@ public class CustomBarChartView extends View {
     * 성장치 그래프 커스텀 뷰
     * */
 
-    private final Bar bgBar = new Bar(0.4f, 0.8f, 0.0f, Color.WHITE);
-    private final Bar contentBar = new Bar(0.4f, 0.8f, 0.0f, Color.GREEN);
+    private final Bar bgBar = new Bar(0.4f, 0.8f, 0.0f, Color.WHITE, true);
+    private final Bar contentBar = new Bar(0.4f, 0.8f, 0.0f, Color.GREEN, false);
 
     /**
      *
@@ -74,12 +74,14 @@ public class CustomBarChartView extends View {
         float inWidth, inHeight;
         float amount;
         Canvas canvas;
+        boolean isBG;
 
-        public Bar(float inWidth, float inHeight, float amount, int color) {
+        public Bar(float inWidth, float inHeight, float amount, int color, boolean isBG) {
             this.inWidth = inWidth;
             this.inHeight = inHeight;
             this.amount = amount;
             this.color = color;
+            this.isBG = isBG;
         }
 
         public void init() {
@@ -96,7 +98,12 @@ public class CustomBarChartView extends View {
             this.barWidth = width * inWidth;
             this.barX = (width - barWidth) / 2;
             this.barY = (height - barHeight) / 2;
-            this.rect.set(barX, barY + this.amount, barX + barWidth, barY + barHeight);
+            if(this.isBG){
+                this.rect.set(barX, barY + this.amount, barX + barWidth, barY + barHeight);
+            } else {
+                this.rect.set(barX, barY + this.amount, barX + barWidth, barY);
+            }
+
             this.canvas.drawRoundRect(rect, 20, 20, paint);
         }
 

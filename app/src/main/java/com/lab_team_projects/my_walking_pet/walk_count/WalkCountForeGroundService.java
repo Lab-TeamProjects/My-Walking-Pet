@@ -276,6 +276,8 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
             animal.setGrowth(animal.getGrowth() - 1.0f);
         }
 
+        Log.e("시발", String.valueOf(animal.getGrowth()));
+
         if (animal.getGrowthCallback() != null) {
             animal.getGrowthCallback().onCall();
         }
@@ -314,7 +316,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     }
 
 
-    // 쓰레드
+    // 스레드
     class BackgroundTask extends AsyncTask<Integer, String, Integer> {
 
         Date currentDate;
