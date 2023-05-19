@@ -31,7 +31,7 @@
             app:layout_constraintStart_toStartOf="@id/tvWeek"
             android:id="@+id/tvWalkCount"
             android:layout_gravity="top"
-            android:text="8,646"
+            android:text="0"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="35sp"
@@ -53,7 +53,7 @@
             app:layout_constraintTop_toBottomOf="@id/tvWalkCount"
             app:layout_constraintStart_toStartOf="@id/tvWeek"
             android:id="@+id/tvWeekDate"
-            android:text="2023년 1월 21일 - 2023년 1월 27일"
+            android:text="0000년 0월 00일 ~ 0000년 0월 00일"
             android:textSize="14sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

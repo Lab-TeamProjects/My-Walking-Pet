@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentWeekBinding;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
@@ -65,6 +66,8 @@ public class WeekFragment extends Fragment {
                 // 빈 메소드
             }
         });
+
+        binding.barChart.setOnChartGestureListener(new MyChartGestureListener(walkList, binding.barChart, binding.tvWalkCount, binding.tvWeekDate));
 
         return binding.getRoot();
     }
@@ -139,9 +142,6 @@ public class WeekFragment extends Fragment {
                             nextCal.get(Calendar.DAY_OF_MONTH) == currentCal.get(Calendar.DAY_OF_MONTH);
 
                     if ((isSameDate && i + next != walkList.size())) {
-                        Log.d("walk", String.format("%d", walkList.size()));
-                        Log.d("walk", String.format("%d %d", i, next));
-
                         break;
                     } else {
                         // 현재 데이터에 하루를 더한다

@@ -2,6 +2,8 @@ package com.lab_team_projects.my_walking_pet.helpers;
 
 import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
 
+import android.widget.TextView;
+
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
@@ -67,7 +69,7 @@ public class BarChartHelper {
     }
 
     public void initLayout(boolean isDay) {
-        barChart.setScaleEnabled(false);
+        barChart.setDragEnabled(false);
         barChart.setScaleEnabled(false);
         barChart.setDrawBarShadow(false);
         barChart.setDrawBorders(false);
