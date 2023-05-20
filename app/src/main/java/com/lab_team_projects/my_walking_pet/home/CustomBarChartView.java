@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 public class CustomBarChartView extends View {
@@ -14,15 +15,24 @@ public class CustomBarChartView extends View {
     * 성장치 그래프 커스텀 뷰
     * */
 
-    private final Bar bgBar = new Bar(0.4f, 0.8f, 0.0f, Color.WHITE);
-    private final Bar contentBar = new Bar(0.4f, 0.8f, 0.4f, Color.LTGRAY);
+    private final Bar bgBar = new Bar(0.4f, 0.8f, 0.0f, Color.WHITE, true);
+    private final Bar contentBar = new Bar(0.4f, 0.8f, 0.0f, Color.GREEN, false);
 
+    /**
+     *
+     * @param s : only '+' or '-'
+     */
     public void setBarLength(String s) {
         if (s.equals("+")) {
-            contentBar.increaseLength();
+            contentBar.increaseLength(1);
         } else if (s.equals("-")) {
-            contentBar.decreaseLength();
+            contentBar.decreaseLength(970);
         }
+        invalidate();
+    }
+
+    public void setContentBar(float nowGrowth, float maxGrowth) {
+        contentBar.setAmount(nowGrowth, maxGrowth);
         invalidate();
     }
 
@@ -44,7 +54,6 @@ public class CustomBarChartView extends View {
         contentBar.init();
     }
 
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -52,7 +61,7 @@ public class CustomBarChartView extends View {
         contentBar.draw(canvas);
     }
 
-    class Bar {
+    private class Bar {
         Paint paint;
         RectF rect;
         float width;
@@ -65,19 +74,20 @@ public class CustomBarChartView extends View {
         float inWidth, inHeight;
         float amount;
         Canvas canvas;
+        boolean isBG;
 
-        public Bar(float inWidth, float inHeight, float amount, int color) {
+        public Bar(float inWidth, float inHeight, float amount, int color, boolean isBG) {
             this.inWidth = inWidth;
             this.inHeight = inHeight;
             this.amount = amount;
             this.color = color;
+            this.isBG = isBG;
         }
 
         public void init() {
             this.paint = new Paint();
             this.paint.setColor(this.color);
             this.rect = new RectF();
-
         }
 
         public void draw(Canvas canvas) {
@@ -88,18 +98,27 @@ public class CustomBarChartView extends View {
             this.barWidth = width * inWidth;
             this.barX = (width - barWidth) / 2;
             this.barY = (height - barHeight) / 2;
-            this.rect.set(barX, barY + this.amount, barX + barWidth, barY + barHeight);
+            if(this.isBG){
+                this.rect.set(barX, barY + this.amount, barX + barWidth, barY + barHeight);
+            } else {
+                this.rect.set(barX, barY + this.amount, barX + barWidth, barY);
+            }
+
             this.canvas.drawRoundRect(rect, 20, 20, paint);
         }
 
-
-        public void increaseLength() {
-            this.amount -= 50.0f;
+        public void setAmount(float nowGrowth, float maxGrowth) {
+            this.amount = (nowGrowth / maxGrowth) * this.barHeight;
             this.rect.set(barX, barY + this.amount, barX + barWidth, barY + barHeight);
         }
 
-        public void decreaseLength() {
-            this.amount += 50.0f;
+        public void increaseLength(float amount) {
+            this.amount -= amount;
+            this.rect.set(barX, barY + this.amount, barX + barWidth, barY + barHeight);
+        }
+
+        public void decreaseLength(float amount) {
+            this.amount += amount;
             this.rect.set(barX, barY + this.amount, barX + barWidth, barY + barHeight);
         }
     }

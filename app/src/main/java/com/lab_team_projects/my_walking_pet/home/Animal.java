@@ -8,17 +8,18 @@ public class Animal {
     private Integer level;
     private Integer clean;
     private Integer hunger;
-    private Integer growth;
+    private float growth;
+    private GrowthCallback growthCallback;
     private Integer thirsty;
     private Integer liking;    // 이게 기분인가????
     private String brood;
+    private float maxGrowth;
     public enum Feelings {
         HAPPY,
         NORMAL,
         BAD,
         SICK
     }
-
 
     public Animal(String name, String brood, String originalOwnerUid, String currentOwnerUid) {
         this.name = name;
@@ -30,8 +31,21 @@ public class Animal {
         this.clean = 50;
         this.hunger = 50;
         this.thirsty = 50;
-        this.growth = 0;
+        this.growth = 3000 + (3000 * 0.3f * this.level);
         this.liking = 0;
+        this.maxGrowth = 3000 + (3000 * 0.3f * this.level);
+    }
+
+    public interface GrowthCallback {
+        void onCall();
+    }
+
+    public void setGrowthCallback(GrowthCallback growthCallback) {
+        this.growthCallback = growthCallback;
+    }
+
+    public GrowthCallback getGrowthCallback() {
+        return growthCallback;
     }
 
     private int levelUp() {
@@ -39,9 +53,9 @@ public class Animal {
         return 0;
     }
 
-    private int stateAverage() {
+    public float getStateAverage() {
         //clean, hunger, liking 각각의 수치를 비교해서 현재 상태를 반환하는 함수
-        return 0;
+        return (clean + hunger + thirsty) / 3.0f;
     }
 
     public void useItem(ItemDetail itemDetail) {
@@ -140,11 +154,11 @@ public class Animal {
         this.hunger = hunger;
     }
 
-    public Integer getGrowth() {
+    public float getGrowth() {
         return growth;
     }
 
-    public void setGrowth(Integer growth) {
+    public void setGrowth(float growth) {
         this.growth = growth;
     }
 
@@ -162,5 +176,13 @@ public class Animal {
 
     public void setBrood(String brood) {
         this.brood = brood;
+    }
+
+    public float getMaxGrowth() {
+        return maxGrowth;
+    }
+
+    public void setMaxGrowth(float maxGrowth) {
+        this.maxGrowth = maxGrowth;
     }
 }

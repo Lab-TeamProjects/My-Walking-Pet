@@ -18,7 +18,9 @@ import android.widget.Toast;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
@@ -41,6 +43,11 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener;
+
+    private GameManager gm = GameManager.getInstance();
+    private User user = gm.getUser();
+    private Animal nowPet = user.getAnimalList().get(user.getNowSelectedPet());
+
     private boolean isInteractionBtnClick = false;
     long lastClickTime = 0;
     int canDragTime = 3000;    // 드래그 쿨타임 현재 3초
@@ -55,6 +62,13 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+
+        nowPet.setGrowthCallback(new Animal.GrowthCallback() {
+            @Override
+            public void onCall() {
+                binding.customBarChartView.setContentBar(nowPet.getGrowth(),nowPet.getMaxGrowth());
+            }
+        });
 
         bindingListener();
         try {
@@ -83,8 +97,6 @@ public class HomeFragment extends Fragment {
                     // 드래그 종료시 동작
                     break;
             }
-
-
             return true;
         });
 
@@ -113,9 +125,19 @@ public class HomeFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        GameManager gm = GameManager.getInstance();
+        User user = gm.getUser();
+        Animal nowPet = user.getAnimalList().get(user.getNowSelectedPet());
+
+        binding.tvMoney.setText(String.valueOf(gm.getUser().getMoney()));
+        binding.customBarChartView.setContentBar(nowPet.getGrowth(),nowPet.getMaxGrowth());
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private void initInventory() throws IOException {
-
         inventoryHelper = new InventoryHelper(requireContext());
         binding.fabWater.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.DRINK, inventoryHelper));
         binding.fabFood.setOnClickListener(v -> setFabOnClickListener(Item.ItemType.FOOD, inventoryHelper));
@@ -235,8 +257,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        GameManager gameManager = GameManager.getInstance();
-        binding.tvMoney.setText(String.valueOf(gameManager.getUser().getMoney()));
+
+        binding.tvMoney.setText(String.valueOf(gm.getUser().getMoney()));
+        binding.customBarChartView.setContentBar(nowPet.getGrowth(),nowPet.getMaxGrowth());
     }
 
     @Override
