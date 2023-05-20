@@ -62,7 +62,7 @@ public class WalkCountFragment extends Fragment {
             } else if (position == 2) {
                 tab.setText("1달");
             } else if (position == 3) {
-                tab.setText("1년");
+                tab.setText("달력 보기");
             }
         }).attach();
 

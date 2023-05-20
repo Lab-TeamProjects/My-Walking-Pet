@@ -20,7 +20,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/tvWeek"
             android:layout_gravity="top"
-            android:text="일일평균"
+            android:text="주간 평균"
             android:textSize="22sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
