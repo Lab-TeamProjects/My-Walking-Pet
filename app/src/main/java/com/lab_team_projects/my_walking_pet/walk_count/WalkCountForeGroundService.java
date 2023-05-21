@@ -269,11 +269,11 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         Animal animal = user.getAnimalList().get(user.getNowSelectedPet());
         float ave = animal.getStateAverage();
         if(ave >= 90) {
-            animal.setGrowth(animal.getGrowth() + 50.0f);
+            animal.setGrowth(animal.getGrowth() + 3.0f);
         } else if (ave < 90 && ave >= 50) {
-            animal.setGrowth(animal.getGrowth() + 50.0f);
+            animal.setGrowth(animal.getGrowth() + 2.0f);
         } else {
-            animal.setGrowth(animal.getGrowth() + 50.0f);
+            animal.setGrowth(animal.getGrowth() + 1.0f);
         }
 
         Log.e("성장치", String.valueOf(animal.getGrowth()));

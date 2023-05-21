@@ -52,11 +52,7 @@ public class CustomBarChartView extends View {
 
 
     public void setContentBarRatio(float nowGrowth, float maxGrowth) {
-        if (maxGrowth > 0) {
-            contentBar.growthRatio = nowGrowth / maxGrowth;
-        } else {
-            contentBar.growthRatio = 0;
-        }
+        contentBar.growthRatio = nowGrowth / maxGrowth;
         invalidate(); // 바의 성장 정도가 변경되었으므로 다시 그리기 위해 invalidate() 호출
     }
 
@@ -72,8 +68,8 @@ public class CustomBarChartView extends View {
         }
 
         public void draw(Canvas canvas) {
-            float width = getWidth() * 0.4f;
-            float height = getHeight() * 0.98f;
+            float width = getWidth() * 0.4f; // bar의 넓이는 커스텀 view 의 0.4배
+            float height = getHeight() * 0.9f; // bar의 높이는 커스텀 view 의 0.9배
 
             float bottom = getHeight();
             float left = (getWidth() - width) / 2;
