@@ -68,7 +68,6 @@ public class BarChartHelper {
     }
 
     public void initLayout(boolean isDay) {
-        barChart.setDragEnabled(false);
         barChart.setScaleEnabled(false);
         barChart.setDrawBarShadow(false);
         barChart.setDrawBorders(false);
@@ -94,6 +93,7 @@ public class BarChartHelper {
         if (isDay) {
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
+            barChart.setDragEnabled(true);
             leftAxis.setDrawAxisLine(false);
             leftAxis.setDrawZeroLine(true);
 
@@ -104,6 +104,7 @@ public class BarChartHelper {
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
             xAxis.setDrawLabels(true);
 
+            barChart.setDragEnabled(false);
             leftAxis.setDrawAxisLine(true);
             leftAxis.setDrawTopYLabelEntry(true);
 

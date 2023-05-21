@@ -80,7 +80,11 @@ public class YearFragment extends Fragment {
                     binding.tvWalkKM.setText("걸은 거리: " + selectWalk.getDistance());
 
                 } else {
-                    Toast.makeText(requireContext(), "저장된 데이터가 없습니다.", Toast.LENGTH_SHORT).show();
+                    binding.tvWalkGoal.setText("걸음 목표: " + "데이터 없음");
+                    binding.tvWalkCount.setText("걸음 수: " + "데이터 없음");
+                    binding.tvWalkTime.setText("걸은 시간: " + "데이터 없음");
+                    binding.tvWalkKcal.setText("칼로리 소모량: " + "데이터 없음");
+                    binding.tvWalkKM.setText("걸은 거리: " + "데이터 없음");
                 }
             }
         });

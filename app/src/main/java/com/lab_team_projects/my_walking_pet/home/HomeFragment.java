@@ -44,9 +44,9 @@ public class HomeFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener;
 
-    private GameManager gm = GameManager.getInstance();
-    private User user = gm.getUser();
-    private Animal nowPet = user.getAnimalList().get(user.getNowSelectedPet());
+    private final GameManager gm = GameManager.getInstance();
+    private final User user = gm.getUser();
+    private final Animal nowPet = user.getAnimalList().get(user.getNowSelectedPet());
 
     private boolean isInteractionBtnClick = false;
     long lastClickTime = 0;
