@@ -31,7 +31,7 @@ public class Animal {
         this.clean = 50;
         this.hunger = 50;
         this.thirsty = 50;
-        this.growth = 3000 + (3000 * 0.3f * this.level);
+        this.growth = 0;
         this.liking = 0;
         this.maxGrowth = 3000 + (3000 * 0.3f * this.level);
     }

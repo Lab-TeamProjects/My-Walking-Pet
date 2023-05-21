@@ -20,7 +20,6 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
@@ -66,7 +65,7 @@ public class HomeFragment extends Fragment {
         nowPet.setGrowthCallback(new Animal.GrowthCallback() {
             @Override
             public void onCall() {
-                binding.customBarChartView.setContentBar(nowPet.getGrowth(),nowPet.getMaxGrowth());
+                binding.customBarChartView.setContentBarRatio(nowPet.getGrowth(),nowPet.getMaxGrowth());
             }
         });
 
@@ -133,7 +132,7 @@ public class HomeFragment extends Fragment {
         Animal nowPet = user.getAnimalList().get(user.getNowSelectedPet());
 
         binding.tvMoney.setText(String.valueOf(gm.getUser().getMoney()));
-        binding.customBarChartView.setContentBar(nowPet.getGrowth(),nowPet.getMaxGrowth());
+        binding.customBarChartView.setContentBarRatio(nowPet.getGrowth(),nowPet.getMaxGrowth());
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -259,7 +258,7 @@ public class HomeFragment extends Fragment {
         super.onResume();
 
         binding.tvMoney.setText(String.valueOf(gm.getUser().getMoney()));
-        binding.customBarChartView.setContentBar(nowPet.getGrowth(),nowPet.getMaxGrowth());
+        binding.customBarChartView.setContentBarRatio(nowPet.getGrowth(),nowPet.getMaxGrowth());
     }
 
     @Override
