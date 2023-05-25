@@ -91,9 +91,9 @@ public class BarChartHelper {
         rightAxis.setDrawGridLines(false);
 
         if (isDay) {
+            barChart.setDragEnabled(true);
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
-            barChart.setDragEnabled(true);
             leftAxis.setDrawAxisLine(false);
             leftAxis.setDrawZeroLine(true);
 
