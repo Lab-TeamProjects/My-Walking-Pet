@@ -2,7 +2,7 @@ package com.lab_team_projects.my_walking_pet.login;
 
 import com.lab_team_projects.my_walking_pet.home.Animal;
 import com.lab_team_projects.my_walking_pet.home.Item;
-import com.lab_team_projects.my_walking_pet.home.collection.Collection;
+import com.lab_team_projects.my_walking_pet.collection.Collection;
 import com.lab_team_projects.my_walking_pet.mission.Mission;
 
 import java.util.Arrays;

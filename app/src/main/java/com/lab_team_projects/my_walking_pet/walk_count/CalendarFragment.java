@@ -2,17 +2,14 @@ package com.lab_team_projects.my_walking_pet.walk_count;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentYearBinding;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
 
@@ -22,12 +19,12 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-public class YearFragment extends Fragment {
+public class CalendarFragment extends Fragment {
 
     private FragmentYearBinding binding;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public YearFragment() {
+    public CalendarFragment() {
         // Required empty public constructor
     }
 
