@@ -26,7 +26,7 @@ import androidx.navigation.Navigation;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
-import com.lab_team_projects.my_walking_pet.help.HelpActivity;
+//import com.lab_team_projects.my_walking_pet.help.HelpActivity;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
 import com.lab_team_projects.my_walking_pet.helpers.OnSwipeTouchHelper;
 import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
@@ -217,8 +217,8 @@ public class HomeFragment extends Fragment {
             clickInteractionBtn(isInteractionBtnClick);
         });
 
-        binding.ibHelp.setOnClickListener(v -> startActivity(new Intent(requireContext(), HelpActivity.class)) );
-
+        binding.ibHelp.setOnClickListener(v -> showHelpOverlay()); // 도움말을 표시하는 메소드 호출
+        //binding.helpOverlay.setOnClickListener(v -> hideHelpOverlay());
         binding.ibAR.setOnClickListener(v -> Toast.makeText(requireContext(), "AR 이동 버튼", Toast.LENGTH_SHORT).show()); // Toast -> "카메라 실행"으로 변경 필요
 
         binding.ibExercise.setOnClickListener(v -> {
@@ -297,6 +297,19 @@ public class HomeFragment extends Fragment {
 
         requireContext().bindService(intent,mServiceConnection,Context.BIND_AUTO_CREATE);
         requireContext().startService(intent);
+    }
+
+    private void showHelpOverlay() {
+       // binding.helpOverlay.setVisibility(View.VISIBLE); // 반투명한 화면을 보이도록 설정
+
+        // 각 객체의 설명을 나타내는 코드 작성
+        // 객체의 설명을 나타내는 TextView를 추가하거나 다른 방식을 사용하여 구현합니다.
+    }
+
+    private void hideHelpOverlay() {
+        //binding.helpOverlay.setVisibility(View.GONE); // 반투명한 화면을 숨기도록 설정
+
+        // 객체의 설명을 숨기는 코드 작성
     }
 
     private ServiceConnection mServiceConnection;
