@@ -66,30 +66,37 @@
 
                 <TableRow
                     android:minHeight="100dp">
-                    <Button
+                    <ImageButton
                         android:id="@+id/btnFood1"
                         android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
+                        android:background="@drawable/ic_baseline_shop_food_pink"/>
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/btnFood2"
                         android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
+                        android:background="@drawable/ic_baseline_shop_food_pink"/>
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/btnFood3"
                         android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
+                        android:background="@drawable/ic_baseline_shop_food_pink"/>
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/btnFood4"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
+                        android:background="@drawable/ic_baseline_shop_food_pink"/>
 
 
                 </TableRow>

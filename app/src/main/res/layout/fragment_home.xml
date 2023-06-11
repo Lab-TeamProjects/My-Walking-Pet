@@ -11,6 +11,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <LinearLayout
+            android:id="@+id/helpGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"
+            android:elevation="101dp"
+            android:background="@color/translucent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text=""/>
+
+        </LinearLayout>
+
+
         <ImageButton
             android:visibility="invisible"
             android:id="@+id/ibItemPreview"
@@ -18,7 +38,7 @@
             android:layout_height="30dp"
             android:src="@drawable/ic_baseline_arrow_back_pink"
             android:scaleType="fitXY"
-            android:background="@drawable/ic_baseline_arrow_back_pink"
+            android:background="@drawable/ic_baseline_left_button_no_bg"
             app:layout_constraintEnd_toStartOf="@id/tvItemName"
             app:layout_constraintTop_toTopOf="@id/tvItemName"
             app:layout_constraintBottom_toBottomOf="@id/tvItemName"/>
@@ -29,7 +49,7 @@
             android:layout_height="30dp"
             android:src="@drawable/ic_baseline_arrow_back_pink"
             android:scaleType="fitXY"
-            android:background="@drawable/ic_baseline_arrow_back_pink"
+            android:background="@drawable/ic_baseline_right_button_no_bg"
             app:layout_constraintStart_toEndOf="@id/tvItemName"
             app:layout_constraintTop_toTopOf="@id/tvItemName"
             app:layout_constraintBottom_toBottomOf="@id/tvItemName"/>
@@ -108,11 +128,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="70dp"
             android:scaleType="fitXY"
-            android:layout_width="150dp"
-            android:layout_height="200dp"
-            android:src="@drawable/ic_android_black_24dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/pet_cat_3"/>
 
         <ImageView
             android:id="@+id/ivCoin"
@@ -138,8 +159,8 @@
         <ImageButton
             android:elevation="100dp"
             android:id="@+id/ibAR"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_margin="10dp"
             android:background="@drawable/bg_ib_camera_ripple"
             app:layout_constraintEnd_toEndOf="parent"
@@ -147,17 +168,18 @@
 
         <ImageButton
             android:id="@+id/ibExercise"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
+            android:background="@drawable/ic_baseline_exercise_yellow"
             app:layout_constraintEnd_toStartOf="@id/ibSetting"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageButton
             android:id="@+id/ibSetting"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:background="@drawable/bg_ib_setting_ripple"
@@ -166,8 +188,8 @@
 
         <ImageButton
             android:id="@+id/ibMission"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
@@ -179,23 +201,23 @@
 
         <ImageButton
             android:id="@+id/ibCollection"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_margin="5dp"
             android:background="@null"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_baseline_menu_book_24"
+            android:src="@drawable/ic_baseline_mission_yellow"
             app:layout_constraintStart_toEndOf="@id/ibMission"
             app:layout_constraintTop_toBottomOf="@id/tvMoney" />
 
         <ImageButton
             android:id="@+id/ibHelp"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_margin="5dp"
             android:background="@null"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_baseline_question_mark_24"
+            android:src="@drawable/ic_baseline_help_yellow"
             app:layout_constraintStart_toEndOf="@id/ibCollection"
             app:layout_constraintTop_toBottomOf="@id/tvMoney" />
 
@@ -246,46 +268,50 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ibWalkCount" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnNextPet"
             android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
             app:layout_constraintStart_toEndOf="@id/tvPetName"
             app:layout_constraintTop_toTopOf="@id/tvPetName"
             app:layout_constraintBottom_toBottomOf="@id/tvPetName"
+            android:background="@drawable/ic_baseline_right_button_no_bg"
             android:text="2" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnPrevPet"
             android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginRight="5dp"
             app:layout_constraintEnd_toStartOf="@id/tvPetName"
             app:layout_constraintTop_toTopOf="@id/tvPetName"
             app:layout_constraintBottom_toBottomOf="@id/tvPetName"
+            android:background="@drawable/ic_baseline_left_button_no_bg"
             android:text="1" />
 
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <ImageButton
             android:id="@+id/fabInteraction"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginBottom="30dp"
-            android:backgroundTint="@color/dark_gray"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="20dp"
             android:text="상호작용"
             android:textAlignment="center"
+            android:background="@drawable/ic_baseline_interaction_yellow"
             app:borderWidth="0dp"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <ImageButton
             android:id="@+id/fabWater"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/dark_gray"
-            android:text="물"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:textAlignment="center"
             android:visibility="invisible"
+            android:background="@drawable/ic_baseline_water_yellow"
             app:borderWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintCircle="@id/fabInteraction"
@@ -293,14 +319,13 @@
             app:layout_constraintCircleRadius="100dp"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <ImageButton
             android:id="@+id/fabFood"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/dark_gray"
-            android:text="밥"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:textAlignment="center"
             android:visibility="invisible"
+            android:background="@drawable/ic_baseline_food_yellow"
             app:borderWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintCircle="@id/fabInteraction"
@@ -308,12 +333,11 @@
             app:layout_constraintCircleRadius="100dp"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <ImageButton
             android:id="@+id/fabWash"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/dark_gray"
-            android:text="씻기"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="@drawable/ic_baseline_wash_yellow"
             android:textAlignment="center"
             android:visibility="invisible"
             app:borderWidth="0dp"
@@ -322,9 +346,8 @@
             app:layout_constraintCircleAngle="110"
             app:layout_constraintCircleRadius="100dp"
             app:layout_constraintStart_toStartOf="parent" />
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </FrameLayout>
