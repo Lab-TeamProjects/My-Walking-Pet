@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.lab_team_projects.my_walking_pet.adapters.FragmentPagerAdapter;
 import com.lab_team_projects.my_walking_pet.app.MainActivity;
+import com.lab_team_projects.my_walking_pet.databinding.FragmentWalkCountBinding;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +25,7 @@ public class WalkCountFragment extends Fragment {
     private final DayFragment dayFragment = new DayFragment();
     private final WeekFragment weekFragment = new WeekFragment();
     private final MonthFragment monthFragment = new MonthFragment();
-    private final CalendarFragment calendarFragment = new CalendarFragment();
+    private final CalendarFragment yearFragment = new CalendarFragment();
 
 
     public WalkCountFragment() {
@@ -47,7 +49,7 @@ public class WalkCountFragment extends Fragment {
          * 뷰페이저2, 어댑터 연동
          * */
 
-        List<Fragment> fragments = Arrays.asList(dayFragment, weekFragment, monthFragment, calendarFragment);
+        List<Fragment> fragments = Arrays.asList(dayFragment, weekFragment, monthFragment, yearFragment);
         FragmentPagerAdapter pagerAdapter = new FragmentPagerAdapter(requireActivity(), fragments);
         binding.viewPager2.setAdapter(pagerAdapter);
         binding.viewPager2.setUserInputEnabled(false);

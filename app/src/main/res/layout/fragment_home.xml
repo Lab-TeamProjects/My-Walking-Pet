@@ -32,29 +32,30 @@
 
 
         <ImageButton
+            android:layout_marginRight="10dp"
             android:visibility="invisible"
             android:id="@+id/ibItemPreview"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_baseline_arrow_back_pink"
+            android:background="@drawable/ic_icon_left"
             android:scaleType="fitXY"
-            android:background="@drawable/ic_baseline_left_button_no_bg"
             app:layout_constraintEnd_toStartOf="@id/tvItemName"
             app:layout_constraintTop_toTopOf="@id/tvItemName"
             app:layout_constraintBottom_toBottomOf="@id/tvItemName"/>
         <ImageButton
+            android:layout_marginLeft="10dp"
             android:visibility="invisible"
             android:id="@+id/ibItemNext"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_baseline_arrow_back_pink"
+            android:background="@drawable/ic_icon_right"
             android:scaleType="fitXY"
-            android:background="@drawable/ic_baseline_right_button_no_bg"
             app:layout_constraintStart_toEndOf="@id/tvItemName"
             app:layout_constraintTop_toTopOf="@id/tvItemName"
             app:layout_constraintBottom_toBottomOf="@id/tvItemName"/>
 
         <TextView
+            android:fontFamily="@font/cafe24_ssurround_bold"
             android:visibility="invisible"
             android:id="@+id/tvItemName"
             android:textSize="22sp"
@@ -78,7 +79,6 @@
             android:layout_gravity="center"
             android:indeterminate="false"
             android:max="100"
-            android:progressBackgroundTint="#FBE7C6"
             android:progressDrawable="@drawable/circle_progressbar"
             android:progressTint="#edbf41"/>
 
@@ -93,11 +93,11 @@
             android:layout_gravity="center"
             android:indeterminate="false"
             android:max="100"
-            android:progressBackgroundTint="#FBE7C6"
             android:progressDrawable="@drawable/circle_progressbar"
             android:progressTint="#418EED"/>
 
         <ProgressBar
+            android:elevation="50dp"
             android:id="@+id/pbCleanliness"
             app:layout_constraintEnd_toEndOf="@id/ibShop"
             app:layout_constraintTop_toBottomOf="@id/pet"
@@ -107,7 +107,6 @@
             android:layout_gravity="center"
             android:indeterminate="false"
             android:max="100"
-            android:progressBackgroundTint="#FBE7C6"
             android:progressDrawable="@drawable/circle_progressbar"
             android:progressTint="#ED4141"/>
 
@@ -146,6 +145,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:fontFamily="@font/cafe24_ssurround_bold"
             android:id="@+id/tvMoney"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -245,6 +245,7 @@
             app:layout_constraintVertical_bias="0.2" />
 
         <TextView
+            android:fontFamily="@font/cafe24_ssurround_bold"
             android:id="@+id/tvWalkCount"
             android:text="여기에 얼마나 걸었는지"
             android:gravity="center"
@@ -258,6 +259,7 @@
 
 
         <TextView
+            android:fontFamily="@font/cafe24_ssurround_bold"
             android:id="@+id/tvPetName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

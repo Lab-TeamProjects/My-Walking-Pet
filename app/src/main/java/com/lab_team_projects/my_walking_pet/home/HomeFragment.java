@@ -300,7 +300,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void showHelpOverlay() {
-       // binding.helpOverlay.setVisibility(View.VISIBLE); // 반투명한 화면을 보이도록 설정
+        // binding.helpOverlay.setVisibility(View.VISIBLE); // 반투명한 화면을 보이도록 설정
 
         // 각 객체의 설명을 나타내는 코드 작성
         // 객체의 설명을 나타내는 TextView를 추가하거나 다른 방식을 사용하여 구현합니다.

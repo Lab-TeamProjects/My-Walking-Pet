@@ -3,7 +3,9 @@ package com.lab_team_projects.my_walking_pet.home;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -15,6 +17,7 @@ public class CustomBarChartView extends View {
 
     private Bar backGroundBar;
     private Bar contentBar;
+    private DashedOverlay dashedOverlay;
 
     public CustomBarChartView(Context context) {
         super(context);
@@ -40,16 +43,31 @@ public class CustomBarChartView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
         backGroundBar.draw(canvas);
+
         contentBar.draw(canvas);
+
+        float width = getWidth() * 0.4f - 30.0f;
+        float height = getHeight() * 0.9f;
+        float bottom = getHeight();
+        float left = (getWidth() - width) / 2;
+        float dashTop = bottom - (int) (height);
+        float right = left + width;
+        dashedOverlay.draw(canvas, left, dashTop, right, bottom, 5f);
+
+
     }
 
-    private void customBarInit(){
-        backGroundBar = new Bar(Color.WHITE, 1);
-        contentBar = new Bar(Color.GREEN, 0);
+    private void customBarInit() {
+        backGroundBar = new Bar(Color.parseColor("#FAEBD7"), Color.parseColor("#282828")
+                , 1, true, 5f, 20f);
 
+        contentBar = new Bar(Color.parseColor("#FFCB9C"), Color.parseColor("#282828")
+                , 0, true, 5f, 11f);
+
+        dashedOverlay = new DashedOverlay(Color.parseColor("#000000"));
     }
-
 
     public void setContentBarRatio(float nowGrowth, float maxGrowth) {
         contentBar.growthRatio = nowGrowth / maxGrowth;
@@ -59,27 +77,71 @@ public class CustomBarChartView extends View {
 
     private class Bar {
         private float growthRatio;
-        private final Paint paint;
+        private final Paint fillPaint;
+        private final Paint strokePaint;
+        private final boolean drawBorder;
+        private final float strokeWidth;
+        private final float cornerRadius;
 
-        public Bar(int color, int ratio) {
+        public Bar(int fillColor, int strokeColor, float ratio, boolean drawBorder, float strokeWidth, float cornerRadius) {
             this.growthRatio = ratio;
-            this.paint = new Paint();
-            this.paint.setColor(color);
+            this.drawBorder = drawBorder;
+            this.strokeWidth = strokeWidth;
+            this.cornerRadius = cornerRadius;
+
+            this.fillPaint = new Paint();
+            this.fillPaint.setColor(fillColor);
+
+            this.strokePaint = new Paint();
+            this.strokePaint.setColor(strokeColor);
+            this.strokePaint.setStyle(Paint.Style.STROKE);
+            this.strokePaint.setStrokeWidth(strokeWidth);
         }
 
         public void draw(Canvas canvas) {
-            float width = getWidth() * 0.4f; // bar의 넓이는 커스텀 view 의 0.4배
-            float height = getHeight() * 0.9f; // bar의 높이는 커스텀 view 의 0.9배
+            float width = getWidth() * 0.4f - 0.2f;
+            float height = getHeight() * 0.9f;
 
-            float bottom = getHeight();
+            float bottom = getHeight() - strokeWidth / 2;
             float left = (getWidth() - width) / 2;
             float top = bottom - (int) (growthRatio * height);
             float right = left + width;
 
-            RectF rectF = new RectF(left, top, right, bottom);
-            canvas.drawRoundRect(rectF, 20, 20, paint);
+            if (growthRatio != 0) {
+                RectF rectF = new RectF(left, top, right, bottom);
+
+                canvas.drawRoundRect(rectF, cornerRadius, cornerRadius, fillPaint);
+
+                if (drawBorder) {
+                    canvas.drawRoundRect(rectF, cornerRadius, cornerRadius, strokePaint);
+                }
+            }
         }
 
+    }
+
+    private static class DashedOverlay {
+        private final Paint dashedPaint;
+
+        public DashedOverlay(int color) {
+            this.dashedPaint = new Paint();
+            this.dashedPaint.setColor(color);
+            this.dashedPaint.setStyle(Paint.Style.STROKE);
+            this.dashedPaint.setStrokeWidth(3);
+        }
+
+        public void draw(Canvas canvas, float left, float top, float right, float bottom, float cornerRadius) {
+            Path path = new Path();
+
+            float dashHeight = (bottom - top) * 0.1f;
+
+            for (float y = top + dashHeight; y <= bottom; y += dashHeight) {
+                path.moveTo(left, y);
+                path.lineTo(right, y);
+                canvas.drawPath(path, dashedPaint);
+                path.reset();
+            }
+        }
     }
 
 }
