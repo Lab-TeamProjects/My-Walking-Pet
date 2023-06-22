@@ -10,6 +10,10 @@ import androidx.annotation.NonNull;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.CustomResultDialogBinding;
 
+/**
+ * 결과를 화면에 보여주기 위한 커스텀 다이얼로그 클래스
+ * 다이얼로그 클래스를 상속 받음
+ */
 public class CustomResultDialog extends Dialog {
 
     private final Context context;
