@@ -26,7 +26,6 @@ import androidx.navigation.Navigation;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
-//import com.lab_team_projects.my_walking_pet.help.HelpActivity;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
 import com.lab_team_projects.my_walking_pet.helpers.OnSwipeTouchHelper;
 import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;

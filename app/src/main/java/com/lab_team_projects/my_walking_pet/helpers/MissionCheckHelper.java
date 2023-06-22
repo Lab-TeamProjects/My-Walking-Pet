@@ -8,7 +8,7 @@ import android.util.Log;
 import com.lab_team_projects.my_walking_pet.home.Item;
 
 public class MissionCheckHelper {
-    private UserPreferenceHelper userPre;
+    private final UserPreferenceHelper userPre;
 
     public MissionCheckHelper(Context context) {
         this.userPre = new UserPreferenceHelper(context, "user_active");

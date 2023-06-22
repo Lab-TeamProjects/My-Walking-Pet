@@ -1,15 +1,12 @@
 package com.lab_team_projects.my_walking_pet.walk_count;
 
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.listener.ChartTouchListener;
-
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -18,11 +15,12 @@ import java.util.stream.IntStream;
 
 public class MyChartGestureListener implements OnChartGestureListener {
 
-    private List<Walk> walks;
-    private BarChart chart;
+    private final List<Walk> walks;
+    private final BarChart chart;
     private int count;
-    private TextView walkCount, weekDate;
-    private DateTimeFormatter format =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final TextView walkCount;
+    private final TextView weekDate;
+    private final DateTimeFormatter format =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
     public MyChartGestureListener(List<Walk> walkList, BarChart barChart, TextView tvWalkCount, TextView tvWeekDate) {

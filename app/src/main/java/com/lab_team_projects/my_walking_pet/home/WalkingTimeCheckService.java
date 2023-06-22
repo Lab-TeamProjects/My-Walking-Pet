@@ -1,6 +1,5 @@
 package com.lab_team_projects.my_walking_pet.home;
 
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -22,7 +21,6 @@ import com.lab_team_projects.my_walking_pet.walk_count.Walk;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 public class WalkingTimeCheckService extends Service implements SensorEventListener {
 

@@ -23,7 +23,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ServerConnectionHelper {
-    private MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private String serverUrl = "http://203.232.193.164:5000/"; // 서버 기본 url
 

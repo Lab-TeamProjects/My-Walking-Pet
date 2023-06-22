@@ -25,8 +25,8 @@ import com.bumptech.glide.Glide;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.app.MainActivity;
-import com.lab_team_projects.my_walking_pet.helpers.ServerConnectionHelper;
 import com.lab_team_projects.my_walking_pet.databinding.ActivityUserInfoEntryBinding;
+import com.lab_team_projects.my_walking_pet.helpers.ServerConnectionHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;

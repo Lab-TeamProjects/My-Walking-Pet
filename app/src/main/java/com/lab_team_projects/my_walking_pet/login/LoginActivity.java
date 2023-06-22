@@ -20,9 +20,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
-import com.lab_team_projects.my_walking_pet.helpers.ServerConnectionHelper;
 import com.lab_team_projects.my_walking_pet.databinding.ActivityLoginBinding;
 import com.lab_team_projects.my_walking_pet.helpers.PermissionsCheckHelper;
+import com.lab_team_projects.my_walking_pet.helpers.ServerConnectionHelper;
 import com.lab_team_projects.my_walking_pet.home.Animal;
 
 import org.json.JSONException;
@@ -145,8 +145,8 @@ public class LoginActivity extends AppCompatActivity {
                             catch (IOException e) { Log.e("IOException", "btnLogin", e); }
                         } else { Log.e("response failed : ", "btnLogin"); }
                     }));
-                };
-            }
+                }
+                                            }
         );
 
         binding.tvFindPW.setOnClickListener(new View.OnClickListener() { // 비밀번호 찾기

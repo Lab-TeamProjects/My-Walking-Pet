@@ -14,6 +14,7 @@ public class Animal {
     private Integer liking;    // 이게 기분인가????
     private String brood;
     private float maxGrowth;
+
     public enum Feelings {
         HAPPY,
         NORMAL,
@@ -36,6 +37,11 @@ public class Animal {
         this.maxGrowth = 3000 + (3000 * 0.3f * this.level);
     }
 
+    /**
+     * 사용자가 걷게되면 리스너가 동작하고 onCall() 메서드를 호출합니다.
+     * 아래는 리스너 관련 메서드입니다.
+     */
+
     public interface GrowthCallback {
         void onCall();
     }
@@ -48,22 +54,24 @@ public class Animal {
         return growthCallback;
     }
 
-    private int levelUp() {
-        //growth 수치를 확인해 level을 증가시키는 함수
-        return 0;
-    }
+    /**
+     * 사용자가 걸을 때 성장치가 얼만큼 증가할지 판단하는 메서드입니다.
+     *
+     * @return 현재 배고픔, 목마름, 청결의 수치의 평균을 반환합니다.
+     */
 
     public float getStateAverage() {
         //clean, hunger, liking 각각의 수치를 비교해서 현재 상태를 반환하는 함수
         return (clean + hunger + thirsty) / 3.0f;
     }
 
-    public void useItem(ItemDetail itemDetail) {
-        //아이템을 사용했을 때, 어떤 아이템인지 판별 후 해당 수치를 변경시키는 함수
+    /**
+     * 인벤토리에서 아이템을 사용하려고 할 때 동물에게 적용하는 메서드입니다.
+     *
+     * @param itemDetail 사용하는 아이템의 자세한 정보를 갖고 있는 객체
+     */
 
-        /*
-        * 그 아이템의 효과별로 사용
-        * */
+    public void useItem(ItemDetail itemDetail) {
         for (int i = 0; i < itemDetail.getEffects().size(); i++) {
             String effect = itemDetail.getEffects().get(i);
             int value = itemDetail.getValues().get(i);
@@ -80,6 +88,14 @@ public class Animal {
         }
     }
 
+    /**
+     * 아이템을 사용할 때 이전 값에 새로운 값을 더합니다.
+     *
+     * @param originalValue 원래 동물이 갖고 있던 수치
+     * @param addedValue    사용하는 아이템의 수치
+     * @return 더한 값을 반환합니다.
+     */
+
     private int adjustValue(int originalValue, int addedValue) {
         int value = originalValue + addedValue;
         if (value > 100) {
@@ -88,6 +104,11 @@ public class Animal {
             value = 0;
         }
         return value;
+    }
+
+    private int levelUp() {
+        //growth 수치를 확인해 level을 증가시키는 함수
+        return 0;
     }
 
     public Integer getThirsty() {

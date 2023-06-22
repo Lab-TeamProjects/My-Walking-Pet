@@ -27,13 +27,13 @@ public class CircularProgressBar extends View{
     private Paint outlinePaint;
     private Paint innerOutlinePaint;
 
-    private Path path = new Path();
+    private final Path path = new Path();
 
 
     private float progress;
-    private float strokeWidth = 33.0f;
-    private float outlineWidth = 4.5f;
-    private float innerOutlineWidth = 4.5f;
+    private final float strokeWidth = 33.0f;
+    private final float outlineWidth = 4.5f;
+    private final float innerOutlineWidth = 4.5f;
 
     private int progressColor;
     private int backgroundColor;

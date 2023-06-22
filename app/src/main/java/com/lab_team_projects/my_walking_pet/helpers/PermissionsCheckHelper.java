@@ -18,10 +18,10 @@ import java.util.List;
 
 public class PermissionsCheckHelper {
 
-    private Context context;
-    private Activity activity;
+    private final Context context;
+    private final Activity activity;
 
-    private String[] permissions = {
+    private final String[] permissions = {
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,

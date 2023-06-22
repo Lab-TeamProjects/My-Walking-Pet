@@ -15,7 +15,7 @@ import java.io.IOException;
 public class CustomEggDialog extends Dialog {
 
     private CustomEggDialogBinding binding;
-    private Context context;
+    private final Context context;
 
     private ItemPurchaseListener itemPurchaseListener;    // 구매 했다고 단방향으로 알려주는 리스너 인터페이스
 

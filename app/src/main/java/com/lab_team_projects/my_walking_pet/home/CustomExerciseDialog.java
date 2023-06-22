@@ -18,7 +18,7 @@ public class CustomExerciseDialog extends Dialog {
     private CustomExercisingDialogBinding exercisingBinding;
     private final Context context;
     int selected = 30;
-    private MyBinder myBinder;
+    private final MyBinder myBinder;
 
     private final boolean isExercising;
     private OnExerciseListener onExerciseListener;

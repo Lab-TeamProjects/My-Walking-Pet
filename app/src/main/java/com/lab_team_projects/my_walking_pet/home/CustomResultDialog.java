@@ -12,7 +12,7 @@ import com.lab_team_projects.my_walking_pet.databinding.CustomResultDialogBindin
 
 public class CustomResultDialog extends Dialog {
 
-    private Context context;
+    private final Context context;
     private CustomResultDialogBinding binding;
     public CustomResultDialog(@NonNull Context context) {
         super(context);

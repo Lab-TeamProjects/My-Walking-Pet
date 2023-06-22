@@ -19,13 +19,13 @@ import java.util.List;
 import java.util.Locale;
 
 public class InventoryHelper {
-    private User user = GameManager.getInstance().getUser();
+    private final User user = GameManager.getInstance().getUser();
 
     private Item.ItemType itemType = Item.ItemType.DRINK;
-    private Context context;
+    private final Context context;
 
     private final List<ItemDetail> detailsList;    // 파싱한 아이템 정보 리스트
-    private List<Item> items = new ArrayList<>(); // 현재 카테고리 아이템 리스트
+    private final List<Item> items = new ArrayList<>(); // 현재 카테고리 아이템 리스트
     private int currentItemIndex;
     
     private ItemUsingListener itemUsingListener = null;

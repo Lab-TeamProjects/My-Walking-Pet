@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemCodeParseHelper {
-    private List<ItemDetail> itemDetailList = new ArrayList<>();
+    private final List<ItemDetail> itemDetailList = new ArrayList<>();
 
     public List<ItemDetail> getItemDetailsList() {
         return itemDetailList;

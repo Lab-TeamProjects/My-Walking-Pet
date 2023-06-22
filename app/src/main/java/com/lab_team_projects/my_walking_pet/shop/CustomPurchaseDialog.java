@@ -20,11 +20,13 @@ import java.io.IOException;
 
 public class CustomPurchaseDialog extends Dialog {
 
-    private InventoryHelper inventoryHelper;
-    private int itemId, count, price;
+    private final InventoryHelper inventoryHelper;
+    private final int itemId;
+    private int count;
+    private int price;
     private CustomPurchaseDialogBinding binding;
-    private Context context;
-    private ItemDetail itemDetail;
+    private final Context context;
+    private final ItemDetail itemDetail;
 
     private ItemPurchaseListener itemPurchaseListener;    // 구매 했다고 단방향으로 알려주는 리스너 인터페이스
 

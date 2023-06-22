@@ -16,8 +16,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.lab_team_projects.my_walking_pet.helpers.ServerConnectionHelper;
 import com.lab_team_projects.my_walking_pet.databinding.ActivitySignUpBinding;
+import com.lab_team_projects.my_walking_pet.helpers.ServerConnectionHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,14 +57,10 @@ public class SignUpActivity extends AppCompatActivity {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             // EditText 입력값이 변경될 때마다 모든 필드의 입력 여부를 검사하여 회원가입 버튼을 활성화 또는 비활성화함
-            if (!binding.etEmail.getText().toString().isEmpty()
+            // 하나 이상의 필드가 비어있다면 회원가입 버튼 비활성화
+            binding.btnSignUp.setEnabled(!binding.etEmail.getText().toString().isEmpty()
                     && !binding.etPassWord.getText().toString().isEmpty()
-                    && !binding.etPassWordCheck.getText().toString().isEmpty()
-            ) {
-                binding.btnSignUp.setEnabled(true); // 모든 필드가 채워졌다면 회원가입 버튼 활성화
-            } else {
-                binding.btnSignUp.setEnabled(false); // 하나 이상의 필드가 비어있다면 회원가입 버튼 비활성화
-            }
+                    && !binding.etPassWordCheck.getText().toString().isEmpty()); // 모든 필드가 채워졌다면 회원가입 버튼 활성화
         }
 
         @Override

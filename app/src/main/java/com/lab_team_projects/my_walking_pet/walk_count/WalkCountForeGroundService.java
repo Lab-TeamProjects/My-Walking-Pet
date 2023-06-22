@@ -194,11 +194,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                 isFirstRun = true;
             } else {
                 int increaseValue = (int) event.values[0] - lastStep;
-                if (lastUpdateVelocityKmH > 5.0) {
-                    step(increaseValue, true);
-                } else {
-                    step(increaseValue, false);
-                }
+                step(increaseValue, lastUpdateVelocityKmH > 5.0);
                 userMoneyUpdate(increaseValue);
                 lastStep = (int) event.values[0];
             }
@@ -329,7 +325,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
             this.gm = gm;
             this.walkDate = sdf.parse(gm.getWalk().getDate());
             this.context = context;
-        };
+        }
 
         @Override
         protected Integer doInBackground(Integer... values) {

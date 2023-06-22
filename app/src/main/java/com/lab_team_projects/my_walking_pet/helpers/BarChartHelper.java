@@ -2,8 +2,6 @@ package com.lab_team_projects.my_walking_pet.helpers;
 
 import static com.github.mikephil.charting.utils.ColorTemplate.rgb;
 
-import android.widget.TextView;
-
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
