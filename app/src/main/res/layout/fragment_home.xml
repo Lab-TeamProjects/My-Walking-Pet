@@ -68,47 +68,41 @@
             android:gravity="center"
             android:text="아이템 이름 x 개수"/>
 
-        <ProgressBar
-            android:id="@+id/pbHunger"
+        <com.lab_team_projects.my_walking_pet.home.CircularProgressBar
             app:layout_constraintEnd_toEndOf="@id/pbCleanliness"
             app:layout_constraintBottom_toTopOf="@id/pbThirst"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_marginBottom="20dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
             android:layout_gravity="center"
-            android:indeterminate="false"
-            android:max="100"
-            android:progressDrawable="@drawable/circle_progressbar"
-            android:progressTint="#edbf41"/>
+            android:layout_marginBottom="20dp"
+            android:id="@+id/pbHunger"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:progressColor="#FAC87D"
+            app:backgroundColor="#FBE7C6"
+            />
 
-        <ProgressBar
-            android:id="@+id/pbThirst"
+        <com.lab_team_projects.my_walking_pet.home.CircularProgressBar
             app:layout_constraintEnd_toEndOf="@id/pbCleanliness"
             app:layout_constraintBottom_toTopOf="@id/pbCleanliness"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="50dp"
-            android:layout_marginBottom="20dp"
-            android:layout_height="50dp"
             android:layout_gravity="center"
-            android:indeterminate="false"
-            android:max="100"
-            android:progressDrawable="@drawable/circle_progressbar"
-            android:progressTint="#418EED"/>
+            android:layout_marginBottom="20dp"
+            android:id="@+id/pbThirst"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:progressColor="#418EED"
+            app:backgroundColor="#FBE7C6"
+            />
 
-        <ProgressBar
-            android:elevation="50dp"
-            android:id="@+id/pbCleanliness"
+        <com.lab_team_projects.my_walking_pet.home.CircularProgressBar
+            android:layout_marginTop="45dp"
             app:layout_constraintEnd_toEndOf="@id/ibShop"
             app:layout_constraintTop_toBottomOf="@id/pet"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:id="@+id/pbCleanliness"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:progressColor="#FF4646"
+            app:backgroundColor="#FBE7C6"
             android:layout_gravity="center"
-            android:indeterminate="false"
-            android:max="100"
-            android:progressDrawable="@drawable/circle_progressbar"
-            android:progressTint="#ED4141"/>
+            />
 
         <com.lab_team_projects.my_walking_pet.home.CustomBarChartView
             android:id="@+id/customBarChartView"
@@ -127,8 +121,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="70dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="90dp"
             android:scaleType="fitXY"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -187,15 +181,15 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
+
             android:id="@+id/ibMission"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
-            android:background="@null"
+            android:background="@drawable/ic_baseline_mission_yellow1"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_baseline_lightbulb_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvMoney" />
 
