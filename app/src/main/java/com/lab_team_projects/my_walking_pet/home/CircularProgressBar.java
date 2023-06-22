@@ -16,33 +16,74 @@ import androidx.annotation.Nullable;
 
 import com.lab_team_projects.my_walking_pet.R;
 
+/**
+ * 원형 프로그래스바 커스텀 뷰를 생성할 수 있는 클래스입니다.
+ * 자바 스윙을 기반으로 제작되었으며 안드로이드 XML에서 사용가능합니다.
+ */
 public class CircularProgressBar extends View{
 
+    /**
+     * 프로그레스바의 몸통 리엑트
+     */
     private RectF rectF;
+    /**
+     * 프로그레스바 외곽선 리엑트
+     */
     private RectF outlineRectF;  // 외곽선용 RectF를 생성합니다.
+    /**
+     * 프로그레스바의 내곽선 리엑트
+     */
     private RectF innerRectF;
 
-    private Paint backgroundPaint;
-    private Paint foregroundPaint;
-    private Paint outlinePaint;
+    /**
+     * 프로그레스바 배경
+     */
+    private Paint backgroundPaint;/**
+     * 프로그레스바 내용
+     */
+    private Paint foregroundPaint;/**
+     * 프로그레스바 외곽선
+     */
+    private Paint outlinePaint;/**
+     * 프로그레스바 내곽선
+     */
     private Paint innerOutlinePaint;
 
-    private final Path path = new Path();
-
-
+    /**
+     * 프로그레스바 수치
+     */
     private float progress;
-    private final float strokeWidth = 33.0f;
-    private final float outlineWidth = 4.5f;
+    /**
+     * 프로그레스바 두께
+     */
+    private final float strokeWidth = 33.0f;/**
+     * 외곽선 두께
+     */
+    private final float outlineWidth = 4.5f;/**
+     * 내곽선 두께
+     */
     private final float innerOutlineWidth = 4.5f;
-
+    /**
+     * 프로그레스바 색상
+     */
     private int progressColor;
+    /**
+     * 프로그레스바 배경 색상
+     */
     private int backgroundColor;
 
+    /**
+     * 프로그레스바 수치를 설정하고 invalidate() 메서드를 호출합니다.
+     */
     public void setProgress(float progress) {
         this.progress = progress;
         invalidate();
     }
 
+    /**
+     * 각각의 RectF와 Pint를 화면에 그립니다.
+     * @param canvas
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -55,6 +96,13 @@ public class CircularProgressBar extends View{
         canvas.drawOval(innerRectF, innerOutlinePaint);
     }
 
+    /**
+     * xml에서 width, height로 설정했던 크기에 맞춰서 실제 크기도 변경합니다.
+     * @param w
+     * @param h
+     * @param oldw
+     * @param oldh
+     */
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -86,7 +134,10 @@ public class CircularProgressBar extends View{
     }
 
 
-
+    /**
+     * 원형 프로그래스바 생성자
+     * @param context 안드로이드 context
+     */
     public CircularProgressBar(Context context) {
         super(context);
         init(context, null);
@@ -107,6 +158,11 @@ public class CircularProgressBar extends View{
         init(context, attrs);
     }
 
+    /**
+     * 프로그래스바를 스윙으로 만듭니다.
+     * @param context
+     * @param attrs xml에서 설정한 width, hegiht를 배열로 가져옵니다.
+     */
     private void init(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CircularProgressBar, 0, 0);
 

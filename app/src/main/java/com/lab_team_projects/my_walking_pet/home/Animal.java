@@ -1,18 +1,61 @@
 package com.lab_team_projects.my_walking_pet.home;
 
+/**
+ * 동물 클래스
+ * 사용자가 동물을 키울 수 있도록 동물에 대한 객체입니다.
+ */
 public class Animal {
+    /**
+     * 동물 이름
+     */
     private String name;
+    /**
+     * 원래 주인 UID
+     */
     private String originalOwnerUid;
+    /**
+     * 현재 주인 UID
+     */
     private String currentOwnerUid;
+    /**
+     * 가출 상태 여부
+     */
     private Integer isRunAway;
+    /**
+     * 현재 레벨
+     */
     private Integer level;
+    /**
+     * 청결도
+     */
     private Integer clean;
+    /**
+     * 허기
+     */
     private Integer hunger;
+    /**
+     * 성장치
+     */
     private float growth;
+    /**
+     * 성장치 콜백 리스너
+     */
     private GrowthCallback growthCallback;
+    /**
+     * 갈증
+     */
     private Integer thirsty;
+    /**
+     * 호감도
+     */
     private Integer liking;    // 이게 기분인가????
+    /**
+     * 동물 종족
+     */
     private String brood;
+    /**
+     * 최대 성장치
+     */
     private float maxGrowth;
 
     public enum Feelings {
@@ -106,6 +149,10 @@ public class Animal {
         return value;
     }
 
+    /**
+     * 성장치 조건을 확인하여 동물의 레벨을 증가시킵니다.
+     * @return 레벨업 여부를 반환
+     */
     private int levelUp() {
         //growth 수치를 확인해 level을 증가시키는 함수
         return 0;
