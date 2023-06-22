@@ -34,16 +34,32 @@ import com.lab_team_projects.my_walking_pet.walk_count.WalkViewModel;
 
 import java.io.IOException;
 
+/**
+ * 홈 화면에 해당하는 프래그먼트 클래스
+ * 프래그먼트를 상속 받음
+ */
 public class HomeFragment extends Fragment {
 
+    /**
+     * 포그라운드 서비스와 통신하기 위한 바인더 클래스
+     */
     private MyBinder svc;
 
     private FragmentHomeBinding binding;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener;
 
+    /**
+     * 게임 매니저
+     */
     private final GameManager gm = GameManager.getInstance();
+    /**
+     * 현재 접속된 유저
+     */
     private final User user = gm.getUser();
+    /**
+     * 현재 선택된 동물
+     */
     private final Animal nowPet = user.getAnimalList().get(user.getNowSelectedPet());
 
     private boolean isInteractionBtnClick = false;
@@ -55,8 +71,13 @@ public class HomeFragment extends Fragment {
 
     public HomeFragment() { }
 
+    /**
+     * 홈 프래그먼트 화면이 생성되면 실행되는 메서드
+     * 동물을 쓰다듬는 상호작용, 사용자 인벤토리, 동물 성장치 불러오기 등등 정의되어있습니다.
+     */
     @SuppressLint("ClickableViewAccessibility")
     @Override
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
@@ -134,6 +155,11 @@ public class HomeFragment extends Fragment {
         binding.customBarChartView.setContentBarRatio(nowPet.getGrowth(),nowPet.getMaxGrowth());
     }
 
+    /**
+     * 사용자 인벤토리의 리스너를 정의합니다.
+     * @throws IOException
+     */
+
     @SuppressLint("ClickableViewAccessibility")
     private void initInventory() throws IOException {
         inventoryHelper = new InventoryHelper(requireContext());
@@ -150,6 +176,9 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     * 현재 선택된 동물의 성장치, 수치를 홈화면에 그릴 수 있도록 수치를 가져옵니다.
+     */
     private void initPetGrower() {
         User user = GameManager.getInstance().getUser();
         setPetRate(user.getAnimalList().get(user.getNowSelectedPet()));
@@ -186,6 +215,10 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     * 성장치들의 프로그래스바를 설정합니다.
+     * @param currentPet
+     */
     // 성장 수치들(목마름,청결....) 프로그래스바 세팅
     private void setPetRate(Animal currentPet) {
         binding.tvPetName.setText(currentPet.getName());
@@ -194,6 +227,11 @@ public class HomeFragment extends Fragment {
         binding.pbCleanliness.setProgress(currentPet.getClean());
     }
 
+    /**
+     * 상호작용 버튼을 동작할 수 있도록 설정합니다.
+     * @param itemType
+     * @param inventoryHelper
+     */
     // 플로팅 액션버튼 설정
     private void setFabOnClickListener(Item.ItemType itemType, InventoryHelper inventoryHelper) {
         binding.tvItemName.setVisibility(View.VISIBLE);
@@ -203,6 +241,9 @@ public class HomeFragment extends Fragment {
         binding.tvItemName.setText(inventoryHelper.setItemName());
     }
 
+    /**
+     * 홈 화면에서 보이는 각종 버튼들의 리스너를 설정합니다.
+     */
     // 각종 리스너 바인딩
     private void bindingListener() {
         binding.ibShop.setOnClickListener(v -> navigateToFragment(v, R.id.shopFragment));
@@ -233,6 +274,11 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /**
+     * 액티비티 위에서 프래그먼트간의 이동할 떄 실행됩니다.
+     * @param view
+     * @param fragmentId
+     */
     private void navigateToFragment(View view, @IdRes int fragmentId) {
         Navigation.findNavController(view).navigate(fragmentId, null);
     }
@@ -268,6 +314,10 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 
+    /**
+     * 포그라운드 서비스에서 동작하는 바인더 클래스를 정의합니다.
+     * @param selected
+     */
     public void serviceCreateAndBind(int selected) {
         svc = null;
         Intent intent = new Intent(getContext(), WalkingTimeCheckService.class);

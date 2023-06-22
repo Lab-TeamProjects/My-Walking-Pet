@@ -12,15 +12,36 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.CustomExerciseDialogBinding;
 import com.lab_team_projects.my_walking_pet.databinding.CustomExercisingDialogBinding;
 
+/**
+ * 운동 설계 커스텀 다이얼로그 클래스
+ * 다이얼로그 클래스를 상속 받음
+ */
 public class CustomExerciseDialog extends Dialog {
 
+    /**
+     * 운동 설계 다이얼로그 바인딩 클래스
+     * 안드로이드 xml 에서 id로 직접 접근 가능합니다.
+     */
     private CustomExerciseDialogBinding exerciseBinding;
+    /**
+     * 설계된 운동의 현황 다이얼로그
+     */
     private CustomExercisingDialogBinding exercisingBinding;
     private final Context context;
+    /**
+     * 운동하고자 하는 시간
+     * 초기값 30
+     */
     int selected = 30;
+    /**
+     * 포그라운드 서비스 스레드와 통신하기 위한 커스텀 바인더 클래스
+     */
     private final MyBinder myBinder;
 
     private final boolean isExercising;
+    /**
+     * 운동 리스너
+     */
     private OnExerciseListener onExerciseListener;
 
     public void setOnExerciseListener(OnExerciseListener onExerciseListener) {
@@ -40,6 +61,10 @@ public class CustomExerciseDialog extends Dialog {
     }
 
 
+    /**
+     * 다이얼로그가 생성되면 동작하는 메서드
+     * 사용자는 시간을 설정할 수 있고 설정한 시간으로 인터벌 운동을 할 수 있습니다.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +128,9 @@ public class CustomExerciseDialog extends Dialog {
         }
     }
 
+    /**
+     * 스마트폰의 화면 크기 비율에 맞춰서 다이얼로그 창의 크기도 변경하는 메서드
+     */
     private void setWindowPixels() {
         // 스마트폰의 화면 크기를 가져옴
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();

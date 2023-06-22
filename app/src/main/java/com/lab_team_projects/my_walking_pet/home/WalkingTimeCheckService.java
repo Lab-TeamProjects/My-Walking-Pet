@@ -22,10 +22,22 @@ import com.lab_team_projects.my_walking_pet.walk_count.Walk;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * 사용자의 운동 패턴을 설계하기 위한 서비스 클래스
+ */
 public class WalkingTimeCheckService extends Service implements SensorEventListener {
 
+    /**
+     * 바인더 클래스
+     */
     private final MyBinder binder = new MyBinder();
+    /**
+     * 사용자가 설정한 시간
+     */
     private int time;
+    /**
+     * TTS 헬퍼 클래스
+     */
     private TTSHelper thr;
     private GameManager gm;
     private User user;
@@ -39,6 +51,10 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
 
     public WalkingTimeCheckService(){}
 
+    /**
+     * 시작 버튼을 누르면 실행되는 메서드
+     * 운동 패턴을 정의합니다.
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         this.time = intent.getIntExtra("time",0);
@@ -116,6 +132,9 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
         }
     }
 
+    /**
+     * 운동시 걸음 수를 저장하는 메서드입니다.
+     */
     private void step(int step, boolean isRunning) {
         if (isRunning) {
             walk.setExerciseRunCount(walk.getExerciseRunCount() + step);

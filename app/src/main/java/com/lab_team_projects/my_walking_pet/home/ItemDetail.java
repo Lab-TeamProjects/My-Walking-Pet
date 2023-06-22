@@ -2,6 +2,10 @@ package com.lab_team_projects.my_walking_pet.home;
 
 import java.util.List;
 
+/**
+ * 실제 앱에서 사용되는 아이템의 자세한 정보를 갖고있는 클래스
+ * 아이템 코드와 효과 등등이 정의됩니다.
+ */
 public class ItemDetail {
     private int code;
     private String name;

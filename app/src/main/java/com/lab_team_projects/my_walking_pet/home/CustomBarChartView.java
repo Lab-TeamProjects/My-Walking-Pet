@@ -11,12 +11,28 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+/**
+ * 동물 설장치 바차트 클래스 시각적으로 볼 수 있도록 자바 스윙으로 구현되었습니다.
+ */
 public class CustomBarChartView extends View {
 
+    /**
+     * 바차트 배경 클래스
+     */
     private Bar backGroundBar;
+    /**
+     * 바차트 내용 클래스
+     */
     private Bar contentBar;
+    /**
+     * 바차트의 눈금 클래스
+     */
     private DashedOverlay dashedOverlay;
 
+    /**
+     * 커스텀 바차트 뷰 생성자
+     * @param context 안드로이드 context
+     */
     public CustomBarChartView(Context context) {
         super(context);
         customBarInit();
@@ -32,12 +48,19 @@ public class CustomBarChartView extends View {
         customBarInit();
     }
 
+    /**
+     * 화면 크기에 맞춰서 바차트의 크기도 변경됩니다.
+     */
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         customBarInit();
     }
 
+    /**
+     * 화면에 바차트를 표시합니다.
+     * @param canvas 자바 스윙 canvas
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -57,6 +80,9 @@ public class CustomBarChartView extends View {
 
     }
 
+    /**
+     * 바차트 클래스를 자바 스윙으로 구현하여 설정합니다.
+     */
     private void customBarInit() {
         backGroundBar = new Bar(Color.parseColor("#FAEBD7"), Color.parseColor("#282828")
                 , 1, true, 5f, 20f);
@@ -67,12 +93,21 @@ public class CustomBarChartView extends View {
         dashedOverlay = new DashedOverlay(Color.parseColor("#000000"));
     }
 
+    /**
+     * 동물 성장치가 변경되면 바차트의 내용도 변경됩니다.
+     * 퍼센트 비율로 바차트가 상승합니다.
+     * @param nowGrowth 동물의 현재 성장치
+     * @param maxGrowth 동물의 현재 레벨의 최대 성장치
+     */
     public void setContentBarRatio(float nowGrowth, float maxGrowth) {
         contentBar.growthRatio = nowGrowth / maxGrowth;
         invalidate(); // 바의 성장 정도가 변경되었으므로 다시 그리기 위해 invalidate() 호출
     }
 
 
+    /**
+     * 커스텀 뷰에 구현되는 바차트 클래스
+     */
     private class Bar {
         private float growthRatio;
         private final Paint fillPaint;
@@ -118,6 +153,9 @@ public class CustomBarChartView extends View {
 
     }
 
+    /**
+     * 빗금을 구현한 클래스
+     */
     private static class DashedOverlay {
         private final Paint dashedPaint;
 
