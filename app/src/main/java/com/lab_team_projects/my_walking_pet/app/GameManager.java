@@ -6,6 +6,11 @@ import android.content.SharedPreferences;
 import com.lab_team_projects.my_walking_pet.login.User;
 import com.lab_team_projects.my_walking_pet.walk_count.Walk;
 
+/**
+ * 앱의 매니저 역할을 하는 클래스
+ * 싱글톤 객체로 구현되어 있으며
+ * 유저 정보와 일일 걸음 정보에 해당하는 객체를 멤버 변수로 갖고 있습니다.
+ */
 public class GameManager {
     private static GameManager instance;
     private final User user = new User();
@@ -19,6 +24,10 @@ public class GameManager {
         return instance;
     }
 
+    /**
+     * 서버와 동기화 하여 유저 정보를 앱에 설정합니다.
+     * @param context
+     */
     public void loadUser(Context context) {
         SharedPreferences pref = context.getSharedPreferences("login", Context.MODE_PRIVATE);
         /*

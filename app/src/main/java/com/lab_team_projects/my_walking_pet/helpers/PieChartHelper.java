@@ -19,6 +19,9 @@ import com.lab_team_projects.my_walking_pet.walk_count.Walk;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * 사용자의 일일 걸음 수를 파이차트를 이용한 시각적 표현을 위한 클래스
+ */
 public class PieChartHelper {
 
     private final PieChart pieChart;
@@ -29,6 +32,9 @@ public class PieChartHelper {
         initLayout();
     }
 
+    /**
+     * 파이 차트의 ui 레이아웃을 설정합니다.
+     */
     public void initLayout() {
         pieChart.setDrawHoleEnabled(true);
         pieChart.setHoleColor(Color.TRANSPARENT);
@@ -42,6 +48,10 @@ public class PieChartHelper {
         pieChart.setHighlightPerTapEnabled(false);
     }
 
+    /**
+     * 일일 걸음 클래스에 해당하는 정보를 파이차트 데이터로 설정합니다.
+     * @param walk 일일 걸음 정볼를 받습니다.
+     */
     public void setData(Walk walk) {
         ArrayList<PieEntry> entries = new ArrayList<>();
 
@@ -66,6 +76,10 @@ public class PieChartHelper {
         pieChart.invalidate();
     }
 
+    /**
+     * 일일 목표와 현재 걸음 수를 두 줄로 표현하기 위한 메서드입니다.
+     * spannable string 클래스를 이용합니다.
+     */
     private void setPieChartCenterText(int count, int goal) {
         String centerText = String.format(Locale.getDefault()
                 ,"목표 걸음 수 %d\n%d", goal, count);

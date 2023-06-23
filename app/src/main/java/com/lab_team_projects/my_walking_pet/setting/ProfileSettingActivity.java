@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.lab_team_projects.my_walking_pet.databinding.ActivityProfileSettingBinding;
 
+/**
+ * 프로필 설정 액티비티
+ */
 public class ProfileSettingActivity extends AppCompatActivity {
 
     ActivityProfileSettingBinding binding;

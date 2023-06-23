@@ -18,6 +18,12 @@ import com.lab_team_projects.my_walking_pet.login.User;
 
 import java.io.IOException;
 
+/**
+ * 상점에서 아이템을 구매하기 위한 다이얼로그 클래스
+ * 동물의 밥, 청결 도구 등등을 구매할 수 있습니다.
+ *
+ * 사용자가 아이템을 구매하면 리스너로 감지하여 사용자의 재화에서 금액을 차감합니다.
+ */
 public class CustomPurchaseDialog extends Dialog {
 
     private final InventoryHelper inventoryHelper;
@@ -39,6 +45,10 @@ public class CustomPurchaseDialog extends Dialog {
 
     }
 
+    /**
+     * 구매 다이얼로그 생성자
+     * 사용자가 선택한 아이템으로 다이얼로그 뷰를 세팅합니다.
+     */
     public CustomPurchaseDialog(@NonNull Context context, int id) throws IOException {
         super(context);
         this.context = context;
@@ -51,6 +61,11 @@ public class CustomPurchaseDialog extends Dialog {
         this.price = this.itemDetail.getPrice();
     }
 
+    /**
+     * 다이얼로그 뷰가 생성되면 실행되는 메서드
+     *
+     * 사용자가 아이템을 구매할 수 있는지 판단하고 구매 로직을 실행합니다.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

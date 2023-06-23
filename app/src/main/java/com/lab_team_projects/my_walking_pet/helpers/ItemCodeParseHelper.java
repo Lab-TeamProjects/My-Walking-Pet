@@ -13,6 +13,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 아이템의 코드에 해당하는 효과를 정의한 csv 파일을 파싱하여 실제 아이템 자세한 정보에 해당하는 개체 리스트에 저장합니다.
+ */
 public class ItemCodeParseHelper {
     private final List<ItemDetail> itemDetailList = new ArrayList<>();
 
@@ -20,6 +23,9 @@ public class ItemCodeParseHelper {
         return itemDetailList;
     }
 
+    /**
+     * csv를 파싱하여 리스트에 저장합니다.
+     */
     public ItemCodeParseHelper(Context context) throws IOException {
 
         /*

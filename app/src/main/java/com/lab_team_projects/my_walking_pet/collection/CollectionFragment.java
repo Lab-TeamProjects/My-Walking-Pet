@@ -17,6 +17,9 @@ import com.lab_team_projects.my_walking_pet.databinding.FragmentCollectionBindin
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 도감 프래그먼트 클래스
+ */
 public class CollectionFragment extends Fragment {
 
     private FragmentCollectionBinding binding;

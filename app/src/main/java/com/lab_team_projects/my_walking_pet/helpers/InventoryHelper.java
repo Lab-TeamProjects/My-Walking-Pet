@@ -18,20 +18,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * 사용자가 아이템을 사용하여 동물과 상호작용 할 수 있도록 하는 인벤토리 클래스
+ */
 public class InventoryHelper {
     private final User user = GameManager.getInstance().getUser();
 
     private Item.ItemType itemType = Item.ItemType.DRINK;
     private final Context context;
 
+    /**
+     * 아이템 정보에 해당하는 csv 파일을 파싱하여 자세한 아이템 정보를 저장하는 리스트
+     */
     private final List<ItemDetail> detailsList;    // 파싱한 아이템 정보 리스트
     private final List<Item> items = new ArrayList<>(); // 현재 카테고리 아이템 리스트
     private int currentItemIndex;
-    
+
+    /**
+     * 사용자가 아이템을 사용할 때 감지되는 리스너 클래스
+     */
     private ItemUsingListener itemUsingListener = null;
     public void setItemUsingListener(ItemUsingListener itemUsingListener) {
         this.itemUsingListener = itemUsingListener;
     }
+    /**
+     * 사용자가 아이템을 사용할 때 감지되는 리스너 클래스
+     */
     public interface ItemUsingListener {
         void onItemUse();
     }
@@ -42,6 +54,9 @@ public class InventoryHelper {
     * csv 파일을 파싱한 후 메모리 상에 적재해놓음
     * */
 
+    /**
+     * 인벤토리 생성자, 인벤토리를 처음 생성할 떄 json 문자열을 받아서 클래스 타입에 맞게 사용자 인벤토리에 저장합니다.
+     */
     public InventoryHelper(String json, Context context) throws IOException {
         this.context = context;
         /*
@@ -55,6 +70,9 @@ public class InventoryHelper {
         detailsList = itemCodeParseHelper.getItemDetailsList();
     }
 
+    /**
+     * 인벤토리 생성자
+     */
     public InventoryHelper (Context context) throws IOException {
         this.context = context;
         ItemCodeParseHelper itemCodeParseHelper = new ItemCodeParseHelper(context);
@@ -65,6 +83,10 @@ public class InventoryHelper {
         this.itemType = itemType;
     }
 
+    /**
+     * 상호작용 버튼을 눌렀을 때 아이템 버튼을 누르면 카테고리에 맞게 유저의 인벤토리 리스트에서 아이템을 가져옵니다.
+     * @return
+     */
     public String setItemName() {
         /*
         * 상호작용 버튼을 눌렀을 때 나오는 물, 밥, 씻기 버튼을 클릭하면
@@ -97,7 +119,9 @@ public class InventoryHelper {
         return null;
     }
 
-
+    /**
+     * 선택된 아이템에서 다음 버튼을 누르면 아이템 인덱스가 변경되고 아이템 설명 텍스트를 변경합니다.
+     */
     public String setNextItem() {
         /*
         * 현재 선택중인 아이템 에서 다음 버튼을 클릭시
@@ -123,6 +147,11 @@ public class InventoryHelper {
         return getItemName(firstItem);
     }
 
+    /**
+     * 선택된 아이템을 화면에 문자열 형태로 표현하기 위한 메서드입니다.
+     * @param item 아이템 클래스
+     * @return 아이템에 해당하는 문자열을 반환
+     */
     @NonNull
     private String getItemName(Item item) {
         if (item.getCount() > 0) {
@@ -132,6 +161,12 @@ public class InventoryHelper {
         }
     }
 
+    /**
+     * 사용자가 인벤토리에서 아이템을 사용하면 실행되는 메서드
+     * 아이템이 존재하는지 판단하고 해당 아이템의 자세한 객체를 현재 선택된 동물에 전달하여
+     * 아이템 효과대로 동물에 적용합니다.
+     * @return 아이템이 없을경우 없다는 문자열을 반환하고 아니면 선택된 아이템의 상태에 해당하는 문자열을 반환합니다.
+     */
     public String useCurrentItem() {
         if (!items.isEmpty()) {
             Item item = items.get(currentItemIndex);

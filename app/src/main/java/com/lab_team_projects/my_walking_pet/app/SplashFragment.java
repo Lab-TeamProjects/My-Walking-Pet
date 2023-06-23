@@ -14,6 +14,9 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentSplashBinding;
 import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
 
+/**
+ * 앱을 처음 실행했을 때 서버와 동기화 하는 동안 화면에 표시할 프래그먼트
+ */
 public class SplashFragment extends Fragment {
 
 
@@ -22,6 +25,9 @@ public class SplashFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * 앱을 처음 실행하면 앱 도움말 프래그먼트로 이동하고 아니면 바로 메인 액티비티로 이동합니다.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

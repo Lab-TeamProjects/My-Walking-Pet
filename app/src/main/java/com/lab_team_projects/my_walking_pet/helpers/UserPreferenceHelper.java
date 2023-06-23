@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * 간단한 데이터를 앱 내부에 저장하기 위한 클래스
+ */
 public class UserPreferenceHelper {
     /*
     * 해당 열거형의 이름은 임시로 저렇게 만들었음

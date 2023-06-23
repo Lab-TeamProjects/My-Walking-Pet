@@ -12,6 +12,10 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.SettingsActivityBinding;
 import com.lab_team_projects.my_walking_pet.walk_count.WalkCountForeGroundService;
 
+/**
+ * 사용자가 앱의 알림 설정을 조작할 수 있도록 하는 액티비티 클래스
+ * 앱의 중요 설정인 백그라운드 동작 설정이 구현됩니다.
+ */
 public class NoticeSettingActivity extends AppCompatActivity {
 
     private static final WalkCountForeGroundService service = new WalkCountForeGroundService();
@@ -36,6 +40,9 @@ public class NoticeSettingActivity extends AppCompatActivity {
         }*/
     }
 
+    /**
+     * 앱 설정 프래그먼트 클래스
+     */
     public static class SettingsFragment extends PreferenceFragmentCompat {
 
         private static final String SETTING_SENSOR_BG = "foreground_use";
@@ -79,6 +86,9 @@ public class NoticeSettingActivity extends AppCompatActivity {
             }
         };
 
+        /**
+         * 포그라운드 서비스를 시작하는 메서드
+         */
         public void startService() {
             // 서비스 시작 함수
             Intent serviceIntent;
@@ -86,6 +96,9 @@ public class NoticeSettingActivity extends AppCompatActivity {
             requireActivity().startForegroundService(serviceIntent);
         }
 
+        /**
+         * 포그라운드 서비스를 종료하는 메서드
+         */
         public void stopService() {
             // 서비스 종료 함수
             Intent serviceIntent;

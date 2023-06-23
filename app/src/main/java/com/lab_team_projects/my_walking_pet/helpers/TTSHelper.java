@@ -6,6 +6,12 @@ import android.speech.tts.TextToSpeech;
 
 import java.util.Locale;
 
+/**
+ * 걸음 패턴 설계 다이얼로그에서 사용자의 안전을 위해
+ * 현재 상태를 TTS 를 이용하여 사용자에게 알려줍니다.
+ *
+ * 구글 TextToSpeech클래스를 이용합니다.
+ */
 public class TTSHelper {
     private final String SPEAK_ID = "TTS_HELPER";    // 음성 출력 식별 아이디
     private TextToSpeech tts;

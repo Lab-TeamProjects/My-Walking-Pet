@@ -12,6 +12,10 @@ import com.lab_team_projects.my_walking_pet.databinding.CustomEggDialogBinding;
 
 import java.io.IOException;
 
+/**
+ * 동물 알 구입 다이얼로그
+ * 사용자는 해당 다이얼로그를 이용하여 동물을 기르기 위한 알을 구매할 수 있습니다.
+ */
 public class CustomEggDialog extends Dialog {
 
     private CustomEggDialogBinding binding;
@@ -33,6 +37,9 @@ public class CustomEggDialog extends Dialog {
         this.context = context;
     }
 
+    /**
+     * 사용자의 화면 크기에 비례하여 다이얼로그 창의 크기를 설정합니다.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

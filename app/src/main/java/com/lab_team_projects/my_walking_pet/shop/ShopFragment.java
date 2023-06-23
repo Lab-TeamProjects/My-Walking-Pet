@@ -18,6 +18,11 @@ import com.lab_team_projects.my_walking_pet.databinding.FragmentShopBinding;
 
 import java.io.IOException;
 
+/**
+ * 상점 프래그먼트
+ * 사용자는 상점에서 동물 육아에 필요한 아이템을 구매하고
+ * 동물을 키우기 위한 알을 구매할 수 있습니다.
+ */
 public class ShopFragment extends Fragment implements View.OnClickListener {
 
     private FragmentShopBinding binding;
@@ -42,6 +47,10 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
         return binding.getRoot();
     }
 
+    /**
+     * 상점에서 버튼을 클릭하면 아이디를 반환받아 상점 판매 아이템을 클릭했는지 알 구매 버튼을 클릭했는지
+     * 판단하여 서로 다른 다이얼로그를 화면에 표시합니다.
+     */
     @Override
     public void onClick(View v) {
         /*
@@ -93,6 +102,9 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
         binding = null;
     }
 
+    /**
+     * 상점의 버튼은 리스너로 구성되어있습니다.
+     */
     private void setBtnOnClickListener() {
         binding.ibPetEgg.setOnClickListener(this);
 

@@ -13,6 +13,9 @@ import com.lab_team_projects.my_walking_pet.collection.Collection;
 
 import java.util.List;
 
+/**
+ * 도감 프래그먼트에서 리사이클러뷰를 이용하여 동물 도감을 구현하기 위한 어댑터 클래스
+ */
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.ViewHolder> {
 
     private List<Collection> collectionList;

@@ -12,7 +12,9 @@ import com.lab_team_projects.my_walking_pet.walk_count.WalkDao;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
+/**
+ * 기기 내부 저장소 룸 데이터 베이스 클래스
+ */
 @Database(entities = {Walk.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase instance;
@@ -20,7 +22,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static final ExecutorService databaseWriteExecutor = Executors.newSingleThreadExecutor();
 
-    /*
+    /**
     * 데이터 베이스를 관리하는 클래스
     * 싱글톤 구조로 되어있음
     * 메인 액티비티가 종료되어도

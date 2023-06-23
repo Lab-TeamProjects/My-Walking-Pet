@@ -37,6 +37,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * 메인 액티비티 클래스
+ * 로그인 후 홈 프래그먼트, 상점 프래그먼트를 비롯하여 각각의 프래그먼트의 상위 객체입니다.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private PermissionsCheckHelper pch;
@@ -44,6 +48,14 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private NavController navController;
 
+    /**
+     * 액티비티가 생성되면 실행되는 메서드
+     * 앱에 접속하면 기존 걸음 객체의 날짜를 현재 날짜와 비교하여 새로운 걸음 객체를 생성할지 판단합니다.
+     * 기존 저장된 걸음 객체의 날짜가 현재 날짜보다 이전이면 생성합니다.
+     *
+     * 각 프래그먼트로 화면 이동할 수 있도록 리스너를 설정하고
+     * 동물 리스너를 설정합니다.
+     */
     @SuppressLint("BatteryLife")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,6 +224,9 @@ public class MainActivity extends AppCompatActivity {
         db.walkDao().update(walk);
     }
 
+    /**
+     * 권한 관련 메서드입니다.
+     */
     // 권한 체크 함수
     private void permissionCheck(){
         pch =  new PermissionsCheckHelper(this, this);

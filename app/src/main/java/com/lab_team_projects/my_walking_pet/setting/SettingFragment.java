@@ -17,6 +17,10 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.MainActivity;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentSettingBinding;
 
+/**
+ * 앱의 설정 프래그먼트
+ * 앱의 프로필 설정, 알림 설정 등 설정 창으로 이동할 수 있습니다.
+ */
 public class SettingFragment extends Fragment {
 
     private FragmentSettingBinding binding;

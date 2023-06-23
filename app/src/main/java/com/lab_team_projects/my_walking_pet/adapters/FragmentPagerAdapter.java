@@ -7,6 +7,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.List;
 
+/**
+ * 프래그먼트를 탭으로 설정하기 위한 어댑터
+ */
 public class FragmentPagerAdapter extends FragmentStateAdapter {
 
     private final List<Fragment> fragments;

@@ -7,6 +7,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+/**
+ * 사용자가 아이템을 사용할 때 텍스트를 드래그하여 사용할 수 있도록 터치 리스너를 구현하는 클래스
+ * 사용자는 텍스트를 클릭하고 위로 드래그하면 아이템을 사용할 수 있습니다.
+ */
 public class OnSwipeTouchHelper implements OnTouchListener {
 
     private final GestureDetector gestureDetector;
@@ -37,6 +41,10 @@ public class OnSwipeTouchHelper implements OnTouchListener {
             return true;
         }
 
+        /**
+         * 사용자가 터치한 좌표를 계산하여 방향을 판단하고 결과를 반환합니다.
+         * @return 지정한 방향대로 드래그 했는지 판단한 결과를 반환
+         */
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             boolean result = false;
