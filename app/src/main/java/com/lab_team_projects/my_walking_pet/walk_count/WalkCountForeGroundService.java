@@ -33,10 +33,24 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * 포그라운드 서비스 클래스
+ * 백그라운드에서 걸음수 감지 센서를 이용하여 사용자가 걷거나 뛸 때 걸음 수를 카운트하여
+ * 기기 내부 저장소에 저장합니다.
+ *
+ * 가속도 적분을 이용하여 사용자의 지정 시간 동안의 속도를 구하여
+ * 사용자가 걷고 있는지 뛰고 있는지 판단하여 걸음 객체의 걸음 수 관련 변수에 각각 저장합니다.
+ */
 public class WalkCountForeGroundService extends Service implements SensorEventListener {
 
+    /**
+     * 백그라운드에서 서비스가 동작할 수 있도록 하는 클래스
+     */
     public static BackgroundTask task;
     public static int value = 0;
+    /**
+     * 포그라운드 서비스가 동작하면 모바일 알림창에 앱이 동작중이라고 알려주는 클래스
+     */
     private NotificationManager notificationManager;
     private Walk walk;
     private final GameManager gm = GameManager.getInstance();
@@ -57,6 +71,10 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         // 빈 생성자
     }
 
+    /**
+     * 현재 포그라운드 서비스가 동작중인지 판단하는 메서드
+     * @return 동작을 판단하여 bool 형태로 반환
+     */
     public boolean isRunning(){
         return task != null && task.getStatus() == AsyncTask.Status.RUNNING;
     }
@@ -68,6 +86,11 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     }
 
 
+    /**
+     * 서비스가 생성되면 실행되는 메서드
+     * 가속도 센서, 걸음 카운트 센서, 자이로스코프 센서를 설정합니다.
+     * 각각의 센서 리스너를 등록하여 센서에서 신호를 감지하면 메서드를 실행합니다.
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -121,6 +144,11 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         task = null;
     }
 
+    /**
+     * 현재 선택된 펫의 진화 상태를 알립니다.
+     * 서비스가 동작중일 때 알림창은 항상 표시되며 서비스가 중지되면 알림창은 종료됩니다.
+     * @return 알림 빌더 클래스를 반환합니다.
+     */
     // 진화 알람
     public Notification evolutionNotification() {
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle()
@@ -150,7 +178,11 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
         return builder.build();
     }
-
+    /**
+     * 현재 사용자의 걸음 수와 펫의 진화 상태를 알림창으로 보여줍니다.
+     * 서비스가 동작중일 때 알림창은 항상 표시되며 서비스가 중지되면 알림창은 종료됩니다.
+     * @return 알림 빌더 클래스를 반환합니다.
+     */
     // 펫 현황
     public Notification makeNotification(){
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle()
@@ -182,10 +214,18 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         return builder.build();
     }
 
+    /**
+     * 기본 알림창을 포그라운드 서비스로 실행합니다.
+     */
     public void initializeNotification() {
         startForeground(1, makeNotification());
     }
 
+    /**
+     * 리스너로 등록된 센서가 이벤트를 감지하면 실행되는 메서드입니다.
+     * 걸음 계수기 센서를 이용하여 사용자의 정확한 걸음 수를 반환받습니다.
+     * 가속도 센서를 이용하여 사용자의 일정 시간 단위당 속도를 계산하여 사용자가 걷는지 뛰는지 판단합니다.
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
@@ -243,6 +283,9 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         }
     }
 
+    /**
+     * 사용자가 걸은 수 만큼 사용자의 재화로 저장합니다.
+     */
     private void userMoneyUpdate(int addMoney) {
         UserPreferenceHelper helper =
                 new UserPreferenceHelper(getApplicationContext()
@@ -252,6 +295,13 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
                 , addMoney + gm.getUser().getMoney());
     }
 
+    /**
+     * 걸음 센서가 감지하면 메서드를 호출합니다.
+     * 현재 걸음 상태 변수에 따라서 현재 걸음 객체에 걸음 수를 저장합니다.
+     * 저장된 걸음 수 만큼 현재 선택된 동물의 수치에 영향을 줍니다.
+     * @param step 걸음 수
+     * @param isRunning 현재 사용자가 뛰는지 걷는지 판단하는 플래그 변수
+     */
     private void step(int step, boolean isRunning) {
         if (isRunning) {
             walk.setRunCount(walk.getRunCount() + step);
@@ -312,6 +362,11 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     }
 
 
+    /**
+     * 백그라운드에서 동작하는 클래스입니다.
+     * 날짜가 변경되는 00시에 현재 싱글톤 객체에 저장되어 있는 걸음 객체를 새로운 날짜에 맞춰서
+     * 새로운 걸음 객체를 생성하고 교체합니다.
+     */
     // 스레드
     class BackgroundTask extends AsyncTask<Integer, String, Integer> {
 

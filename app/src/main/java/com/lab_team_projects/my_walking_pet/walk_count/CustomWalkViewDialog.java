@@ -14,10 +14,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * 걸음 통계 차트를 클릭할 때 나오는 다이얼로그 정의 클래스
+ */
 public class CustomWalkViewDialog extends Dialog {
 
+    /**
+     * 차트에 해당하는 걸음 클래스
+     */
     private final Walk walk;
 
+    /**
+     * 다이얼로그를 종료할 때 감지되는 리스너
+     */
     public interface DialogCancelListener {
         void onDialogCancel();
     }
@@ -31,11 +40,20 @@ public class CustomWalkViewDialog extends Dialog {
     private CustomWalkViewDialogBinding binding;
     private WindowManager.LayoutParams params;
 
+    /**
+     * 다이얼로그 생성자
+     * @param context 메인 스레드에 접근하기 위한 Context 클래스를 받습니다.
+     * @param walk 차트에 해당하는 걸음 정보를 멤버변수 걸음 객체에 저장합니다.
+     */
     public CustomWalkViewDialog(@NonNull Context context, Walk walk) {
         super(context);
         this.walk = walk;
     }
 
+    /**
+     * 걸음 정보 다이얼로그에서 걸음 정보 객체에 해당하는 정보를 다이얼로그 창에서 자세하게 볼 수 있습니다.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +87,9 @@ public class CustomWalkViewDialog extends Dialog {
         binding.tvTime.setText(walk.calculateHours());
     }
 
+    /**
+     * 클릭된 바차트의 색깔을 변경하기 위한 다이얼로그 취소 리스너 메서드를 호출합니다.
+     */
     @Override
     public void cancel() {
         super.cancel();

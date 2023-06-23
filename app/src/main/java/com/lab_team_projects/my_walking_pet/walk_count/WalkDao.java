@@ -9,6 +9,9 @@ import androidx.room.Update;
 
 import java.util.List;
 
+/**
+ * 기기 내부 저장소에 저장되는 걸음 객체를 room database로 호출할 수 있도록 하는 구현 객체입니다.
+ */
 @Dao
 public interface WalkDao {
     @Insert

@@ -32,6 +32,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+/**
+ * 사용자의 걸음 정보를 월 단위로 볼 수 있도록 하는 프래그먼트 클래스
+ * 일일 단위로 저장되어 있는 걸음 정보를 월 단위의 일수를 나누어 월 평균 걸음 수를 바차트로 나타냅니다.
+ */
 public class MonthFragment extends Fragment {
 
     private FragmentMonthBinding binding;
@@ -68,6 +72,10 @@ public class MonthFragment extends Fragment {
     }
 
 
+    /**
+     * 프래그먼트 뷰가 나타날 때 실행되는 메서드입니다.
+     * 기기 내부 저장소의 데이터와 바 차트 리스너를 설정합니다.
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -103,6 +111,12 @@ public class MonthFragment extends Fragment {
     }
 
 
+    /**
+     * 월 단위로 표현할 바 차트 데이터를 설정합니다.
+     * 막대 차트의 넓이 길이, 개수, 시작 위치 등등을 설정합니다.
+     * @param barChart 만들어진 바차트 객체
+     * @param monthCounts 월 별로 저장되는 데이터 리스트
+     */
     private void barChartSetData(BarChart barChart, List<MonthCount> monthCounts) {
         List<BarEntry> valueList = new ArrayList<>();
         String title = "걸음 수";
@@ -138,6 +152,11 @@ public class MonthFragment extends Fragment {
         barChart.invalidate();
     }
 
+    /**
+     * 막대 차트의 기본 ui 데이터를 설정합니다.
+     * 막대 차트 드래그 사용 여부, 배경 넓이 등등을 설정합니다.
+     * @param barChart 설정할 막대차트 객체를 받습니다.
+     */
     private void barChartInit(BarChart barChart) {
         barChart.setDragEnabled(true);
         barChart.setScaleEnabled(true);
@@ -176,6 +195,12 @@ public class MonthFragment extends Fragment {
         barChart.getLegend().setEnabled(false);
     }
 
+    /**
+     * 내부 저장소에서 일일 걸음 수를 가져와서 월 단위 걸음 객체에 저장합니다.
+     * 동일한 월인지 판단하여 저장합니다.
+     * @param monthCounts  월 단위 리스트
+     * @param walkList 일일 달위 리스트
+     */
     private void setMonthCountsList(List<MonthCount> monthCounts, List<Walk> walkList) {
         for (Walk walk : walkList) {
 
@@ -196,6 +221,9 @@ public class MonthFragment extends Fragment {
         }
     }
 
+    /**
+     * 코드 구현상 실제로 저장되지 않는 데이터를 수정하기 위한 메서드입니다.
+     */
     private void makeMonthCountsList(List<MonthCount> monthCounts, List<Walk> walkList) {
         Walk firstWalk = walkList.get(0); // 가장 예전에 저장된 데이터
         Walk lastWalk = walkList.get(walkList.size() - 1); // 가장 최근에 저장된 데이터

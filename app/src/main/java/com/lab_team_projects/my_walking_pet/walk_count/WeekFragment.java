@@ -23,6 +23,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+/**
+ * 일주일 단위로 저장되어 있는 걸음 수 통계를 보여줍니다.
+ * 기기 저장소에 실제로 저장되어 있는 걸음 수는 있을 수도 있고 없을 수도 있기 떄문에
+ * 없는 데이터를 더미 데이터로 만들어서 통계 수치에 활용합니다.
+ *
+ * 사용자는 막대 차트를 드래그하여 일주일 단위로 걸음 정보에 대한 막대 차트를 볼 수 있습니다.
+ */
 public class WeekFragment extends Fragment {
 
     private FragmentWeekBinding binding;
@@ -31,6 +38,11 @@ public class WeekFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * 일주일 걸음 통계 프래그먼트가 생성되면 실행되는 메서드
+     * 실제 저장되어 있는 걸음 객체와 더미 걸음 객체를 생성하고 막대 차트 데이터에 저장합니다.
+     * 막대 차트는 저장된 데이터를 기반으로 사용자에게 일주일 단위 통계를 보여줍니다.
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,6 +81,12 @@ public class WeekFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     * 실제 내부 저장소에 저장되어 있는 걸음 수를 순회하여 없는 날짜에 더미 걸음 객체를 생성하여
+     * 사용자에게 보여줄 걸음 리스트에 추가합니다.
+     * @param dateFormat 걸음 객체에 저장되어 있는 날짜 포맷
+     * @param walkList 실제 내부 저장소에 저장되어 있는 걸음 객체 리스트
+     */
     private void addNextEmptyDate(SimpleDateFormat dateFormat, List<Walk> walkList) {
         while (walkList.size() % 7 != 0) {
 
@@ -101,6 +119,10 @@ public class WeekFragment extends Fragment {
         }
     }
 
+    /**
+     * 실제 리스트를 순회하여 날짜가 없는 데이터를 판단하고 데이터를 추가합니다.
+     * 비교 대상의 걸음 날짜와 실제 그 다음 날짜와 비교 후 데이터 공백을 판단합니다.
+     */
     private void addEmptyDate(SimpleDateFormat dateFormat, List<Walk> walkList) {
         int next;
         for (int i = 0; i < walkList.size(); i += next) {
@@ -167,6 +189,10 @@ public class WeekFragment extends Fragment {
         }
     }
 
+    /**
+     * 걸음 객체 리스트를 정렬하는 메서드입니다.
+     * 걸음 객체를 정렬하는 비교 대상을 지정해줘야 합니다.
+     */
     private void sortedList(List<Walk> walkList, SimpleDateFormat dateFormat) {
         walkList.sort((o1, o2) -> {
             try {

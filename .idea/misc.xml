@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="JavadocGenerationManager">
-    <option name="OUTPUT_DIRECTORY" value="E:/" />
+    <option name="OUTPUT_DIRECTORY" value="$USER_HOME$/Documents/김주영/공부/대학교/3학년 1학기/캡스톤디자인/JavaDoc" />
     <option name="OPTION_SCOPE" value="private" />
-    <option name="OTHER_OPTIONS" value="-encoding UTF-8 -charset UTF-8 -docencoding UTF-8 -sourcepath C:\Users\IRLAB\AppData\Local\Android\Sdk\platforms\android-33\andorid.js" />
+    <option name="OTHER_OPTIONS" value="-encoding UTF-8 -charset UTF-8 -docencoding UTF-8 -sourcepath C:\Users\ymail\AppData\Local\Android\Sdk\platforms\android-33\andorid.js" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

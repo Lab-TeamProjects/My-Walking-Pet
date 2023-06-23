@@ -29,18 +29,38 @@ import com.lab_team_projects.my_walking_pet.login.User;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * 일일 걸음 정보를 보기 위한 프래그먼트입니다.
+ */
 public class DayFragment extends Fragment {
     private final GameManager gm = GameManager.getInstance();
     private final User user = gm.getUser();
     private List<Walk> walks;
     private Walk walk;
+    /**
+     * 파이 차트를 이용하여 당일 걸음 수를 시각적으로 볼 수 있습니다.
+     */
     private PieChartHelper pieChartHelper;
+    /**
+     * 일일 단위로 실제 사용자 기기에 저장되어있는 걸음 정보를 따로 볼 수 있습니다.
+     */
     private BarChartHelper barchartHelper;
 
     public DayFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * 기기 내부 저장소에 저장되어있는 걸음 정보를 불러와서 파이차트와 바차트에 데이터를 설정하고
+     * 사용자가 걸음 정보를 시각적으로 볼 수 있도록 설정합니다.
+     * 파이 차트를 클릭하여 일일 목표를 설정할 수 있고 바 차트를 클릭하여 걸음 정보 다이얼로그를 표시합니다.
+     * 사용자가 걷고 있을 떄 실시간으로 변화되는 값을 볼 수 있도록 뷰모델 라이브 데이터 클래스를 이용하여
+     * 걸음 카운트가 저장되는 화면을 실시간으로 볼 수 있습니다.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return 바인딩 객체를 반환합니다.
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

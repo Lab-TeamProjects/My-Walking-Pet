@@ -13,6 +13,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.IntStream;
 
+/**
+ * 막대 차트의 제스처를 감지하는 제스처 감지 리스너를 구현하는 클래스
+ * 주간 통계 화면에서 일주일 별로 막대 차트를 넘기기 위한 리스너입니다.
+ */
 public class MyChartGestureListener implements OnChartGestureListener {
 
     private final List<Walk> walks;
@@ -63,6 +67,10 @@ public class MyChartGestureListener implements OnChartGestureListener {
 
     }
 
+    /**
+     * 일주일 단위 탭에서 막대 차트를 드래그하면 실행되는 메서드
+     * 터치 좌표와 터치 종료 좌표를 계산하여 왼쪽, 오른쪽을 판단하고 일주일 단위로 막대 차트를 넘깁니다.
+     */
     @Override
     public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
         int moveCount = 7;
@@ -88,6 +96,9 @@ public class MyChartGestureListener implements OnChartGestureListener {
 
     }
 
+    /**
+     * 막대 차트를 드래그하면 상단의 현재 날짜 텍스트를 변경합니다.
+     */
     private void invalidateTextView() {
         int totalCount = IntStream.range(count, count + 7).mapToObj(i -> walks.get(i)).mapToInt(Walk::getCount).sum();
         totalCount = totalCount / 7;

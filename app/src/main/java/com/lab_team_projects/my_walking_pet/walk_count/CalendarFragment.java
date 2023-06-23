@@ -19,9 +19,18 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 걸음 정보의 이전 내역을 날짜별로 보기 쉽게 하기 위한 캘린더 프래그먼트
+ */
 public class CalendarFragment extends Fragment {
 
+    /**
+     * 프래그먼트 xml에 접근하기 위한 바인딩 클래스
+     */
     private FragmentYearBinding binding;
+    /**
+     * 날짜 기본 포맷 yyyy-MM-dd 클래스
+     */
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public CalendarFragment() {
@@ -29,6 +38,9 @@ public class CalendarFragment extends Fragment {
     }
 
 
+    /**
+     * 캘린더 프래그먼트 뷰가 만들어지면 실행되는 메소드
+     */
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
