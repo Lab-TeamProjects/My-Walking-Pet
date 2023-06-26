@@ -3,6 +3,7 @@ package com.lab_team_projects.my_walking_pet.home;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -41,7 +42,9 @@ import com.lab_team_projects.my_walking_pet.walk_count.WalkViewModel;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * 홈 화면에 해당하는 프래그먼트 클래스
@@ -100,6 +103,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
+        verifyStoragePermission(requireActivity());
         nowPet.setGrowthCallback(new Animal.GrowthCallback() {
             @Override
             public void onCall() {
@@ -302,11 +306,17 @@ public class HomeFragment extends Fragment {
                     1);
         }
 
-        Date now = new Date();
-        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
-
         try {
-            String mPath = requireContext().getExternalFilesDir(null).toString() + "/" + now + ".jpg";
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+
+            // 외부 저장소 경로를 "/learn" 디렉토리로 설정
+            String dirPath = Environment.getExternalStorageDirectory().toString() + "/learn";
+            File fileDir = new File(dirPath);
+            if (!fileDir.exists()) {
+                boolean mkdir = fileDir.mkdir();
+            }
+
+            String path = dirPath + "/" + "sc" + timeStamp + "a.jpg";
 
             // 스크린샷을 찍기 위해 뷰를 생성
             View v1 = requireActivity().getWindow().getDecorView().getRootView();
@@ -314,7 +324,7 @@ public class HomeFragment extends Fragment {
             Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
             v1.setDrawingCacheEnabled(false);
 
-            File imageFile = new File(mPath);
+            File imageFile = new File(path);
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             int quality = 100;
             bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
@@ -328,6 +338,22 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static final String[] PERMISSION_STORAGE = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+    };
+
+    public static void verifyStoragePermission(Activity activity) {
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity,
+                    PERMISSION_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE);
+        }
+    }
+
 
     /**
      * 액티비티 위에서 프래그먼트간의 이동할 떄 실행됩니다.
