@@ -25,6 +25,11 @@ public class CustomPetInfoDialog extends Dialog {
      */
     private final Context context;
 
+    /**
+     * Instantiates a new Custom pet info dialog.
+     *
+     * @param context the context
+     */
     public CustomPetInfoDialog(@NonNull Context context) {
         super(context);
         this.context = context;

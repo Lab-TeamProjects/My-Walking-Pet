@@ -142,122 +142,272 @@ public class Walk {
         return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
     }
 
+    /**
+     * Gets walk count.
+     *
+     * @return the walk count
+     */
     public int getWalkCount() {
         return walkCount;
     }
 
+    /**
+     * Sets walk count.
+     *
+     * @param walkCount the walk count
+     */
     public void setWalkCount(int walkCount) {
         this.walkCount = walkCount;
     }
 
+    /**
+     * Gets run count.
+     *
+     * @return the run count
+     */
     public int getRunCount() {
         return runCount;
     }
 
+    /**
+     * Sets run count.
+     *
+     * @param runCount the run count
+     */
     public void setRunCount(int runCount) {
         this.runCount = runCount;
     }
 
+    /**
+     * Gets distance.
+     *
+     * @return the distance
+     */
     public double getDistance() {
         return distance;
     }
 
+    /**
+     * Sets distance.
+     *
+     * @param distance the distance
+     */
     public void setDistance(double distance) {
         this.distance = distance;
     }
 
+    /**
+     * Gets count.
+     *
+     * @return the count
+     */
     public int getCount() {
         return count;
     }
 
+    /**
+     * Sets count.
+     *
+     * @param count the count
+     */
     public void setCount(int count) {
         this.count = count;
     }
 
+    /**
+     * Gets date.
+     *
+     * @return the date
+     */
     public String getDate() {
         return date;
     }
 
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * Sets date.
+     *
+     * @param date the date
+     */
     public void setDate(String date) {
         this.date = date;
     }
 
+    /**
+     * Gets goal.
+     *
+     * @return the goal
+     */
     public int getGoal() {
         return goal;
     }
 
+    /**
+     * Sets goal.
+     *
+     * @param goal the goal
+     */
     public void setGoal(int goal) {
         this.goal = goal;
     }
 
+    /**
+     * Gets sec.
+     *
+     * @return the sec
+     */
     public int getSec() {
         return sec;
     }
 
+    /**
+     * Sets sec.
+     *
+     * @param sec the sec
+     */
     public void setSec(int sec) {
         this.sec = sec;
     }
 
+    /**
+     * Gets kcal.
+     *
+     * @return the kcal
+     */
     public double getKcal() {
         return kcal;
     }
 
+    /**
+     * Sets kcal.
+     *
+     * @param kcal the kcal
+     */
     public void setKcal(double kcal) {
         this.kcal = kcal;
     }
 
+    /**
+     * Gets exercise count.
+     *
+     * @return the exercise count
+     */
     public int getExerciseCount() {
         return exerciseCount;
     }
 
+    /**
+     * Sets exercise count.
+     *
+     * @param exerciseCount the exercise count
+     */
     public void setExerciseCount(int exerciseCount) {
         this.exerciseCount = exerciseCount;
     }
 
+    /**
+     * Gets exercise run count.
+     *
+     * @return the exercise run count
+     */
     public int getExerciseRunCount() {
         return exerciseRunCount;
     }
 
+    /**
+     * Sets exercise run count.
+     *
+     * @param exerciseRunCount the exercise run count
+     */
     public void setExerciseRunCount(int exerciseRunCount) {
         this.exerciseRunCount = exerciseRunCount;
     }
 
+    /**
+     * Gets exercise walk count.
+     *
+     * @return the exercise walk count
+     */
     public int getExerciseWalkCount() {
         return exerciseWalkCount;
     }
 
+    /**
+     * Sets exercise walk count.
+     *
+     * @param exerciseWalkCount the exercise walk count
+     */
     public void setExerciseWalkCount(int exerciseWalkCount) {
         this.exerciseWalkCount = exerciseWalkCount;
     }
 
+    /**
+     * Gets exercise kcal.
+     *
+     * @return the exercise kcal
+     */
     public double getExerciseKcal() {
         return exerciseKcal;
     }
 
+    /**
+     * Sets exercise kcal.
+     *
+     * @param exerciseKcal the exercise kcal
+     */
     public void setExerciseKcal(double exerciseKcal) {
         this.exerciseKcal = exerciseKcal;
     }
 
+    /**
+     * Gets exercise distance.
+     *
+     * @return the exercise distance
+     */
     public double getExerciseDistance() {
         return exerciseDistance;
     }
 
+    /**
+     * Sets exercise distance.
+     *
+     * @param exerciseDistance the exercise distance
+     */
     public void setExerciseDistance(double exerciseDistance) {
         this.exerciseDistance = exerciseDistance;
     }
 
+    /**
+     * Gets exercise walk sec.
+     *
+     * @return the exercise walk sec
+     */
     public int getExerciseWalkSec() {
         return exerciseWalkSec;
     }
 
+    /**
+     * Sets exercise walk sec.
+     *
+     * @param exerciseWalkSec the exercise walk sec
+     */
     public void setExerciseWalkSec(int exerciseWalkSec) {
         this.exerciseWalkSec = exerciseWalkSec;
     }

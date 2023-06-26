@@ -13,6 +13,9 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentOnBoardingThirdBinding;
 import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
 
+/**
+ * The type On boarding third fragment.
+ */
 public class OnBoardingThirdFragment extends Fragment {
 
     @Override

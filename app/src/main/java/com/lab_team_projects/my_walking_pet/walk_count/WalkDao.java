@@ -14,21 +14,51 @@ import java.util.List;
  */
 @Dao
 public interface WalkDao {
+    /**
+     * Insert.
+     *
+     * @param walk the walk
+     */
     @Insert
     void insert(Walk walk);
 
+    /**
+     * Update.
+     *
+     * @param walk the walk
+     */
     @Update
     void update(Walk walk);
 
+    /**
+     * Gets walk last.
+     *
+     * @return the walk last
+     */
     @Query("SELECT * FROM Walk ORDER BY id DESC LIMIT 1")
     LiveData<Walk> getWalkLast();
 
+    /**
+     * Delete.
+     *
+     * @param walk the walk
+     */
     @Delete
     void delete(Walk walk);
 
+    /**
+     * Gets all.
+     *
+     * @return the all
+     */
     @Query("SELECT * FROM Walk ORDER BY id")
     List<Walk> getAll();
 
+    /**
+     * Gets last.
+     *
+     * @return the last
+     */
     @Query("SELECT * FROM Walk ORDER BY id DESC LIMIT 1")
     Walk getLast();
 

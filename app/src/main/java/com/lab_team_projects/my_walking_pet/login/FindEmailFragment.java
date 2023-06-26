@@ -10,8 +10,14 @@ import androidx.fragment.app.Fragment;
 
 import com.lab_team_projects.my_walking_pet.R;
 
+/**
+ * The type Find email fragment.
+ */
 public class FindEmailFragment extends Fragment {
 
+    /**
+     * Instantiates a new Find email fragment.
+     */
     public FindEmailFragment() { }
 
     @Nullable

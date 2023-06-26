@@ -44,14 +44,35 @@ public class CustomExerciseDialog extends Dialog {
      */
     private OnExerciseListener onExerciseListener;
 
+    /**
+     * Sets on exercise listener.
+     *
+     * @param onExerciseListener the on exercise listener
+     */
     public void setOnExerciseListener(OnExerciseListener onExerciseListener) {
         this.onExerciseListener = onExerciseListener;
     }
 
+    /**
+     * The interface On exercise listener.
+     */
     public interface OnExerciseListener {
+        /**
+         * On exercise.
+         *
+         * @param flag     the flag
+         * @param selected the selected
+         */
         void onExercise(boolean flag, int selected);
     }
 
+    /**
+     * Instantiates a new Custom exercise dialog.
+     *
+     * @param context      the context
+     * @param isExercising the is exercising
+     * @param svc          the svc
+     */
     public CustomExerciseDialog(@NonNull Context context, boolean isExercising, MyBinder svc) {
         super(context);
         this.context = context;

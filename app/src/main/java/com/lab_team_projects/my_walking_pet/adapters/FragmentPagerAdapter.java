@@ -14,6 +14,12 @@ public class FragmentPagerAdapter extends FragmentStateAdapter {
 
     private final List<Fragment> fragments;
 
+    /**
+     * Instantiates a new Fragment pager adapter.
+     *
+     * @param fragmentActivity the fragment activity
+     * @param fragments        the fragments
+     */
     public FragmentPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<Fragment> fragments) {
         super(fragmentActivity);
         this.fragments = fragments;

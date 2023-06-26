@@ -38,13 +38,26 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
         return collectionList.size();
     }
 
+    /**
+     * Sets collection list.
+     *
+     * @param collectionList the collection list
+     */
     @SuppressLint("NotifyDataSetChanged")
     public void setCollectionList(List<Collection> collectionList) {
         this.collectionList = collectionList;
         notifyDataSetChanged();
     }
 
+    /**
+     * The type View holder.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
+        /**
+         * Instantiates a new View holder.
+         *
+         * @param itemView the item view
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
         }

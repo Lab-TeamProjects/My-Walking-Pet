@@ -28,11 +28,19 @@ public class CustomWalkViewDialog extends Dialog {
      * 다이얼로그를 종료할 때 감지되는 리스너
      */
     public interface DialogCancelListener {
+        /**
+         * On dialog cancel.
+         */
         void onDialogCancel();
     }
 
     private DialogCancelListener dialogCancelListener;
 
+    /**
+     * Sets dialog cancel listener.
+     *
+     * @param dialogCancelListener the dialog cancel listener
+     */
     public void setDialogCancelListener(DialogCancelListener dialogCancelListener) {
         this.dialogCancelListener = dialogCancelListener;
     }
@@ -42,8 +50,9 @@ public class CustomWalkViewDialog extends Dialog {
 
     /**
      * 다이얼로그 생성자
+     *
      * @param context 메인 스레드에 접근하기 위한 Context 클래스를 받습니다.
-     * @param walk 차트에 해당하는 걸음 정보를 멤버변수 걸음 객체에 저장합니다.
+     * @param walk    차트에 해당하는 걸음 정보를 멤버변수 걸음 객체에 저장합니다.
      */
     public CustomWalkViewDialog(@NonNull Context context, Walk walk) {
         super(context);

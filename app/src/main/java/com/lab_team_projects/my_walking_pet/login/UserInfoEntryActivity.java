@@ -35,13 +35,22 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * The type User info entry activity.
+ */
 public class UserInfoEntryActivity extends AppCompatActivity {
 
     private ActivityUserInfoEntryBinding binding;
 
     private Bitmap profilePhoto;
 
+    /**
+     * The Gm.
+     */
     GameManager gm = GameManager.getInstance();
+    /**
+     * The Access token.
+     */
     String accessToken =  gm.getUser().getAccessToken();
 
     @Override
@@ -132,7 +141,10 @@ public class UserInfoEntryActivity extends AppCompatActivity {
         activityResultLauncher.launch(intent);
     }
 
-    // 갤러리 접근 함수 실행 시
+    /**
+     * The Activity result launcher.
+     */
+// 갤러리 접근 함수 실행 시
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {

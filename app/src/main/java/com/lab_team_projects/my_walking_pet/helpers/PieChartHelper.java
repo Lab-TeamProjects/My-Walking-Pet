@@ -26,6 +26,11 @@ public class PieChartHelper {
 
     private final PieChart pieChart;
 
+    /**
+     * Instantiates a new Pie chart helper.
+     *
+     * @param pieChart the pie chart
+     */
     public PieChartHelper(PieChart pieChart) {
         this.pieChart = pieChart;
 
@@ -50,6 +55,7 @@ public class PieChartHelper {
 
     /**
      * 일일 걸음 클래스에 해당하는 정보를 파이차트 데이터로 설정합니다.
+     *
      * @param walk 일일 걸음 정볼를 받습니다.
      */
     public void setData(Walk walk) {

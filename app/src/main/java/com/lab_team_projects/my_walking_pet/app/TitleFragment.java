@@ -12,6 +12,9 @@ import com.lab_team_projects.my_walking_pet.databinding.FragmentTitleBinding;
 import com.lab_team_projects.my_walking_pet.login.LoginActivity;
 import com.lab_team_projects.my_walking_pet.login.SignUpActivity;
 
+/**
+ * The type Title fragment.
+ */
 public class TitleFragment extends Fragment {
 
     private FragmentTitleBinding binding;

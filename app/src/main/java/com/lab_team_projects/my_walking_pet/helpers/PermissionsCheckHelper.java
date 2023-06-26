@@ -16,6 +16,9 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Permissions check helper.
+ */
 public class PermissionsCheckHelper {
 
     private final Context context;
@@ -39,11 +42,22 @@ public class PermissionsCheckHelper {
 
     private final int MULTIPLE_PERMISSIONS = 1023 ;
 
+    /**
+     * Instantiates a new Permissions check helper.
+     *
+     * @param _activity the activity
+     * @param _context  the context
+     */
     public PermissionsCheckHelper(Activity _activity, Context _context) {
         this.activity = _activity;
         this.context = _context;
     }
 
+    /**
+     * Check permission boolean.
+     *
+     * @return the boolean
+     */
     public boolean checkPermission(){
         int result;
         permissionList = new ArrayList<>();
@@ -59,11 +73,22 @@ public class PermissionsCheckHelper {
         return permissionList.isEmpty();
     }
 
+    /**
+     * Request permission.
+     */
     public void requestPermission(){
         ActivityCompat.requestPermissions(activity, permissionList.toArray(new String[permissionList.size()]),
                 MULTIPLE_PERMISSIONS);
     }
 
+    /**
+     * Permission result boolean.
+     *
+     * @param requestCode  the request code
+     * @param permissions  the permissions
+     * @param grantResults the grant results
+     * @return the boolean
+     */
     public boolean permissionResult(int requestCode , @NonNull String[] permissions, @NonNull int[] grantResults){
 
         if (requestCode == MULTIPLE_PERMISSIONS && (grantResults.length > 0)){
@@ -79,6 +104,9 @@ public class PermissionsCheckHelper {
         return true;
     }
 
+    /**
+     * Battery optimization.
+     */
     public void batteryOptimization() {
         // 베터리 최적화 설정 요청
         Intent intent = new Intent();

@@ -25,6 +25,10 @@ public class SettingFragment extends Fragment {
 
     private FragmentSettingBinding binding;
     private MainActivity mMainActivity;
+
+    /**
+     * Instantiates a new Setting fragment.
+     */
     public SettingFragment() {
         // Required empty public constructor
     }

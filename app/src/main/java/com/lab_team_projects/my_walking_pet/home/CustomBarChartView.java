@@ -31,6 +31,7 @@ public class CustomBarChartView extends View {
 
     /**
      * 커스텀 바차트 뷰 생성자
+     *
      * @param context 안드로이드 context
      */
     public CustomBarChartView(Context context) {
@@ -38,11 +39,24 @@ public class CustomBarChartView extends View {
         customBarInit();
     }
 
+    /**
+     * Instantiates a new Custom bar chart view.
+     *
+     * @param context the context
+     * @param attrs   the attrs
+     */
     public CustomBarChartView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         customBarInit();
     }
 
+    /**
+     * Instantiates a new Custom bar chart view.
+     *
+     * @param context      the context
+     * @param attrs        the attrs
+     * @param defStyleAttr the def style attr
+     */
     public CustomBarChartView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         customBarInit();
@@ -96,6 +110,7 @@ public class CustomBarChartView extends View {
     /**
      * 동물 성장치가 변경되면 바차트의 내용도 변경됩니다.
      * 퍼센트 비율로 바차트가 상승합니다.
+     *
      * @param nowGrowth 동물의 현재 성장치
      * @param maxGrowth 동물의 현재 레벨의 최대 성장치
      */
@@ -116,6 +131,16 @@ public class CustomBarChartView extends View {
         private final float strokeWidth;
         private final float cornerRadius;
 
+        /**
+         * Instantiates a new Bar.
+         *
+         * @param fillColor    the fill color
+         * @param strokeColor  the stroke color
+         * @param ratio        the ratio
+         * @param drawBorder   the draw border
+         * @param strokeWidth  the stroke width
+         * @param cornerRadius the corner radius
+         */
         public Bar(int fillColor, int strokeColor, float ratio, boolean drawBorder, float strokeWidth, float cornerRadius) {
             this.growthRatio = ratio;
             this.drawBorder = drawBorder;
@@ -131,6 +156,11 @@ public class CustomBarChartView extends View {
             this.strokePaint.setStrokeWidth(strokeWidth);
         }
 
+        /**
+         * Draw.
+         *
+         * @param canvas the canvas
+         */
         public void draw(Canvas canvas) {
             float width = getWidth() * 0.4f - 0.2f;
             float height = getHeight() * 0.9f;
@@ -159,6 +189,11 @@ public class CustomBarChartView extends View {
     private static class DashedOverlay {
         private final Paint dashedPaint;
 
+        /**
+         * Instantiates a new Dashed overlay.
+         *
+         * @param color the color
+         */
         public DashedOverlay(int color) {
             this.dashedPaint = new Paint();
             this.dashedPaint.setColor(color);
@@ -166,6 +201,16 @@ public class CustomBarChartView extends View {
             this.dashedPaint.setStrokeWidth(3);
         }
 
+        /**
+         * Draw.
+         *
+         * @param canvas       the canvas
+         * @param left         the left
+         * @param top          the top
+         * @param right        the right
+         * @param bottom       the bottom
+         * @param cornerRadius the corner radius
+         */
         public void draw(Canvas canvas, float left, float top, float right, float bottom, float cornerRadius) {
             Path path = new Path();
 

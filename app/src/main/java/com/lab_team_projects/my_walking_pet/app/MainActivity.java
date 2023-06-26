@@ -211,6 +211,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * On app bar load.
+     */
     public void onAppBarLoad(){
         binding.appBarLayout.setVisibility(View.VISIBLE);
     }

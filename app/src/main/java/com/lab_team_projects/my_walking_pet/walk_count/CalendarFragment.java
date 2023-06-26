@@ -33,6 +33,9 @@ public class CalendarFragment extends Fragment {
      */
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    /**
+     * Instantiates a new Calendar fragment.
+     */
     public CalendarFragment() {
         // Required empty public constructor
     }

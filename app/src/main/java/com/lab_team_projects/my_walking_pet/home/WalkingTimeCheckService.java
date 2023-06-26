@@ -49,6 +49,9 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
     private boolean isFirstRun = false;
     private Walk walk;
 
+    /**
+     * Instantiates a new Walking time check service.
+     */
     public WalkingTimeCheckService(){}
 
     /**

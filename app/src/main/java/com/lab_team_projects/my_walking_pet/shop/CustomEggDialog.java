@@ -23,15 +23,32 @@ public class CustomEggDialog extends Dialog {
 
     private ItemPurchaseListener itemPurchaseListener;    // 구매 했다고 단방향으로 알려주는 리스너 인터페이스
 
+    /**
+     * Sets item purchase listener.
+     *
+     * @param itemPurchaseListener the item purchase listener
+     */
     public void setItemPurchaseListener(ItemPurchaseListener itemPurchaseListener) {
         this.itemPurchaseListener = itemPurchaseListener;
     }
 
+    /**
+     * The interface Item purchase listener.
+     */
     public interface ItemPurchaseListener {
+        /**
+         * Item purchase.
+         */
         void itemPurchase();
 
     }
 
+    /**
+     * Instantiates a new Custom egg dialog.
+     *
+     * @param context the context
+     * @throws IOException the io exception
+     */
     public CustomEggDialog(@NonNull Context context) throws IOException {
         super(context);
         this.context = context;

@@ -15,6 +15,11 @@ public class OnSwipeTouchHelper implements OnTouchListener {
 
     private final GestureDetector gestureDetector;
 
+    /**
+     * Instantiates a new On swipe touch helper.
+     *
+     * @param context the context
+     */
     public OnSwipeTouchHelper(Context context) {
         gestureDetector = new GestureDetector(context, new GestureListener());
     }
@@ -76,15 +81,27 @@ public class OnSwipeTouchHelper implements OnTouchListener {
         }
     }
 
+    /**
+     * On swipe right.
+     */
     public void onSwipeRight() {
     }
 
+    /**
+     * On swipe left.
+     */
     public void onSwipeLeft() {
     }
 
+    /**
+     * On swipe top.
+     */
     public void onSwipeTop() {
     }
 
+    /**
+     * On swipe bottom.
+     */
     public void onSwipeBottom() {
     }
 }

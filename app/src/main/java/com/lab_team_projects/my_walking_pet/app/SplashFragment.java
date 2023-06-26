@@ -21,6 +21,10 @@ public class SplashFragment extends Fragment {
 
 
     private FragmentSplashBinding binding;
+
+    /**
+     * Instantiates a new Splash fragment.
+     */
     public SplashFragment() {
         // Required empty public constructor
     }

@@ -20,16 +20,22 @@ public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase instance;
     private static final String DATABASE_NAME = "MY-WALKING-PET";
 
+    /**
+     * The constant databaseWriteExecutor.
+     */
     public static final ExecutorService databaseWriteExecutor = Executors.newSingleThreadExecutor();
 
     /**
-    * 데이터 베이스를 관리하는 클래스
-    * 싱글톤 구조로 되어있음
-    * 메인 액티비티가 종료되어도
-    * 포그라운드 서비스가 켜져있다면
-    * 메모리 상에 계속 남아서
-    * db io를 도와줌
-    * */
+     * 데이터 베이스를 관리하는 클래스
+     * 싱글톤 구조로 되어있음
+     * 메인 액티비티가 종료되어도
+     * 포그라운드 서비스가 켜져있다면
+     * 메모리 상에 계속 남아서
+     * db io를 도와줌
+     *
+     * @param context the context
+     * @return the instance
+     */
     public synchronized static AppDatabase getInstance(Context context)
     {
         if(instance == null) {
@@ -41,6 +47,11 @@ public abstract class AppDatabase extends RoomDatabase {
         return instance;
     }
 
+    /**
+     * Walk dao walk dao.
+     *
+     * @return the walk dao
+     */
     public abstract WalkDao walkDao();
 
 }

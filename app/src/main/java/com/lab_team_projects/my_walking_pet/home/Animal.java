@@ -58,13 +58,36 @@ public class Animal {
      */
     private float maxGrowth;
 
+    /**
+     * The enum Feelings.
+     */
     public enum Feelings {
+        /**
+         * Happy feelings.
+         */
         HAPPY,
+        /**
+         * Normal feelings.
+         */
         NORMAL,
+        /**
+         * Bad feelings.
+         */
         BAD,
+        /**
+         * Sick feelings.
+         */
         SICK
     }
 
+    /**
+     * Instantiates a new Animal.
+     *
+     * @param name             the name
+     * @param brood            the brood
+     * @param originalOwnerUid the original owner uid
+     * @param currentOwnerUid  the current owner uid
+     */
     public Animal(String name, String brood, String originalOwnerUid, String currentOwnerUid) {
         this.name = name;
         this.brood = brood;
@@ -84,15 +107,27 @@ public class Animal {
      * 사용자가 걷게되면 리스너가 동작하고 onCall() 메서드를 호출합니다.
      * 아래는 리스너 관련 메서드입니다.
      */
-
     public interface GrowthCallback {
+        /**
+         * On call.
+         */
         void onCall();
     }
 
+    /**
+     * Sets growth callback.
+     *
+     * @param growthCallback the growth callback
+     */
     public void setGrowthCallback(GrowthCallback growthCallback) {
         this.growthCallback = growthCallback;
     }
 
+    /**
+     * Gets growth callback.
+     *
+     * @return the growth callback
+     */
     public GrowthCallback getGrowthCallback() {
         return growthCallback;
     }
@@ -102,7 +137,6 @@ public class Animal {
      *
      * @return 현재 배고픔, 목마름, 청결의 수치의 평균을 반환합니다.
      */
-
     public float getStateAverage() {
         //clean, hunger, liking 각각의 수치를 비교해서 현재 상태를 반환하는 함수
         return (clean + hunger + thirsty) / 3.0f;
@@ -113,7 +147,6 @@ public class Animal {
      *
      * @param itemDetail 사용하는 아이템의 자세한 정보를 갖고 있는 객체
      */
-
     public void useItem(ItemDetail itemDetail) {
         for (int i = 0; i < itemDetail.getEffects().size(); i++) {
             String effect = itemDetail.getEffects().get(i);
@@ -158,98 +191,218 @@ public class Animal {
         return 0;
     }
 
+    /**
+     * Gets thirsty.
+     *
+     * @return the thirsty
+     */
     public Integer getThirsty() {
         return thirsty;
     }
 
+    /**
+     * Sets thirsty.
+     *
+     * @param thirsty the thirsty
+     */
     public void setThirsty(Integer thirsty) {
         this.thirsty = thirsty;
     }
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets original owner uid.
+     *
+     * @return the original owner uid
+     */
     public String getOriginalOwnerUid() {
         return originalOwnerUid;
     }
 
+    /**
+     * Sets original owner uid.
+     *
+     * @param originalOwnerUid the original owner uid
+     */
     public void setOriginalOwnerUid(String originalOwnerUid) {
         this.originalOwnerUid = originalOwnerUid;
     }
 
+    /**
+     * Gets current owner uid.
+     *
+     * @return the current owner uid
+     */
     public String getCurrentOwnerUid() {
         return currentOwnerUid;
     }
 
+    /**
+     * Sets current owner uid.
+     *
+     * @param currentOwnerUid the current owner uid
+     */
     public void setCurrentOwnerUid(String currentOwnerUid) {
         this.currentOwnerUid = currentOwnerUid;
     }
 
+    /**
+     * Gets is run away.
+     *
+     * @return the is run away
+     */
     public Integer getIsRunAway() {
         return isRunAway;
     }
 
+    /**
+     * Sets is run away.
+     *
+     * @param isRunAway the is run away
+     */
     public void setIsRunAway(Integer isRunAway) {
         this.isRunAway = isRunAway;
     }
 
+    /**
+     * Gets level.
+     *
+     * @return the level
+     */
     public Integer getLevel() {
         return level;
     }
 
+    /**
+     * Sets level.
+     *
+     * @param level the level
+     */
     public void setLevel(Integer level) {
         this.level = level;
     }
 
+    /**
+     * Gets clean.
+     *
+     * @return the clean
+     */
     public Integer getClean() {
         return clean;
     }
 
+    /**
+     * Sets clean.
+     *
+     * @param clean the clean
+     */
     public void setClean(Integer clean) {
         this.clean = clean;
     }
 
+    /**
+     * Gets hunger.
+     *
+     * @return the hunger
+     */
     public Integer getHunger() {
         return hunger;
     }
 
+    /**
+     * Sets hunger.
+     *
+     * @param hunger the hunger
+     */
     public void setHunger(Integer hunger) {
         this.hunger = hunger;
     }
 
+    /**
+     * Gets growth.
+     *
+     * @return the growth
+     */
     public float getGrowth() {
         return growth;
     }
 
+    /**
+     * Sets growth.
+     *
+     * @param growth the growth
+     */
     public void setGrowth(float growth) {
         this.growth = growth;
     }
 
+    /**
+     * Gets liking.
+     *
+     * @return the liking
+     */
     public Integer getLiking() {
         return liking;
     }
 
+    /**
+     * Sets liking.
+     *
+     * @param liking the liking
+     */
     public void setLiking(Integer liking) {
         this.liking = liking;
     }
 
+    /**
+     * Gets brood.
+     *
+     * @return the brood
+     */
     public String getBrood() {
         return brood;
     }
 
+    /**
+     * Sets brood.
+     *
+     * @param brood the brood
+     */
     public void setBrood(String brood) {
         this.brood = brood;
     }
 
+    /**
+     * Gets max growth.
+     *
+     * @return the max growth
+     */
     public float getMaxGrowth() {
         return maxGrowth;
     }
 
+    /**
+     * Sets max growth.
+     *
+     * @param maxGrowth the max growth
+     */
     public void setMaxGrowth(float maxGrowth) {
         this.maxGrowth = maxGrowth;
     }

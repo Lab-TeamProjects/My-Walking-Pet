@@ -26,7 +26,13 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+/**
+ * The type Sign up activity.
+ */
 public class SignUpActivity extends AppCompatActivity {
+    /**
+     * The Binding.
+     */
     ActivitySignUpBinding binding;
 
     @Override
@@ -50,6 +56,9 @@ public class SignUpActivity extends AppCompatActivity {
         binding.etPassWordCheck.addTextChangedListener(textWatcher);
     }
 
+    /**
+     * The Text watcher.
+     */
     TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -67,7 +76,10 @@ public class SignUpActivity extends AppCompatActivity {
         public void afterTextChanged(Editable s) {}
     };
 
-    // 중복체크 리스너
+    /**
+     * The Btn duplication check listener.
+     */
+// 중복체크 리스너
     View.OnClickListener btnDuplicationCheckListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -117,7 +129,10 @@ public class SignUpActivity extends AppCompatActivity {
         }
     };
 
-    // 회원가입 버튼
+    /**
+     * The Btn sign up listener.
+     */
+// 회원가입 버튼
     View.OnClickListener btnSignUpListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -165,7 +180,13 @@ public class SignUpActivity extends AppCompatActivity {
         }
     };
 
-    // 이메일 형식 판별
+    /**
+     * Is email pattern boolean.
+     *
+     * @param src the src
+     * @return the boolean
+     */
+// 이메일 형식 판별
     public static boolean isEmailPattern(String src) {
         return Pattern.matches("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
                 "\\@" +

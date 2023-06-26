@@ -10,6 +10,9 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.adapters.FindAccountAdapter;
 
+/**
+ * The type Find account activity.
+ */
 public class FindAccountActivity extends AppCompatActivity {
 
     @Override

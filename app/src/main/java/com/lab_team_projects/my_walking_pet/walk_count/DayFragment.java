@@ -46,6 +46,9 @@ public class DayFragment extends Fragment {
      */
     private BarChartHelper barchartHelper;
 
+    /**
+     * Instantiates a new Day fragment.
+     */
     public DayFragment() {
         // Required empty public constructor
     }

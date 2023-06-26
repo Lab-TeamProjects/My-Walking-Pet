@@ -37,7 +37,7 @@ import java.util.Locale;
  * 포그라운드 서비스 클래스
  * 백그라운드에서 걸음수 감지 센서를 이용하여 사용자가 걷거나 뛸 때 걸음 수를 카운트하여
  * 기기 내부 저장소에 저장합니다.
- *
+ * <p>
  * 가속도 적분을 이용하여 사용자의 지정 시간 동안의 속도를 구하여
  * 사용자가 걷고 있는지 뛰고 있는지 판단하여 걸음 객체의 걸음 수 관련 변수에 각각 저장합니다.
  */
@@ -47,6 +47,9 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
      * 백그라운드에서 서비스가 동작할 수 있도록 하는 클래스
      */
     public static BackgroundTask task;
+    /**
+     * The constant value.
+     */
     public static int value = 0;
     /**
      * 포그라운드 서비스가 동작하면 모바일 알림창에 앱이 동작중이라고 알려주는 클래스
@@ -67,12 +70,16 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     private double accelerationMagnitudeAtLastUpdate = 0.0;  // 마지막 가속도 측정 값
 
 
+    /**
+     * Instantiates a new Walk count fore ground service.
+     */
     public WalkCountForeGroundService() {
         // 빈 생성자
     }
 
     /**
      * 현재 포그라운드 서비스가 동작중인지 판단하는 메서드
+     *
      * @return 동작을 판단하여 bool 형태로 반환
      */
     public boolean isRunning(){
@@ -138,6 +145,9 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
         return START_NOT_STICKY;
     }
 
+    /**
+     * Stop task.
+     */
     public void stopTask() {
         task.onCancelled();
         task.cancel(true);
@@ -147,9 +157,10 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
     /**
      * 현재 선택된 펫의 진화 상태를 알립니다.
      * 서비스가 동작중일 때 알림창은 항상 표시되며 서비스가 중지되면 알림창은 종료됩니다.
+     *
      * @return 알림 빌더 클래스를 반환합니다.
      */
-    // 진화 알람
+// 진화 알람
     public Notification evolutionNotification() {
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle()
                 .bigText(String.format(Locale.getDefault(), "\uD83D\uDC36 펫 다음 성장까지 %d걸음\n\uD83D\uDC5F 목표 걸음까지 %d걸음 남았습니다!", walk.getCount(), walk.getGoal()))
@@ -178,12 +189,14 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
         return builder.build();
     }
+
     /**
      * 현재 사용자의 걸음 수와 펫의 진화 상태를 알림창으로 보여줍니다.
      * 서비스가 동작중일 때 알림창은 항상 표시되며 서비스가 중지되면 알림창은 종료됩니다.
+     *
      * @return 알림 빌더 클래스를 반환합니다.
      */
-    // 펫 현황
+// 펫 현황
     public Notification makeNotification(){
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle()
                 .bigText(String.format(Locale.getDefault(), "\uD83D\uDC36 펫 다음 성장까지 %d걸음\n\uD83D\uDC5F 목표 걸음까지 %d걸음 남았습니다!", walk.getCount(), walk.getGoal()))
@@ -357,6 +370,11 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
 
     }
 
+    /**
+     * Println.
+     *
+     * @param msg the msg
+     */
     public static void println(String msg) {
         Log.d("Foreground", msg);
     }
@@ -367,15 +385,37 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
      * 날짜가 변경되는 00시에 현재 싱글톤 객체에 저장되어 있는 걸음 객체를 새로운 날짜에 맞춰서
      * 새로운 걸음 객체를 생성하고 교체합니다.
      */
-    // 스레드
+// 스레드
     class BackgroundTask extends AsyncTask<Integer, String, Integer> {
 
+        /**
+         * The Current date.
+         */
         Date currentDate;
+        /**
+         * The Sdf.
+         */
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+        /**
+         * The Walk date.
+         */
         Date walkDate;
+        /**
+         * The Context.
+         */
         Context context;
+        /**
+         * The Gm.
+         */
         GameManager gm;
 
+        /**
+         * Instantiates a new Background task.
+         *
+         * @param gm      the gm
+         * @param context the context
+         * @throws ParseException the parse exception
+         */
         public BackgroundTask(GameManager gm, Context context) throws ParseException {
             this.gm = gm;
             this.walkDate = sdf.parse(gm.getWalk().getDate());

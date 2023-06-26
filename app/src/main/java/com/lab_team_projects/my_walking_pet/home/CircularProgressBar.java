@@ -74,6 +74,8 @@ public class CircularProgressBar extends View{
 
     /**
      * 프로그레스바 수치를 설정하고 invalidate() 메서드를 호출합니다.
+     *
+     * @param progress the progress
      */
     public void setProgress(float progress) {
         this.progress = progress;
@@ -136,6 +138,7 @@ public class CircularProgressBar extends View{
 
     /**
      * 원형 프로그래스바 생성자
+     *
      * @param context 안드로이드 context
      */
     public CircularProgressBar(Context context) {
@@ -143,16 +146,37 @@ public class CircularProgressBar extends View{
         init(context, null);
     }
 
+    /**
+     * Instantiates a new Circular progress bar.
+     *
+     * @param context the context
+     * @param attrs   the attrs
+     */
     public CircularProgressBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
+    /**
+     * Instantiates a new Circular progress bar.
+     *
+     * @param context      the context
+     * @param attrs        the attrs
+     * @param defStyleAttr the def style attr
+     */
     public CircularProgressBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
+    /**
+     * Instantiates a new Circular progress bar.
+     *
+     * @param context      the context
+     * @param attrs        the attrs
+     * @param defStyleAttr the def style attr
+     * @param defStyleRes  the def style res
+     */
     public CircularProgressBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context, attrs);

@@ -17,6 +17,11 @@ public class GameManager {
     private Walk walk;
 
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static GameManager getInstance() {
         if (instance == null) {
             instance = new GameManager();
@@ -26,7 +31,8 @@ public class GameManager {
 
     /**
      * 서버와 동기화 하여 유저 정보를 앱에 설정합니다.
-     * @param context
+     *
+     * @param context the context
      */
     public void loadUser(Context context) {
         SharedPreferences pref = context.getSharedPreferences("login", Context.MODE_PRIVATE);
@@ -43,14 +49,29 @@ public class GameManager {
         user.setMoney(pref.getInt("money", 10000));
     }
 
+    /**
+     * Gets user.
+     *
+     * @return the user
+     */
     public User getUser() {
         return user;
     }
 
+    /**
+     * Gets walk.
+     *
+     * @return the walk
+     */
     public Walk getWalk() {
         return walk;
     }
 
+    /**
+     * Sets walk.
+     *
+     * @param walk the walk
+     */
     public void setWalk(Walk walk) {
         this.walk = walk;
     }

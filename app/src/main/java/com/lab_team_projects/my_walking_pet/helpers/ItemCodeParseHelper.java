@@ -19,12 +19,20 @@ import java.util.List;
 public class ItemCodeParseHelper {
     private final List<ItemDetail> itemDetailList = new ArrayList<>();
 
+    /**
+     * Gets item details list.
+     *
+     * @return the item details list
+     */
     public List<ItemDetail> getItemDetailsList() {
         return itemDetailList;
     }
 
     /**
      * csv를 파싱하여 리스트에 저장합니다.
+     *
+     * @param context the context
+     * @throws IOException the io exception
      */
     public ItemCodeParseHelper(Context context) throws IOException {
 

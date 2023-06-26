@@ -8,7 +8,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.lab_team_projects.my_walking_pet.databinding.ActivityEmailAuthNoticeBinding;
 
+/**
+ * The type Email auth notice activity.
+ */
 public class EmailAuthNoticeActivity extends AppCompatActivity {
+    /**
+     * The Binding.
+     */
     ActivityEmailAuthNoticeBinding binding;
 
     @Override

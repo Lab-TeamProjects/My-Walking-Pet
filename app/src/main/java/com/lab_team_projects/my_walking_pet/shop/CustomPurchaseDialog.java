@@ -21,7 +21,7 @@ import java.io.IOException;
 /**
  * 상점에서 아이템을 구매하기 위한 다이얼로그 클래스
  * 동물의 밥, 청결 도구 등등을 구매할 수 있습니다.
- *
+ * <p>
  * 사용자가 아이템을 구매하면 리스너로 감지하여 사용자의 재화에서 금액을 차감합니다.
  */
 public class CustomPurchaseDialog extends Dialog {
@@ -36,11 +36,22 @@ public class CustomPurchaseDialog extends Dialog {
 
     private ItemPurchaseListener itemPurchaseListener;    // 구매 했다고 단방향으로 알려주는 리스너 인터페이스
 
+    /**
+     * Sets item purchase listener.
+     *
+     * @param itemPurchaseListener the item purchase listener
+     */
     public void setItemPurchaseListener(ItemPurchaseListener itemPurchaseListener) {
         this.itemPurchaseListener = itemPurchaseListener;
     }
 
+    /**
+     * The interface Item purchase listener.
+     */
     public interface ItemPurchaseListener {
+        /**
+         * Item purchase.
+         */
         void itemPurchase();
 
     }
@@ -48,6 +59,10 @@ public class CustomPurchaseDialog extends Dialog {
     /**
      * 구매 다이얼로그 생성자
      * 사용자가 선택한 아이템으로 다이얼로그 뷰를 세팅합니다.
+     *
+     * @param context the context
+     * @param id      the id
+     * @throws IOException the io exception
      */
     public CustomPurchaseDialog(@NonNull Context context, int id) throws IOException {
         super(context);

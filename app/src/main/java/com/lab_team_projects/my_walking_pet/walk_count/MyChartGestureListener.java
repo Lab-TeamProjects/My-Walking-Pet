@@ -27,6 +27,14 @@ public class MyChartGestureListener implements OnChartGestureListener {
     private final DateTimeFormatter format =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
+    /**
+     * Instantiates a new My chart gesture listener.
+     *
+     * @param walkList    the walk list
+     * @param barChart    the bar chart
+     * @param tvWalkCount the tv walk count
+     * @param tvWeekDate  the tv week date
+     */
     public MyChartGestureListener(List<Walk> walkList, BarChart barChart, TextView tvWalkCount, TextView tvWeekDate) {
         this.walks = walkList;
         this.chart = barChart;

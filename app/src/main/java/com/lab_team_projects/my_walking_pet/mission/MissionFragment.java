@@ -15,10 +15,17 @@ import com.lab_team_projects.my_walking_pet.databinding.FragmentMissionBinding;
 import com.lab_team_projects.my_walking_pet.helpers.MissionCheckHelper;
 import com.lab_team_projects.my_walking_pet.home.Item;
 
+/**
+ * The type Mission fragment.
+ */
 public class MissionFragment extends Fragment {
 
     private FragmentMissionBinding binding;
     private MainActivity mMainActivity;
+
+    /**
+     * Instantiates a new Mission fragment.
+     */
     public MissionFragment() {
         // Required empty public constructor
     }

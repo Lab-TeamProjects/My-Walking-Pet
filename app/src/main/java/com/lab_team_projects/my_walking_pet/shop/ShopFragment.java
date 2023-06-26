@@ -28,6 +28,9 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
     private FragmentShopBinding binding;
     private MainActivity mMainActivity;
 
+    /**
+     * Instantiates a new Shop fragment.
+     */
     public ShopFragment() { }
 
     @Override

@@ -6,7 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.lab_team_projects.my_walking_pet.databinding.ActivityTitleBinding;
 
+/**
+ * The type Title activity.
+ */
 public class TitleActivity extends AppCompatActivity {
+    /**
+     * The Binding.
+     */
     ActivityTitleBinding binding;
 
     @Override

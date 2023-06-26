@@ -18,6 +18,12 @@ public class CustomResultDialog extends Dialog {
 
     private final Context context;
     private CustomResultDialogBinding binding;
+
+    /**
+     * Instantiates a new Custom result dialog.
+     *
+     * @param context the context
+     */
     public CustomResultDialog(@NonNull Context context) {
         super(context);
         this.context = context;

@@ -63,12 +63,21 @@ public class HomeFragment extends Fragment {
     private final Animal nowPet = user.getAnimalList().get(user.getNowSelectedPet());
 
     private boolean isInteractionBtnClick = false;
+    /**
+     * The Last click time.
+     */
     long lastClickTime = 0;
+    /**
+     * The Can drag time.
+     */
     int canDragTime = 3000;    // 드래그 쿨타임 현재 3초
     private InventoryHelper inventoryHelper;
 
     private boolean isExercising = false;
 
+    /**
+     * Instantiates a new Home fragment.
+     */
     public HomeFragment() { }
 
     /**
@@ -316,7 +325,8 @@ public class HomeFragment extends Fragment {
 
     /**
      * 포그라운드 서비스에서 동작하는 바인더 클래스를 정의합니다.
-     * @param selected
+     *
+     * @param selected the selected
      */
     public void serviceCreateAndBind(int selected) {
         svc = null;

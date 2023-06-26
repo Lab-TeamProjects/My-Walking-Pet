@@ -23,6 +23,12 @@ public class BarChartHelper {
     private final BarChart barChart;
     private final boolean isDay;
 
+    /**
+     * Instantiates a new Bar chart helper.
+     *
+     * @param barChart the bar chart
+     * @param isDay    the is day
+     */
     public BarChartHelper(BarChart barChart, boolean isDay) {
         this.barChart = barChart;
         this.isDay = isDay;
@@ -31,6 +37,7 @@ public class BarChartHelper {
 
     /**
      * 막대 차트의 데이터를 설정합니다.
+     *
      * @param walkList 데이터로 설정할 걸음 객체 리스트
      */
     public void setData(List<Walk> walkList) {
@@ -74,6 +81,7 @@ public class BarChartHelper {
 
     /**
      * 막대 차트의 ui 설정 메서드
+     *
      * @param isDay 막대 차트를 일일 통계 화면에서 보여주는지 판단하는 플래그 변수
      */
     public void initLayout(boolean isDay) {

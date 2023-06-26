@@ -15,6 +15,11 @@ public class WalkViewModel extends AndroidViewModel {
     private final LiveData<Walk> walkLiveData;
     private final AppDatabase db;
 
+    /**
+     * Instantiates a new Walk view model.
+     *
+     * @param application the application
+     */
     public WalkViewModel(Application application) {
         super(application);
         db = AppDatabase.getInstance(application);
@@ -23,12 +28,18 @@ public class WalkViewModel extends AndroidViewModel {
 
     /**
      * 실시간으로 변수에 접근하여 값을 반환한는 클래스
-     * @return
+     *
+     * @return walk live data
      */
     public LiveData<Walk> getWalkLiveData() {
         return walkLiveData;
     }
 
+    /**
+     * Update walk.
+     *
+     * @param walk the walk
+     */
     public void updateWalk(Walk walk) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             AppDatabase.getInstance(getApplication()).walkDao().update(walk);

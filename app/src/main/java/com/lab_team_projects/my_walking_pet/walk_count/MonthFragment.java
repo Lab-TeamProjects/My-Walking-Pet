@@ -41,31 +41,66 @@ public class MonthFragment extends Fragment {
     private FragmentMonthBinding binding;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
+    /**
+     * Instantiates a new Month fragment.
+     */
     public MonthFragment() {
         // Required empty public constructor
     }
 
     private class MonthCount {
+        /**
+         * The Date.
+         */
         String date;    // yy-MM
+        /**
+         * The Count.
+         */
         int count;
 
+        /**
+         * Instantiates a new Month count.
+         *
+         * @param date  the date
+         * @param count the count
+         */
         public MonthCount(String date, int count) {
             this.date = date;
             this.count = count;
         }
 
+        /**
+         * Gets date.
+         *
+         * @return the date
+         */
         public String getDate() {
             return date;
         }
 
+        /**
+         * Sets date.
+         *
+         * @param date the date
+         */
         public void setDate(String date) {
             this.date = date;
         }
 
+        /**
+         * Gets count.
+         *
+         * @return the count
+         */
         public int getCount() {
             return count;
         }
 
+        /**
+         * Sets count.
+         *
+         * @param count the count
+         */
         public void setCount(int count) {
             this.count = count;
         }

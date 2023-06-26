@@ -48,6 +48,9 @@ public class WalkCountFragment extends Fragment {
     private final CalendarFragment yearFragment = new CalendarFragment();
 
 
+    /**
+     * Instantiates a new Walk count fragment.
+     */
     public WalkCountFragment() {
         // Required empty public constructor
     }

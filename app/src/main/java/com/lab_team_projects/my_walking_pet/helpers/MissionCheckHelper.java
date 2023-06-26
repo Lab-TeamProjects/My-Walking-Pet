@@ -13,12 +13,18 @@ import com.lab_team_projects.my_walking_pet.home.Item;
 public class MissionCheckHelper {
     private final UserPreferenceHelper userPre;
 
+    /**
+     * Instantiates a new Mission check helper.
+     *
+     * @param context the context
+     */
     public MissionCheckHelper(Context context) {
         this.userPre = new UserPreferenceHelper(context, "user_active");
     }
 
     /**
      * 사용자가 해당 아잍메을 사용했다고 알립니다.
+     *
      * @param type 아이템 타입
      */
     public void useItem(String type) {
@@ -33,8 +39,9 @@ public class MissionCheckHelper {
 
     /**
      * 사용자가 사용한 아이템 개수를 알립니다.
-     * @param type
-     * @param count
+     *
+     * @param type  the type
+     * @param count the count
      */
     public void completeMission(String type, int count) {
         if (type.equals(Item.ItemType.FOOD.name())) {
@@ -48,8 +55,9 @@ public class MissionCheckHelper {
 
     /**
      * 개수를 반환받습니다.
-     * @param type
-     * @return
+     *
+     * @param type the type
+     * @return count
      */
     public int getCount(String type) {
         if (type.equals(Item.ItemType.FOOD.name())) {
@@ -63,7 +71,8 @@ public class MissionCheckHelper {
 
     /**
      * 미션 아이템에 해당하는 비율을 계산하여 반환받습니다.
-     * @param type
+     *
+     * @param type the type
      * @return 미션 달성 비율
      */
     public int getRatio(String type) {
@@ -82,6 +91,9 @@ public class MissionCheckHelper {
         }
     }
 
+    /**
+     * Reset today.
+     */
     public void resetToday() {
         userPre.saveActiveValue(TodayUserActiveKey.food, 0);
         userPre.saveActiveValue(TodayUserActiveKey.drink, 0);

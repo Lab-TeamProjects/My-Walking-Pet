@@ -27,13 +27,16 @@ import java.util.Objects;
  * 일주일 단위로 저장되어 있는 걸음 수 통계를 보여줍니다.
  * 기기 저장소에 실제로 저장되어 있는 걸음 수는 있을 수도 있고 없을 수도 있기 떄문에
  * 없는 데이터를 더미 데이터로 만들어서 통계 수치에 활용합니다.
- *
+ * <p>
  * 사용자는 막대 차트를 드래그하여 일주일 단위로 걸음 정보에 대한 막대 차트를 볼 수 있습니다.
  */
 public class WeekFragment extends Fragment {
 
     private FragmentWeekBinding binding;
 
+    /**
+     * Instantiates a new Week fragment.
+     */
     public WeekFragment() {
         // Required empty public constructor
     }

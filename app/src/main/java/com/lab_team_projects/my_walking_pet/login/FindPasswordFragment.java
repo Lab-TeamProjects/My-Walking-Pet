@@ -9,7 +9,13 @@ import androidx.fragment.app.Fragment;
 
 import com.lab_team_projects.my_walking_pet.R;
 
+/**
+ * The type Find password fragment.
+ */
 public class FindPasswordFragment extends Fragment {
+    /**
+     * Instantiates a new Find password fragment.
+     */
     public FindPasswordFragment() { }
 
     @Override

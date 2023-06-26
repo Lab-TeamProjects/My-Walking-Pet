@@ -11,6 +11,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentOnBoardingFirstBinding;
 
+/**
+ * The type On boarding first fragment.
+ */
 public class OnBoardingFirstFragment extends Fragment {
 
     @Override

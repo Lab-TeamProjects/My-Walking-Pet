@@ -13,8 +13,14 @@ import com.lab_team_projects.my_walking_pet.databinding.ActivityProfileSettingBi
  */
 public class ProfileSettingActivity extends AppCompatActivity {
 
+    /**
+     * The Binding.
+     */
     ActivityProfileSettingBinding binding;
 
+    /**
+     * The Ib save.
+     */
     ImageButton ibSave;
 
     @Override

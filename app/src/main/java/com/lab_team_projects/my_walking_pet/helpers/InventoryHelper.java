@@ -38,13 +38,23 @@ public class InventoryHelper {
      * 사용자가 아이템을 사용할 때 감지되는 리스너 클래스
      */
     private ItemUsingListener itemUsingListener = null;
+
+    /**
+     * Sets item using listener.
+     *
+     * @param itemUsingListener the item using listener
+     */
     public void setItemUsingListener(ItemUsingListener itemUsingListener) {
         this.itemUsingListener = itemUsingListener;
     }
+
     /**
      * 사용자가 아이템을 사용할 때 감지되는 리스너 클래스
      */
     public interface ItemUsingListener {
+        /**
+         * On item use.
+         */
         void onItemUse();
     }
 
@@ -56,6 +66,10 @@ public class InventoryHelper {
 
     /**
      * 인벤토리 생성자, 인벤토리를 처음 생성할 떄 json 문자열을 받아서 클래스 타입에 맞게 사용자 인벤토리에 저장합니다.
+     *
+     * @param json    the json
+     * @param context the context
+     * @throws IOException the io exception
      */
     public InventoryHelper(String json, Context context) throws IOException {
         this.context = context;
@@ -72,6 +86,9 @@ public class InventoryHelper {
 
     /**
      * 인벤토리 생성자
+     *
+     * @param context the context
+     * @throws IOException the io exception
      */
     public InventoryHelper (Context context) throws IOException {
         this.context = context;
@@ -79,13 +96,19 @@ public class InventoryHelper {
         detailsList = itemCodeParseHelper.getItemDetailsList();
     }
 
+    /**
+     * Sets item type.
+     *
+     * @param itemType the item type
+     */
     public void setItemType(Item.ItemType itemType) {
         this.itemType = itemType;
     }
 
     /**
      * 상호작용 버튼을 눌렀을 때 아이템 버튼을 누르면 카테고리에 맞게 유저의 인벤토리 리스트에서 아이템을 가져옵니다.
-     * @return
+     *
+     * @return item name
      */
     public String setItemName() {
         /*
@@ -110,6 +133,12 @@ public class InventoryHelper {
 
     }
 
+    /**
+     * Find item item detail.
+     *
+     * @param code the code
+     * @return the item detail
+     */
     public ItemDetail findItem(int code) {
         for(ItemDetail itemDetail : detailsList) {
             if (itemDetail.getCode() == code) {
@@ -121,6 +150,8 @@ public class InventoryHelper {
 
     /**
      * 선택된 아이템에서 다음 버튼을 누르면 아이템 인덱스가 변경되고 아이템 설명 텍스트를 변경합니다.
+     *
+     * @return the next item
      */
     public String setNextItem() {
         /*
@@ -137,6 +168,11 @@ public class InventoryHelper {
 
     }
 
+    /**
+     * Sets before item.
+     *
+     * @return the before item
+     */
     public String setBeforeItem() {
         if (currentItemIndex > 0) {
             currentItemIndex--;
@@ -165,6 +201,7 @@ public class InventoryHelper {
      * 사용자가 인벤토리에서 아이템을 사용하면 실행되는 메서드
      * 아이템이 존재하는지 판단하고 해당 아이템의 자세한 객체를 현재 선택된 동물에 전달하여
      * 아이템 효과대로 동물에 적용합니다.
+     *
      * @return 아이템이 없을경우 없다는 문자열을 반환하고 아니면 선택된 아이템의 상태에 해당하는 문자열을 반환합니다.
      */
     public String useCurrentItem() {

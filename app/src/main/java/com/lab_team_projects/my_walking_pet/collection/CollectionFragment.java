@@ -25,6 +25,9 @@ public class CollectionFragment extends Fragment {
     private FragmentCollectionBinding binding;
     private MainActivity mMainActivity;
 
+    /**
+     * Instantiates a new Collection fragment.
+     */
     public CollectionFragment() {
         // Required empty public constructor
     }

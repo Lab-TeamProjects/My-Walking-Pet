@@ -22,6 +22,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * The type Server connection helper.
+ */
 public class ServerConnectionHelper {
     private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -29,14 +32,35 @@ public class ServerConnectionHelper {
 
     private ClientCallBackListener clientCallBackListener = null;
 
+    /**
+     * Sets client call back listener.
+     *
+     * @param clientCallBackListener the client call back listener
+     */
     public void setClientCallBackListener(ClientCallBackListener clientCallBackListener) {
         this.clientCallBackListener = clientCallBackListener;
     }
 
+    /**
+     * The interface Client call back listener.
+     */
     public interface ClientCallBackListener {
+        /**
+         * On response.
+         *
+         * @param call     the call
+         * @param response the response
+         * @throws IOException the io exception
+         */
         void onResponse(@NonNull Call call, @NonNull Response response) throws IOException;
     }
 
+    /**
+     * Instantiates a new Server connection helper.
+     *
+     * @param url         the url
+     * @param accessToken the access token
+     */
     public ServerConnectionHelper(String url, String accessToken) {
         serverUrl = serverUrl.concat(url);
 
@@ -50,7 +74,8 @@ public class ServerConnectionHelper {
 
     /**
      * 서버에 데이터를 담은 객체를 전송하기위한 클래스
-     * @param url : 서버주소
+     *
+     * @param url        : 서버주소
      * @param jsonObject : 보낼 메시지를 담은 객체
      */
     public ServerConnectionHelper(String url, JSONObject jsonObject) {
@@ -71,8 +96,9 @@ public class ServerConnectionHelper {
 
     /**
      * 서버에 데이터를 담은 객체를 전송하기위한 클래스
-     * @param url : 서버주소
-     * @param jsonObject : 보낼 메시지를 담은 객체
+     *
+     * @param url         : 서버주소
+     * @param jsonObject  : 보낼 메시지를 담은 객체
      * @param accessToken : 사용자를 구분하기위한 액세스 토큰
      */
     public ServerConnectionHelper(String url, JSONObject jsonObject, String accessToken) {
@@ -95,7 +121,14 @@ public class ServerConnectionHelper {
     }
 
 
-    // 이미지 전송(인코딩 -> base64) 추가해야하고,
+    /**
+     * Instantiates a new Server connection helper.
+     *
+     * @param dir         the dir
+     * @param photoName   the photo name
+     * @param accessToken the access token
+     */
+// 이미지 전송(인코딩 -> base64) 추가해야하고,
     public ServerConnectionHelper(File dir, String photoName, String accessToken) {
         serverUrl = serverUrl.concat("/imgAdd");
         File file = new File(dir, photoName);
