@@ -46,7 +46,7 @@ public class CollectionFragment extends Fragment {
         mMainActivity.onAppBarLoad();
 
         List<Collection> collectionList = new ArrayList<>();
-        for(int i=0; i<40; i++) {
+        for(int i=0; i<18; i++) {
             collectionList.add(new Collection());
         }
 

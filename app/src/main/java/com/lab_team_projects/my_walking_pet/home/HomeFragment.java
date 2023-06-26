@@ -1,13 +1,17 @@
 package com.lab_team_projects.my_walking_pet.home;
 
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +23,8 @@ import android.widget.Toast;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -32,7 +38,10 @@ import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
 import com.lab_team_projects.my_walking_pet.login.User;
 import com.lab_team_projects.my_walking_pet.walk_count.WalkViewModel;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * 홈 화면에 해당하는 프래그먼트 클래스
@@ -268,7 +277,9 @@ public class HomeFragment extends Fragment {
 
         binding.ibHelp.setOnClickListener(v -> showHelpOverlay()); // 도움말을 표시하는 메소드 호출
         //binding.helpOverlay.setOnClickListener(v -> hideHelpOverlay());
-        binding.ibAR.setOnClickListener(v -> Toast.makeText(requireContext(), "AR 이동 버튼", Toast.LENGTH_SHORT).show()); // Toast -> "카메라 실행"으로 변경 필요
+        binding.ibAR.setOnClickListener(v -> {
+            takeScreenshot();
+        });
 
         binding.ibExercise.setOnClickListener(v -> {
             CustomExerciseDialog dialog = new CustomExerciseDialog(requireContext(), isExercising, isExercising ? svc : null);
@@ -281,6 +292,41 @@ public class HomeFragment extends Fragment {
             });
             dialog.show();
         });
+    }
+
+    private void takeScreenshot() {
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(),
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
+        }
+
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+
+        try {
+            String mPath = requireContext().getExternalFilesDir(null).toString() + "/" + now + ".jpg";
+
+            // 스크린샷을 찍기 위해 뷰를 생성
+            View v1 = requireActivity().getWindow().getDecorView().getRootView();
+            v1.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            v1.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(mPath);
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+
+            outputStream.flush();
+            outputStream.close();
+
+            Toast.makeText(requireContext(), "스크린샷을 저장했습니다.", Toast.LENGTH_SHORT).show();
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     /**

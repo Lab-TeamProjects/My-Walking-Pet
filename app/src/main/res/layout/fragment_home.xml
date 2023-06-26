@@ -93,7 +93,7 @@
             />
 
         <com.lab_team_projects.my_walking_pet.home.CircularProgressBar
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="05dp"
             app:layout_constraintEnd_toEndOf="@id/ibShop"
             app:layout_constraintTop_toBottomOf="@id/pet"
             android:id="@+id/pbCleanliness"

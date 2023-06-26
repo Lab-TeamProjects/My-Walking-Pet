@@ -29,7 +29,7 @@ public class TTSHelper {
                 if (status != TextToSpeech.ERROR) {
                     tts.setLanguage(Locale.KOREAN);    // 한국어
                     isTtsInitialized = true;
-                    tts.setPitch(2.0f);    // 목소리 높낮이 설정
+                    tts.setPitch(1.0f);    // 목소리 높낮이 설정
                     tts.setSpeechRate(1.0f);    // 목소리 속도 설정
                 }
             }
