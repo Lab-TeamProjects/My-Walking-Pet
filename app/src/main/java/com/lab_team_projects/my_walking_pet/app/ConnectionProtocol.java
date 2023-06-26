@@ -117,7 +117,7 @@ public class ConnectionProtocol {
     /**
      * The constant GAME_DATA_VIEW.
      */
-    public static final String GAME_DATA_VIEW = "user/game/view";
+    public static final String GET_PETS = "/users/pets";
 
 
     /**

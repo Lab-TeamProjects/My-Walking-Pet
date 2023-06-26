@@ -7,7 +7,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.lab_team_projects.my_walking_pet.login.FindEmailFragment;
 import com.lab_team_projects.my_walking_pet.login.FindPasswordFragment;
-
+/**
+ * 아이디 찾기 프래그먼트와 비밀번호 찾기 프래그먼트를 탭으로 설정하기 위한 어댑터
+ */
 public class FindAccountAdapter extends FragmentStateAdapter {
 
     public FindAccountAdapter(FragmentActivity fa) {

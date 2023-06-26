@@ -1,6 +1,6 @@
 package com.lab_team_projects.my_walking_pet.login;
 
-import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.GAME_DATA_VIEW;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.GET_PETS;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.LOGIN;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_AUTH_EMAIL;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_CORRECT_PASSWORD;
@@ -112,19 +112,38 @@ public class LoginActivity extends AppCompatActivity {
                                             }
                                         }));
 
-                                        loadData = new ServerConnectionHelper(GAME_DATA_VIEW, user.getAccessToken());
+                                        loadData = new ServerConnectionHelper(GET_PETS, user.getAccessToken());
                                         loadData.setClientCallBackListener((c, r) -> runOnUiThread(() -> {
                                             if (r.isSuccessful()) {
                                                 try {
                                                     JSONObject data = new JSONObject(Objects.requireNonNull(r.body()).string());
 
-                                                    String animalData = data.getString("animals");
+                                                    String animalData = data.getString("pets");
                                                     List<Animal> animalList = new Gson().fromJson(animalData, new TypeToken<List<Animal>>(){}.getType());
                                                     user.setAnimalList(animalList);
                                                     /*
                                                     다른 게임 정보도 받아야 함
                                                      */
+                                                } catch (JSONException e) {
+                                                    Log.e("loadData_game", "JSONException", e);
+                                                } catch (IOException e) {
+                                                    Log.e("loadData_game", "IOException", e);
+                                                }
+                                            }
+                                        }));
 
+                                        loadData = new ServerConnectionHelper(GET_PETS, user.getAccessToken());
+                                        loadData.setClientCallBackListener((c, r) -> runOnUiThread(() -> {
+                                            if (r.isSuccessful()) {
+                                                try {
+                                                    JSONObject data = new JSONObject(Objects.requireNonNull(r.body()).string());
+
+                                                    String animalData = data.getString("pets");
+                                                    List<Animal> animalList = new Gson().fromJson(animalData, new TypeToken<List<Animal>>(){}.getType());
+                                                    user.setAnimalList(animalList);
+                                                    /*
+                                                    다른 게임 정보도 받아야 함
+                                                     */
                                                 } catch (JSONException e) {
                                                     Log.e("loadData_game", "JSONException", e);
                                                 } catch (IOException e) {
