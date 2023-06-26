@@ -23,7 +23,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * The type Server connection helper.
+ * 서버와 통신을 담당하는 헬퍼
  */
 public class ServerConnectionHelper {
     private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");

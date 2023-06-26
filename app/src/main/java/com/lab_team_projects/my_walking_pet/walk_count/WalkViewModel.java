@@ -27,7 +27,7 @@ public class WalkViewModel extends AndroidViewModel {
     }
 
     /**
-     * 실시간으로 변수에 접근하여 값을 반환한는 클래스
+     * 실시간으로 변수에 접근하여 값을 반환하는 클래스
      *
      * @return walk live data
      */

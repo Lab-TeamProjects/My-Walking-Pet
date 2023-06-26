@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.PowerManager;
 import android.provider.Settings;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -19,6 +21,7 @@ import java.util.List;
 /**
  * The type Permissions check helper.
  */
+@RequiresApi(api = Build.VERSION_CODES.Q)
 public class PermissionsCheckHelper {
 
     private final Context context;
@@ -54,7 +57,7 @@ public class PermissionsCheckHelper {
     }
 
     /**
-     * Check permission boolean.
+     * 허용되지 않은 권한이 있는지 체크하는 함수
      *
      * @return the boolean
      */
@@ -74,7 +77,7 @@ public class PermissionsCheckHelper {
     }
 
     /**
-     * Request permission.
+     * 배열에 있는 권한을 요청하는 함수
      */
     public void requestPermission(){
         ActivityCompat.requestPermissions(activity, permissionList.toArray(new String[permissionList.size()]),
