@@ -15,6 +15,7 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.app.MainActivity;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentShopBinding;
+import com.lab_team_projects.my_walking_pet.login.User;
 
 import java.io.IOException;
 
@@ -43,6 +44,11 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentShopBinding.inflate(inflater, container, false);
+
+        binding.tvMoney.setOnClickListener(v->{
+            User user = GameManager.getInstance().getUser();
+            user.setMoney(user.getMoney() + 100000);
+        });
 
         mMainActivity.onAppBarLoad();
         setBtnOnClickListener();
