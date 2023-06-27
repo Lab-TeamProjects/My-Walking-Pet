@@ -110,7 +110,7 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
         // 선택된 아이템으로 다이얼로그 표시
         try {
             if (itemId != -1) {
-                CustomPurchaseDialog dialog = new CustomPurchaseDialog(requireContext(), itemId);
+                CustomPurchaseDialog dialog = new CustomPurchaseDialog(requireContext(), itemId, v.getBackground());
                 dialog.show();
                 dialog.setItemPurchaseListener(() -> {
                     binding.tvMoney.setText(String.valueOf(GameManager.getInstance().getUser().getMoney())); // 아이템 구매 OK 버튼을 눌렀을 때 변경된 재화를 표시하기 위해

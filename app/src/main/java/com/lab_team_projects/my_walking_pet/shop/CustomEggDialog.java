@@ -133,14 +133,16 @@ public class CustomEggDialog extends Dialog {
                         // 선택한 알에 따른 종족
                         Broods broods;
                         switch (currentIndex) {
-                            case 1:
-                                broods = Broods.CAT;
                             case 2:
                                 broods = Broods.DOG;
+                                break;
                             case 3:
                                 broods = Broods.MONKEY;
+                                break;
                             case 4:
                                 broods = Broods.HAMSTER;
+                                break;
+                            case 1:
                             default:
                                 broods = Broods.CAT;
                         }
