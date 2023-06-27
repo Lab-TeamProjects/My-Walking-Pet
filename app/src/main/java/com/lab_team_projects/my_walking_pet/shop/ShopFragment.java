@@ -73,6 +73,28 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
             itemId = 1001;
         } else if (btnId == R.id.btnFood2) {
             itemId = 1002;
+        } else if (btnId == R.id.btnFood3) {
+            itemId = 1003;
+        } else if (btnId == R.id.btnFood4) {
+            itemId = 1004;
+        } else if (btnId == R.id.btnOther1) {
+            itemId = 1030;
+        } else if (btnId == R.id.btnOther2) {
+            itemId = 1031;
+        } else if (btnId == R.id.btnOther3) {
+            itemId = 1032;
+        } else if (btnId == R.id.btnOther4) {
+            itemId = 1033;
+        } else if (btnId == R.id.btnOther5) {
+            itemId = 1034;
+        } else if (btnId == R.id.btnOther6) {
+            itemId = 1035;
+        } else if (btnId == R.id.btnOther7) {
+            itemId = 1036;
+        } else if (btnId == R.id.btnClean1) {
+            itemId = 1061;
+        } else if (btnId == R.id.btnClean2) {
+            itemId = 1062;
         } else if (btnId == R.id.ibPetEgg) {
             try {
                 CustomEggDialog dialog = new CustomEggDialog(requireContext());

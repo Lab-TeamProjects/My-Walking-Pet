@@ -30,6 +30,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
@@ -202,8 +204,8 @@ public class HomeFragment extends Fragment {
      * 현재 선택된 동물의 성장치, 수치를 홈화면에 그릴 수 있도록 수치를 가져옵니다.
      */
     private void initPetGrower() {
-        User user = GameManager.getInstance().getUser();
-        setPetRate(user.getAnimalList().get(user.getNowSelectedPet()));
+        // 초기 설정
+        setAnimalShow();
 
         // 펫 이름 클릭시 정보 다이얼로그
         binding.tvPetName.setOnClickListener(v->{
@@ -218,23 +220,42 @@ public class HomeFragment extends Fragment {
 
         // 펫 변경 왼쪽
         binding.btnPrevPet.setOnClickListener(v->{
-            Animal animal;
             if (0 < user.getNowSelectedPet()) {
                 user.setNowSelectedPet(user.getNowSelectedPet() - 1);
-                animal = user.getAnimalList().get(user.getNowSelectedPet());
-                setPetRate(animal);
+                setAnimalShow();
             }
         });
 
         // 펫 변경 오른쪽
         binding.btnNextPet.setOnClickListener(v->{
-            Animal animal;
             if (user.getNowSelectedPet() < user.getAnimalList().size() - 1) {
                 user.setNowSelectedPet(user.getNowSelectedPet() + 1);
-                animal = user.getAnimalList().get(user.getNowSelectedPet());
-                setPetRate(animal);
+                setAnimalShow();
             }
         });
+    }
+
+    private void setAnimalShow() {
+        Animal animal = user.getAnimalList().get(user.getNowSelectedPet());
+        setPetRate(animal);
+
+        /*
+        animalImages : 동물 레벨에 따른 이미지
+        0 : 고양이
+        1 : 개
+        2: 원숭이
+        3: 햄스터
+
+         */
+        int[][] animalImages = {{R.drawable.img_egg_white, R.drawable.img_pet_cat_1, R.drawable.img_pet_cat_2, R.drawable.img_pet_cat_3}
+                , {}
+                , {}
+                , {}};
+
+        // Broods enum 클래스에서 해당 동물이 몇번째인지
+        int broodsIndex = Broods.valueOf(animal.getBrood()).ordinal();
+        int animalLv = animal.getLevel();
+        Glide.with(requireContext()).load(animalImages[broodsIndex][animalLv]).fitCenter().into(binding.pet);
     }
 
     /**

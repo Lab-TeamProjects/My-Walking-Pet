@@ -41,7 +41,7 @@ public class CustomEggDialog extends Dialog {
     /**
      * 동물 알 사진들
      */
-    private final int[] eggImages = {R.drawable.ic_egg_black, R.drawable.ic_egg_blue, R.drawable.ic_egg_white, R.drawable.ic_egg_yellow};
+    private final int[] eggImages = {R.drawable.img_egg_black, R.drawable.img_egg_blue, R.drawable.img_egg_white, R.drawable.img_egg_yellow};
     private int currentIndex;
     private final String[][] eggs = {{"튼튼한 알", "50000"}, {"아름다운 알", "500000"}, {"빛나는 알", "600000"}, {"깨끗한 알", "6000000"}};
 
