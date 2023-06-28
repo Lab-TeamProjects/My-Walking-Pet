@@ -1,6 +1,7 @@
 package com.lab_team_projects.my_walking_pet.helpers;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -110,6 +111,7 @@ public class PermissionsCheckHelper {
     /**
      * Battery optimization.
      */
+    @SuppressLint("BatteryLife")
     public void batteryOptimization() {
         // 베터리 최적화 설정 요청
         Intent intent = new Intent();

@@ -11,6 +11,45 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/currentPet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="현재 키우는 동물 정보"
+            android:layout_margin="10dp"
+            />
+
+        <TextView
+            android:id="@+id/petName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/currentPet"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="pet name"
+            android:layout_margin="10dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/petName"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="pet level"
+            android:layout_margin="10dp"
+            />
+
+        <ImageView
+            android:id="@+id/currentPetImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            />
+
         <View
             android:id="@+id/viewDivider"
             app:layout_constraintTop_toTopOf="parent"

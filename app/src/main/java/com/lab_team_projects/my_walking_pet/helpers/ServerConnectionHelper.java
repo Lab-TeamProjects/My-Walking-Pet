@@ -1,5 +1,8 @@
 package com.lab_team_projects.my_walking_pet.helpers;
 
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.PROFILE_PHOTO;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.PROFILE_SETTING;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -31,6 +34,8 @@ public class ServerConnectionHelper {
     private String serverUrl = "http://203.232.193.164:5000/"; // 서버 기본 url
 
     private ClientCallBackListener clientCallBackListener = null;
+
+
 
     /**
      * Sets client call back listener.
@@ -67,6 +72,22 @@ public class ServerConnectionHelper {
         Request request = new Request.Builder()
                 .url(serverUrl)
                 .addHeader("Authorization", "Bearer " + accessToken)
+                .build();
+
+        requestClient(request);
+    }
+    /**
+     * 서버에 데이터를 담은 객체를 전송하기위한 클래스
+     *
+     * @param url         : 서버주소
+     * @param is_get      : get 판별 변수
+     */
+    public ServerConnectionHelper(String url, Boolean is_get) {
+        serverUrl = serverUrl.concat(url);
+
+        Request request = new Request.Builder()
+                .url(serverUrl)
+                .get()
                 .build();
 
         requestClient(request);
@@ -130,7 +151,7 @@ public class ServerConnectionHelper {
      */
 // 이미지 전송(인코딩 -> base64) 추가해야하고,
     public ServerConnectionHelper(File dir, String photoName, String accessToken) {
-        serverUrl = serverUrl.concat("/imgAdd");
+        serverUrl = serverUrl.concat(PROFILE_PHOTO);
         File file = new File(dir, photoName);
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

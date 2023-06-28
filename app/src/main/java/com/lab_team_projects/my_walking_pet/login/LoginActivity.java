@@ -5,16 +5,18 @@ import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.LOGIN;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_AUTH_EMAIL;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_CORRECT_PASSWORD;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_FOUND_EMAIL;
-import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.PROFILE_VIEW;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.PROFILE_SETTING;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.SUCCESS;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
@@ -35,6 +37,7 @@ import java.util.Objects;
 /**
  * The type Login activity.
  */
+@RequiresApi(api = Build.VERSION_CODES.Q)
 public class LoginActivity extends AppCompatActivity {
 
     private PermissionsCheckHelper pch;
@@ -55,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
+
             @Override
                 public void onClick(View v) {
                     JSONObject jsonObject = new JSONObject();
@@ -96,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                                         User user = gm.getUser();
                                         user.setAccessToken(responseJson.getString("access_token"));
 
-                                        ServerConnectionHelper loadData = new ServerConnectionHelper(PROFILE_VIEW, user.getAccessToken());
+                                        ServerConnectionHelper loadData = new ServerConnectionHelper(PROFILE_SETTING, user.getAccessToken());
                                         loadData.setClientCallBackListener((c,r) -> runOnUiThread(() -> {
                                             if (r.isSuccessful()) {
                                                 try {
