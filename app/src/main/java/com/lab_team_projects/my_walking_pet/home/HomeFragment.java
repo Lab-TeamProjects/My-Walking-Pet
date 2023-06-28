@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ import com.bumptech.glide.request.target.Target;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
+import com.lab_team_projects.my_walking_pet.helpers.AnimalSwipeTimeCheckHelper;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
 import com.lab_team_projects.my_walking_pet.helpers.OnSwipeTouchHelper;
 import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
@@ -71,10 +73,6 @@ public class HomeFragment extends Fragment {
      * 현재 접속된 유저
      */
     private final User user = gm.getUser();
-    /**
-     * 현재 선택된 동물
-     */
-    private final Animal nowPet = user.getAnimalList().get(user.getNowSelectedPet());
 
     private boolean isInteractionBtnClick = false;
     /**
@@ -84,10 +82,15 @@ public class HomeFragment extends Fragment {
     /**
      * The Can drag time.
      */
-    int canDragTime = 3000;    // 드래그 쿨타임 현재 3초
+    int canDragTime = 4000;    // 드래그 쿨타임 현재 3초
     private InventoryHelper inventoryHelper;
 
     private boolean isExercising = false;
+
+    private AnimalSwipeTimeCheckHelper animalSwipeTimeCheckHelper = new AnimalSwipeTimeCheckHelper();
+
+    private String[] liking = {"매우좋음", "좋음", "보통", "나쁨"};
+
 
     /**
      * Instantiates a new Home fragment.
@@ -106,6 +109,7 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
         verifyStoragePermission(requireActivity());
+        Animal nowPet = user.getAnimalList().get(user.getNowSelectedPet());
         nowPet.setGrowthCallback(new Animal.GrowthCallback() {
             @Override
             public void onCall() {
@@ -132,8 +136,21 @@ public class HomeFragment extends Fragment {
                     long currentTime = System.currentTimeMillis();
                     if (currentTime - lastClickTime > canDragTime) {
                         lastClickTime = currentTime;
-                        Log.d("__walk", "asdasd");
+
+                        Animal animal = user.getAnimalList().get(user.getNowSelectedPet());
+
                         // 드래그 하면 동작할 것
+                        boolean result = animalSwipeTimeCheckHelper.isCoolTimeOver(
+                                animal);
+
+                        if (result) {
+                            animal.setLiking(animal.getLiking() + 25);
+                        }
+
+                        setMessageCloud(R.drawable.ic_messge_happy);
+
+                        setAnimalLiking(animal);
+
                     }
                     break;
                 case MotionEvent.ACTION_UP:
@@ -168,6 +185,41 @@ public class HomeFragment extends Fragment {
         return binding.getRoot();
     }
 
+    private void setAnimalLiking(Animal animal) {
+        if (animal.getLiking() >= 75) {
+            binding.tvLiking.setText("기분 매우 좋음");
+        } else if (animal.getLiking() >= 50) {
+            binding.tvLiking.setText("기분 좋음");
+        } else if (animal.getLiking() >= 25) {
+            binding.tvLiking.setText("기분 보틍");
+        } else {
+            binding.tvLiking.setText("기분 나쁨");
+        }
+    }
+
+    private void setMessageCloud(int image) {
+        // 애니메이션 시작 전에 View를 보이게 함
+        Glide.with(requireContext()).load(image).into(binding.ivMessage);
+        binding.ivMessage.setVisibility(View.VISIBLE);
+        // 서서히 나타나는 애니메이션
+        binding.ivMessage.animate().alpha(1f).setDuration(500).start();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // 2.5초 후에 서서히 사라지는 애니메이션
+                binding.ivMessage.animate().alpha(0f).setDuration(500).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        // 애니메이션이 끝난 후에 View를 안보이게 함
+                        binding.ivMessage.setVisibility(View.INVISIBLE);
+                    }
+                }).start();
+            }
+        }, 3000);
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -195,9 +247,14 @@ public class HomeFragment extends Fragment {
         binding.tvItemName.setOnTouchListener(new OnSwipeTouchHelper(requireContext()) {
             @Override
             public void onSwipeTop() {
+                // 말풍선 표시, 이미지 추가되면 수정할것
+                setMessageCloud(R.drawable.ic_messge);
+
                 binding.tvItemName.setText(inventoryHelper.useCurrentItem());
             }
         });
+
+
     }
 
     /**
@@ -250,7 +307,7 @@ public class HomeFragment extends Fragment {
         int[][] animalImages = {{R.drawable.img_egg_white, R.drawable.img_pet_cat_1, R.drawable.img_pet_cat_2, R.drawable.img_pet_cat_3}
                 , {}
                 , {}
-                , {}};
+                , {R.drawable.img_egg_yellow, R.drawable.img_pet_hamster_2, R.drawable.img_pet_hamster_3, R.drawable.img_pet_hamster_4}};
 
         // Broods enum 클래스에서 해당 동물이 몇번째인지
         int broodsIndex = Broods.valueOf(animal.getBrood()).ordinal();
@@ -403,8 +460,10 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        animalSwipeTimeCheckHelper.loadAnimal();
         binding.tvMoney.setText(String.valueOf(gm.getUser().getMoney()));
+        Animal nowPet = user.getAnimalList().get(user.getNowSelectedPet());
+        setAnimalLiking(nowPet);
         binding.customBarChartView.setContentBarRatio(nowPet.getGrowth(),nowPet.getMaxGrowth());
     }
 

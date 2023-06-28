@@ -43,7 +43,7 @@ public class CustomEggDialog extends Dialog {
      */
     private final int[] eggImages = {R.drawable.img_egg_black, R.drawable.img_egg_blue, R.drawable.img_egg_white, R.drawable.img_egg_yellow};
     private int currentIndex;
-    private final String[][] eggs = {{"튼튼한 알", "50000"}, {"아름다운 알", "500000"}, {"빛나는 알", "600000"}, {"깨끗한 알", "6000000"}};
+    private final String[][] eggs = {{"튼튼한 알", "5000"}, {"아름다운 알", "5000"}, {"빛나는 알", "6000"}, {"깨끗한 알", "6000"}};
 
     /**
      * Sets item purchase listener.
@@ -133,18 +133,19 @@ public class CustomEggDialog extends Dialog {
                         // 선택한 알에 따른 종족
                         Broods broods;
                         switch (currentIndex) {
-                            case 2:
+                            case 1:
                                 broods = Broods.DOG;
                                 break;
-                            case 3:
+                            case 2:
                                 broods = Broods.MONKEY;
                                 break;
-                            case 4:
+                            case 3:
                                 broods = Broods.HAMSTER;
                                 break;
-                            case 1:
+                            case 0:
                             default:
                                 broods = Broods.CAT;
+                                break;
                         }
 
                         // 알 생성

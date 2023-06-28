@@ -94,7 +94,7 @@ public class Animal {
         this.originalOwnerUid = originalOwnerUid;
         this.currentOwnerUid = currentOwnerUid;
         this.isRunAway = 0;
-        this.level = 2;
+        this.level = 0;
         this.clean = 50;
         this.hunger = 50;
         this.thirsty = 50;
