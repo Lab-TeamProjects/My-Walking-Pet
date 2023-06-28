@@ -167,9 +167,9 @@ public class MainActivity extends AppCompatActivity {
     //로그인 후 동물데이터 불러오기가 가능하면 삭제 요망
     private void setUserPetList() {
         User user = GameManager.getInstance().getUser();
-        Animal pet1 = new Animal("착한아이", Broods.DOG.name(), user.getUid(), user.getUid());
+        Animal pet1 = new Animal("착한아이", Broods.CAT.name(), user.getUid(), user.getUid());
         Animal pet2 = new Animal("멋진아이", Broods.CAT.name(), user.getUid(), user.getUid());
-        Animal pet3 = new Animal("천재아이", Broods.MONKEY.name(), user.getUid(), user.getUid());
+        Animal pet3 = new Animal("천재아이", Broods.CAT.name(), user.getUid(), user.getUid());
         List<Animal> list = new ArrayList<>();
         list.add(pet1);
         list.add(pet2);
@@ -185,9 +185,9 @@ public class MainActivity extends AppCompatActivity {
         JSONObject jsonObject4 = new JSONObject();
         try {
             jsonObject.put("code", 1001).put("count", 3);
-            jsonObject2.put("code", 1006).put("count", 10);
-            jsonObject3.put("code", 1002).put("count", 5);
-            jsonObject4.put("code", 1004).put("count", -1);
+            jsonObject2.put("code", 1030).put("count", 10);
+            jsonObject3.put("code", 1061).put("count", 5);
+            jsonObject4.put("code", 1020).put("count", -1);
         } catch (JSONException e) {
             e.printStackTrace();
         }

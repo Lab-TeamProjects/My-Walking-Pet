@@ -7,17 +7,61 @@
     android:padding="17dp">
 
     <TextView
-        android:id="@+id/tvTitle"
+        android:id="@+id/tvEggInfo"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="@id/is_egg_picture"
+        app:layout_constraintBottom_toTopOf="@id/is_egg_picture"
+        android:textSize="30sp"
+        android:layout_margin="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:fontFamily="@font/cafe24_ssurround_bold"
+        android:text="튼튼한알\n30000원"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="알 구매!!!!"
+        android:layout_height="wrap_content" />
+
+    <ImageSwitcher
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/is_egg_picture"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginBottom="30dp"
+        />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/ibLeft"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:background="@drawable/ic_baseline_left_button_no_bg"
+        app:layout_constraintTop_toTopOf="@id/is_egg_picture"
+        app:layout_constraintBottom_toBottomOf="@id/is_egg_picture"
+        app:layout_constraintStart_toStartOf="@id/is_egg_picture"
+        app:layout_constraintEnd_toStartOf="@id/is_egg_picture"  />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/ibRight"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:background="@drawable/ic_baseline_right_button_no_bg"
+        app:layout_constraintTop_toTopOf="@id/is_egg_picture"
+        app:layout_constraintBottom_toBottomOf="@id/is_egg_picture"
+        app:layout_constraintStart_toEndOf="@id/is_egg_picture"
+        app:layout_constraintEnd_toEndOf="@id/is_egg_picture" />
+
+
+
 
 
 
     <Button
+        android:fontFamily="@font/cafe24_ssurround_bold"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:background="@color/transparent"
         android:layout_marginBottom="7dp"
         android:layout_marginEnd="20dp"
         android:id="@+id/btnOK"
@@ -28,7 +72,10 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:layout_marginEnd="20dp"
+        android:fontFamily="@font/cafe24_ssurround_bold"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:background="@color/transparent"
         android:id="@+id/btnCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

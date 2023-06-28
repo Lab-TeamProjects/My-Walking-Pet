@@ -15,6 +15,7 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.app.MainActivity;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentShopBinding;
+import com.lab_team_projects.my_walking_pet.login.User;
 
 import java.io.IOException;
 
@@ -44,6 +45,11 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         binding = FragmentShopBinding.inflate(inflater, container, false);
 
+        binding.tvMoney.setOnClickListener(v->{
+            User user = GameManager.getInstance().getUser();
+            user.setMoney(user.getMoney() + 100000);
+        });
+
         mMainActivity.onAppBarLoad();
         setBtnOnClickListener();
 
@@ -67,6 +73,28 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
             itemId = 1001;
         } else if (btnId == R.id.btnFood2) {
             itemId = 1002;
+        } else if (btnId == R.id.btnFood3) {
+            itemId = 1003;
+        } else if (btnId == R.id.btnFood4) {
+            itemId = 1004;
+        } else if (btnId == R.id.btnOther1) {
+            itemId = 1030;
+        } else if (btnId == R.id.btnOther2) {
+            itemId = 1031;
+        } else if (btnId == R.id.btnOther3) {
+            itemId = 1032;
+        } else if (btnId == R.id.btnOther4) {
+            itemId = 1033;
+        } else if (btnId == R.id.btnOther5) {
+            itemId = 1034;
+        } else if (btnId == R.id.btnOther6) {
+            itemId = 1035;
+        } else if (btnId == R.id.btnOther7) {
+            itemId = 1036;
+        } else if (btnId == R.id.btnClean1) {
+            itemId = 1061;
+        } else if (btnId == R.id.btnClean2) {
+            itemId = 1062;
         } else if (btnId == R.id.ibPetEgg) {
             try {
                 CustomEggDialog dialog = new CustomEggDialog(requireContext());
@@ -82,7 +110,7 @@ public class ShopFragment extends Fragment implements View.OnClickListener {
         // 선택된 아이템으로 다이얼로그 표시
         try {
             if (itemId != -1) {
-                CustomPurchaseDialog dialog = new CustomPurchaseDialog(requireContext(), itemId);
+                CustomPurchaseDialog dialog = new CustomPurchaseDialog(requireContext(), itemId, v.getBackground());
                 dialog.show();
                 dialog.setItemPurchaseListener(() -> {
                     binding.tvMoney.setText(String.valueOf(GameManager.getInstance().getUser().getMoney())); // 아이템 구매 OK 버튼을 눌렀을 때 변경된 재화를 표시하기 위해

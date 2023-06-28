@@ -7,24 +7,9 @@
     tools:context=".shop.ShopFragment"
     android:background="@color/transparent">
 
-    <ImageButton
-        android:id="@+id/ibPetEgg"
-        android:elevation="30dp"
-        android:background="@drawable/bg_ib_yello_ripple"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="30dp"
-        />
 
-    <TextView
-        android:textSize="30sp"
-        android:elevation="30dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="60dp"
-        android:text="알뽑기" />
+
+
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -37,6 +22,7 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:fontFamily="@font/cafe24_ssurround_bold"
                 android:padding="14dp"
                 android:id="@+id/tvMoney"
                 android:layout_width="wrap_content"
@@ -46,6 +32,7 @@
                 android:text="00000000 걸음"/>
 
             <TextView
+                android:fontFamily="@font/cafe24_ssurround_bold"
                 android:padding="14dp"
                 android:id="@+id/tvFood"
                 android:layout_width="wrap_content"
@@ -80,7 +67,7 @@
                         android:layout_width="50dp"
                         android:layout_height="100dp"
                         android:scaleType="fitXY"
-                        android:background="@drawable/ic_baseline_shop_food_pink"/>
+                        android:background="@drawable/ic_baseline_shop_food_puple"/>
 
                     <ImageButton
                         android:id="@+id/btnFood3"
@@ -88,7 +75,7 @@
                         android:layout_width="50dp"
                         android:layout_height="100dp"
                         android:scaleType="fitXY"
-                        android:background="@drawable/ic_baseline_shop_food_pink"/>
+                        android:background="@drawable/ic_baseline_shop_food_yello"/>
 
                     <ImageButton
                         android:id="@+id/btnFood4"
@@ -96,37 +83,49 @@
                         android:layout_width="50dp"
                         android:layout_height="100dp"
                         android:scaleType="fitXY"
-                        android:background="@drawable/ic_baseline_shop_food_pink"/>
+                        android:background="@drawable/ic_baseline_shop_food_white_pink"
+                        android:layout_marginEnd="10dp"/>
 
 
                 </TableRow>
 
                 <TableRow
                     android:minHeight="100dp">
-                    <Button
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_pink"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnFood5"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginStart="10dp"/>
 
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_pink"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnFood6"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginStart="10dp"/>
 
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_pink"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnFood7"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginStart="10dp"/>
 
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_pink"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnFood8"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginEnd="10dp" />
 
 
                 </TableRow>
@@ -141,6 +140,7 @@
                 android:layout_margin="14dp" />
 
             <TextView
+                android:fontFamily="@font/cafe24_ssurround_bold"
                 android:padding="14dp"
                 android:id="@+id/tvSnack"
                 android:layout_width="wrap_content"
@@ -159,60 +159,84 @@
 
                 <TableRow
                     android:minHeight="100dp">
-                    <Button
+
+
+                    <ImageButton
                         android:id="@+id/btnOther1"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
                         android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:background="@drawable/ic_baseline_shop_snack_bone"
+                        android:scaleType="fitXY" />
 
-                    <Button
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_shop_snack_bread"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnOther2"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginStart="10dp" />
 
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_shop_snack_carrot"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnOther3"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginStart="10dp"/>
 
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_shop_snack_donut"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnOther4"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginEnd="10dp" />
 
 
                 </TableRow>
 
                 <TableRow
                     android:minHeight="100dp">
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_shop_snack_fish"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnOther5"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginStart="10dp" />
 
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_shop_snack_pizza"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnOther6"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginStart="10dp"/>
 
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_shop_snack_plane"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnOther7"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginStart="10dp" />
 
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_yellow"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnOther8"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginEnd="10dp"/>
 
 
                 </TableRow>
@@ -229,6 +253,7 @@
                 android:layout_margin="14dp" />
 
             <TextView
+                android:fontFamily="@font/cafe24_ssurround_bold"
                 android:padding="14dp"
                 android:id="@+id/tvClean"
                 android:layout_width="wrap_content"
@@ -249,60 +274,84 @@
 
                 <TableRow
                     android:minHeight="100dp">
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_shop_cleaning_soap"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnClean1"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginStart="10dp" />
 
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_shop_cleaning_shampoo"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnClean2"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginStart="10dp"/>
 
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_pink"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnClean3"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginStart="10dp" />
 
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_pink"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnClean4"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginEnd="10dp"/>
 
 
                 </TableRow>
 
                 <TableRow
                     android:minHeight="100dp">
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_pink"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnClean5"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginStart="10dp" />
 
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_pink"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnClean6"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginStart="10dp" />
 
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_pink"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnClean7"
-                        android:layout_marginStart="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginStart="10dp" />
 
-                    <Button
+
+                    <ImageButton
+                        android:background="@drawable/ic_baseline_pink"
+                        android:layout_width="50dp"
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY"
                         android:id="@+id/btnClean8"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent" />
+                        android:layout_marginEnd="10dp" />
 
 
                 </TableRow>
@@ -310,4 +359,38 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_margin="30dp"
+        android:layout_gravity="end|bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/ibPetEgg"
+            android:elevation="30dp"
+            android:background="@drawable/bg_ib_yello_ripple"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            />
+
+        <ImageView
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/img_egg_black"
+            android:textSize="30sp"
+            android:elevation="30dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:text="알뽑기" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </FrameLayout>

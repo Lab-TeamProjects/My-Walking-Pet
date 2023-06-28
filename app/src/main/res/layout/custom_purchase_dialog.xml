@@ -7,6 +7,11 @@
     android:padding="17dp">
 
     <TextView
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:fontFamily="@font/cafe24_ssurround_air"
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,17 +21,20 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <ImageView
+
         android:layout_marginTop="20dp"
         android:id="@+id/ivItem"
         android:layout_width="70dp"
         android:layout_height="70dp"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="20dp"/>
+        android:layout_marginStart="35dp"/>
 
     <TextView
+        android:textColor="@color/black"
+        android:fontFamily="@font/cafe24_ssurround_air"
         android:id="@+id/tvItemName"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="50dp"
         android:text="아이템 이름"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,9 +42,11 @@
         app:layout_constraintTop_toTopOf="@id/ivItem"/>
 
     <TextView
-        android:layout_marginTop="10dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/cafe24_ssurround_air"
+        android:layout_marginTop="20dp"
         android:id="@+id/tvItemPrice"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="50dp"
         android:text="아이템 가격"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,17 +54,21 @@
         app:layout_constraintTop_toBottomOf="@id/tvItemName"/>
 
     <TextView
-    android:layout_marginTop="10dp"
-    android:id="@+id/tvItemEffect"
-        android:layout_marginStart="30dp"
-    android:text="아이템 효과"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:layout_constraintStart_toEndOf="@id/ivItem"
-    app:layout_constraintTop_toBottomOf="@id/tvItemPrice"/>
+        android:textColor="@color/black"
+        android:fontFamily="@font/cafe24_ssurround_air"
+        android:layout_marginTop="20dp"
+        android:id="@+id/tvItemEffect"
+        android:layout_marginStart="50dp"
+        android:text="아이템 효과"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/ivItem"
+        app:layout_constraintTop_toBottomOf="@id/tvItemPrice"/>
 
     <TextView
-        android:layout_marginTop="10dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/cafe24_ssurround_air"
+        android:layout_marginTop="20dp"
         android:id="@+id/tvItemValue"
         android:layout_marginStart="30dp"
         android:text="아이템 효과 값"
@@ -64,9 +78,11 @@
         app:layout_constraintTop_toBottomOf="@id/tvItemPrice"/>
 
     <TextView
+        android:textColor="@color/black"
+        android:fontFamily="@font/cafe24_ssurround_air"
         android:layout_marginTop="10dp"
         android:id="@+id/tvItemInfo"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="50dp"
         android:text="아이템 정보"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,16 +90,19 @@
         app:layout_constraintTop_toBottomOf="@id/tvItemEffect"/>
 
     <TextView
+        android:textColor="@color/black"
+        android:fontFamily="@font/cafe24_ssurround_air"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvItemNum"
         android:layout_marginTop="20dp"
-        android:text="1"
+        android:text="1개"
         app:layout_constraintStart_toStartOf="@id/ivItem"
         app:layout_constraintEnd_toEndOf="@id/ivItem"
         app:layout_constraintTop_toBottomOf="@id/ivItem"/>
 
     <ImageButton
+        android:background="@drawable/ic_baseline_right_button_no_bg"
         android:layout_marginStart="15dp"
         android:id="@+id/ibAdd"
         android:layout_width="30dp"
@@ -93,6 +112,7 @@
         app:layout_constraintBottom_toBottomOf="@id/tvItemNum" />
 
     <ImageButton
+        android:background="@drawable/ic_baseline_left_button_no_bg"
         android:layout_marginEnd="15dp"
         android:id="@+id/ibSubtract"
         android:layout_width="30dp"
@@ -102,6 +122,10 @@
         app:layout_constraintBottom_toBottomOf="@id/tvItemNum" />
 
     <Button
+        android:textSize="15sp"
+        android:fontFamily="@font/cafe24_ssurround_bold"
+        android:background="@color/transparent"
+        android:textColor="@color/black"
         android:layout_marginBottom="7dp"
         android:layout_marginEnd="20dp"
         android:id="@+id/btnOK"
@@ -112,7 +136,10 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:layout_marginEnd="20dp"
+        android:textSize="15sp"
+        android:fontFamily="@font/cafe24_ssurround_bold"
+        android:background="@color/transparent"
+        android:textColor="@color/black"
         android:id="@+id/btnCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

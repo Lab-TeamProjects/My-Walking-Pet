@@ -3,6 +3,7 @@ package com.lab_team_projects.my_walking_pet.home;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,9 +31,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
+import com.lab_team_projects.my_walking_pet.helpers.AnimalSwipeTimeCheckHelper;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
 import com.lab_team_projects.my_walking_pet.helpers.OnSwipeTouchHelper;
 import com.lab_team_projects.my_walking_pet.helpers.UserPreferenceHelper;
@@ -41,7 +46,9 @@ import com.lab_team_projects.my_walking_pet.walk_count.WalkViewModel;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * 홈 화면에 해당하는 프래그먼트 클래스
@@ -66,10 +73,6 @@ public class HomeFragment extends Fragment {
      * 현재 접속된 유저
      */
     private final User user = gm.getUser();
-    /**
-     * 현재 선택된 동물
-     */
-    private final Animal nowPet = user.getAnimalList().get(user.getNowSelectedPet());
 
     private boolean isInteractionBtnClick = false;
     /**
@@ -79,10 +82,15 @@ public class HomeFragment extends Fragment {
     /**
      * The Can drag time.
      */
-    int canDragTime = 3000;    // 드래그 쿨타임 현재 3초
+    int canDragTime = 4000;    // 드래그 쿨타임 현재 3초
     private InventoryHelper inventoryHelper;
 
     private boolean isExercising = false;
+
+    private AnimalSwipeTimeCheckHelper animalSwipeTimeCheckHelper = new AnimalSwipeTimeCheckHelper();
+
+    private String[] liking = {"매우좋음", "좋음", "보통", "나쁨"};
+
 
     /**
      * Instantiates a new Home fragment.
@@ -100,6 +108,8 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
+        verifyStoragePermission(requireActivity());
+        Animal nowPet = user.getAnimalList().get(user.getNowSelectedPet());
         nowPet.setGrowthCallback(new Animal.GrowthCallback() {
             @Override
             public void onCall() {
@@ -126,8 +136,21 @@ public class HomeFragment extends Fragment {
                     long currentTime = System.currentTimeMillis();
                     if (currentTime - lastClickTime > canDragTime) {
                         lastClickTime = currentTime;
-                        Log.d("__walk", "asdasd");
+
+                        Animal animal = user.getAnimalList().get(user.getNowSelectedPet());
+
                         // 드래그 하면 동작할 것
+                        boolean result = animalSwipeTimeCheckHelper.isCoolTimeOver(
+                                animal);
+
+                        if (result) {
+                            animal.setLiking(animal.getLiking() + 25);
+                        }
+
+                        setMessageCloud(R.drawable.ic_messge_happy);
+
+                        setAnimalLiking(animal);
+
                     }
                     break;
                 case MotionEvent.ACTION_UP:
@@ -162,6 +185,41 @@ public class HomeFragment extends Fragment {
         return binding.getRoot();
     }
 
+    private void setAnimalLiking(Animal animal) {
+        if (animal.getLiking() >= 75) {
+            binding.tvLiking.setText("기분 매우 좋음");
+        } else if (animal.getLiking() >= 50) {
+            binding.tvLiking.setText("기분 좋음");
+        } else if (animal.getLiking() >= 25) {
+            binding.tvLiking.setText("기분 보틍");
+        } else {
+            binding.tvLiking.setText("기분 나쁨");
+        }
+    }
+
+    private void setMessageCloud(int image) {
+        // 애니메이션 시작 전에 View를 보이게 함
+        Glide.with(requireContext()).load(image).into(binding.ivMessage);
+        binding.ivMessage.setVisibility(View.VISIBLE);
+        // 서서히 나타나는 애니메이션
+        binding.ivMessage.animate().alpha(1f).setDuration(500).start();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // 2.5초 후에 서서히 사라지는 애니메이션
+                binding.ivMessage.animate().alpha(0f).setDuration(500).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        // 애니메이션이 끝난 후에 View를 안보이게 함
+                        binding.ivMessage.setVisibility(View.INVISIBLE);
+                    }
+                }).start();
+            }
+        }, 3000);
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -189,17 +247,22 @@ public class HomeFragment extends Fragment {
         binding.tvItemName.setOnTouchListener(new OnSwipeTouchHelper(requireContext()) {
             @Override
             public void onSwipeTop() {
+                // 말풍선 표시, 이미지 추가되면 수정할것
+                setMessageCloud(R.drawable.ic_messge);
+
                 binding.tvItemName.setText(inventoryHelper.useCurrentItem());
             }
         });
+
+
     }
 
     /**
      * 현재 선택된 동물의 성장치, 수치를 홈화면에 그릴 수 있도록 수치를 가져옵니다.
      */
     private void initPetGrower() {
-        User user = GameManager.getInstance().getUser();
-        setPetRate(user.getAnimalList().get(user.getNowSelectedPet()));
+        // 초기 설정
+        setAnimalShow();
 
         // 펫 이름 클릭시 정보 다이얼로그
         binding.tvPetName.setOnClickListener(v->{
@@ -214,23 +277,42 @@ public class HomeFragment extends Fragment {
 
         // 펫 변경 왼쪽
         binding.btnPrevPet.setOnClickListener(v->{
-            Animal animal;
             if (0 < user.getNowSelectedPet()) {
                 user.setNowSelectedPet(user.getNowSelectedPet() - 1);
-                animal = user.getAnimalList().get(user.getNowSelectedPet());
-                setPetRate(animal);
+                setAnimalShow();
             }
         });
 
         // 펫 변경 오른쪽
         binding.btnNextPet.setOnClickListener(v->{
-            Animal animal;
             if (user.getNowSelectedPet() < user.getAnimalList().size() - 1) {
                 user.setNowSelectedPet(user.getNowSelectedPet() + 1);
-                animal = user.getAnimalList().get(user.getNowSelectedPet());
-                setPetRate(animal);
+                setAnimalShow();
             }
         });
+    }
+
+    private void setAnimalShow() {
+        Animal animal = user.getAnimalList().get(user.getNowSelectedPet());
+        setPetRate(animal);
+
+        /*
+        animalImages : 동물 레벨에 따른 이미지
+        0 : 고양이
+        1 : 개
+        2: 원숭이
+        3: 햄스터
+
+         */
+        int[][] animalImages = {{R.drawable.img_egg_white, R.drawable.img_pet_cat_1, R.drawable.img_pet_cat_2, R.drawable.img_pet_cat_3}
+                , {}
+                , {}
+                , {R.drawable.img_egg_yellow, R.drawable.img_pet_hamster_2, R.drawable.img_pet_hamster_3, R.drawable.img_pet_hamster_4}};
+
+        // Broods enum 클래스에서 해당 동물이 몇번째인지
+        int broodsIndex = Broods.valueOf(animal.getBrood()).ordinal();
+        int animalLv = animal.getLevel();
+        Glide.with(requireContext()).load(animalImages[broodsIndex][animalLv]).fitCenter().into(binding.pet);
     }
 
     /**
@@ -302,11 +384,17 @@ public class HomeFragment extends Fragment {
                     1);
         }
 
-        Date now = new Date();
-        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
-
         try {
-            String mPath = requireContext().getExternalFilesDir(null).toString() + "/" + now + ".jpg";
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+
+            // 외부 저장소 경로를 "/learn" 디렉토리로 설정
+            String dirPath = Environment.getExternalStorageDirectory().toString() + "/learn";
+            File fileDir = new File(dirPath);
+            if (!fileDir.exists()) {
+                boolean mkdir = fileDir.mkdir();
+            }
+
+            String path = dirPath + "/" + "sc" + timeStamp + "a.jpg";
 
             // 스크린샷을 찍기 위해 뷰를 생성
             View v1 = requireActivity().getWindow().getDecorView().getRootView();
@@ -314,7 +402,7 @@ public class HomeFragment extends Fragment {
             Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
             v1.setDrawingCacheEnabled(false);
 
-            File imageFile = new File(mPath);
+            File imageFile = new File(path);
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             int quality = 100;
             bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
@@ -328,6 +416,22 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static final String[] PERMISSION_STORAGE = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+    };
+
+    public static void verifyStoragePermission(Activity activity) {
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity,
+                    PERMISSION_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE);
+        }
+    }
+
 
     /**
      * 액티비티 위에서 프래그먼트간의 이동할 떄 실행됩니다.
@@ -356,8 +460,10 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        animalSwipeTimeCheckHelper.loadAnimal();
         binding.tvMoney.setText(String.valueOf(gm.getUser().getMoney()));
+        Animal nowPet = user.getAnimalList().get(user.getNowSelectedPet());
+        setAnimalLiking(nowPet);
         binding.customBarChartView.setContentBarRatio(nowPet.getGrowth(),nowPet.getMaxGrowth());
     }
 
