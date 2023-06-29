@@ -60,7 +60,6 @@ public class FindEmailFragment extends Fragment {
                         String result = responseJson.getString("result");
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-                        Log.e("실험", result);
                         switch(result) {
                             case SUCCESS:
                                 getActivity().runOnUiThread(new Runnable() {

@@ -33,7 +33,10 @@ public class ConnectionProtocol {
      * The constant INVALID_ACCESS_TOKEN.
      */
     public static final String INVALID_ACCESS_TOKEN = "A06"; // 엑세스토큰이 유효하지 않은 경우
-
+    /**
+     * The constant INVALID_ACCESS_TOKEN.
+     */
+    public static final String NOT_AUTH_PASSWORD_RESET = "A07"; // 비밀번호 변경 인증 안됨
     /**
      * The constant INVALID_IMAGE_DATA.
      */
@@ -99,7 +102,13 @@ public class ConnectionProtocol {
      * The constant PASSWORD_RESET_REQUEST.
      * POST - 비밀번호 리셋 요청
      */
-    public static final String PASSWORD_RESET_REQUEST = "password-reset-request";
+    public static final String PASSWORD_RESET_REQUEST = "password/reset/request";
+
+    /**
+     * The constant PASSWORD_RESET_REQUEST.
+     * POST - 비밀번호 리셋 메일 인증 확인
+    */
+    public static final String PASSWORD_RESET_AUTH = "password/reset/auth-check";
 
     /**
      * The constant PASSWORD_RESET.
