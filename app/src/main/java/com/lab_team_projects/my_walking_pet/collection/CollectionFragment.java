@@ -11,8 +11,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.lab_team_projects.my_walking_pet.adapters.CollectionAdapter;
+import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.app.MainActivity;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentCollectionBinding;
+import com.lab_team_projects.my_walking_pet.login.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +47,9 @@ public class CollectionFragment extends Fragment {
         binding = FragmentCollectionBinding.inflate(inflater, container, false);
         mMainActivity.onAppBarLoad();
 
-        List<Collection> collectionList = new ArrayList<>();
-        for(int i=0; i<18; i++) {
-            collectionList.add(new Collection());
-        }
-
+        // 유저로부터 도감 컬렉션을 받아옴
+        User user = GameManager.getInstance().getUser();
+        List<Collection> collectionList = user.getCollectionList();
 
         CollectionAdapter collectionAdapter = new CollectionAdapter();
         collectionAdapter.setCollectionList(collectionList);

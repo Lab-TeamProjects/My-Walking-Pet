@@ -3,9 +3,38 @@ package com.lab_team_projects.my_walking_pet.collection;
 import com.lab_team_projects.my_walking_pet.home.Broods;
 
 /**
- * The type Collection.
+ * 동물 도감에 대한 클래스
  */
 public class Collection {
-    private Broods brood;
+    private String broodName;
     private Boolean isHave;
+    private int lv;
+
+
+    public String getBroodName() {
+        return broodName;
+    }
+
+    public Collection setBroodName(String broodName) {
+        this.broodName = broodName;
+        return this;
+    }
+
+    public Boolean getHave() {
+        return isHave;
+    }
+
+    public Collection setHave(Boolean have) {
+        isHave = have;
+        return this;
+    }
+
+    public int getLv() {
+        return lv;
+    }
+
+    public Collection setLv(int lv) {
+        this.lv = lv;
+        return this;
+    }
 }

@@ -1,11 +1,13 @@
 package com.lab_team_projects.my_walking_pet.app;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -13,6 +15,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.lab_team_projects.my_walking_pet.R;
+import com.lab_team_projects.my_walking_pet.collection.Collection;
 import com.lab_team_projects.my_walking_pet.databinding.ActivityMainBinding;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
@@ -66,7 +69,9 @@ public class MainActivity extends AppCompatActivity {
 
         //권한체크 로그인 마무리하면 로그인에서 체크하고 삭제해야함
         permissionCheck();
-        pch.batteryOptimization();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            pch.batteryOptimization();
+        }
 
 
         /*
@@ -134,6 +139,18 @@ public class MainActivity extends AppCompatActivity {
         gameManager.setWalk(walk);
 
         setUserInventory();    // 임시
+
+
+        // 사용자 도감 임시 추가 코드
+        List<Collection> collectionList = new ArrayList<>();
+        for(int i=0; i<18; i++) {
+            collectionList.add(new Collection());
+        }
+
+        GameManager.getInstance().getUser().setCollectionList(collectionList);
+
+
+
 
         // 앱바 설정
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -231,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
      * 권한 관련 메서드입니다.
      */
     // 권한 체크 함수
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     private void permissionCheck(){
         pch =  new PermissionsCheckHelper(this, this);
 
@@ -239,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
