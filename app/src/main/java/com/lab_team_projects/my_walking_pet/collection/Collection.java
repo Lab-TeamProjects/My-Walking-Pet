@@ -10,6 +10,11 @@ public class Collection {
     private Boolean isHave;
     private int lv;
 
+    public Collection(String broodName, Boolean isHave, int lv) {
+        this.broodName = broodName;
+        this.isHave = isHave;
+        this.lv = lv;
+    }
 
     public String getBroodName() {
         return broodName;

@@ -32,6 +32,11 @@ public class AnimalSwipeTimeCheckHelper {
         }
     }
 
+    /**
+     * 쿨타임이 지났는지 체크하는 메서드
+     * @param animal 쓰다듬기를 한 동물
+     * @return 쿨타임 여부를 체크하고 반환
+     */
     public boolean isCoolTimeOver(Animal animal) {
         long currentTime = System.currentTimeMillis();
         long lastSwipeTime = lastSwipeMap.get(animal.getName());

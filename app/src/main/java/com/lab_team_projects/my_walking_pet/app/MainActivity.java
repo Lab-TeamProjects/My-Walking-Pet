@@ -18,6 +18,7 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.collection.Collection;
 import com.lab_team_projects.my_walking_pet.databinding.ActivityMainBinding;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
+import com.lab_team_projects.my_walking_pet.helpers.CollectionCheckHelper;
 import com.lab_team_projects.my_walking_pet.helpers.InventoryHelper;
 import com.lab_team_projects.my_walking_pet.helpers.MissionCheckHelper;
 import com.lab_team_projects.my_walking_pet.helpers.PermissionsCheckHelper;
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private NavController navController;
 
+    private final CollectionCheckHelper collectionCheckHelper = new CollectionCheckHelper();
+
     /**
      * 액티비티가 생성되면 실행되는 메서드
      * 앱에 접속하면 기존 걸음 객체의 날짜를 현재 날짜와 비교하여 새로운 걸음 객체를 생성할지 판단합니다.
@@ -63,12 +66,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 사용자 도감 임시 추가 코드
+
+
+        GameManager.getInstance().getUser().setCollectionList(collectionCheckHelper.getInitCollectionList());
+
         setUserPetList(); // 임시
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         //권한체크 로그인 마무리하면 로그인에서 체크하고 삭제해야함
-        permissionCheck();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            permissionCheck();
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             pch.batteryOptimization();
         }
@@ -141,13 +151,7 @@ public class MainActivity extends AppCompatActivity {
         setUserInventory();    // 임시
 
 
-        // 사용자 도감 임시 추가 코드
-        List<Collection> collectionList = new ArrayList<>();
-        for(int i=0; i<18; i++) {
-            collectionList.add(new Collection());
-        }
 
-        GameManager.getInstance().getUser().setCollectionList(collectionList);
 
 
 
@@ -183,10 +187,17 @@ public class MainActivity extends AppCompatActivity {
 
     //로그인 후 동물데이터 불러오기가 가능하면 삭제 요망
     private void setUserPetList() {
+
         User user = GameManager.getInstance().getUser();
         Animal pet1 = new Animal("착한아이", Broods.CAT.name(), user.getUid(), user.getUid());
+        pet1.setLevel(1);
+        collectionCheckHelper.addCollectionToUser(pet1);
         Animal pet2 = new Animal("멋진아이", Broods.CAT.name(), user.getUid(), user.getUid());
+        pet2.setLevel(2);
+        collectionCheckHelper.addCollectionToUser(pet2);
         Animal pet3 = new Animal("천재아이", Broods.CAT.name(), user.getUid(), user.getUid());
+        pet3.setLevel(3);
+        collectionCheckHelper.addCollectionToUser(pet3);
         List<Animal> list = new ArrayList<>();
         list.add(pet1);
         list.add(pet2);

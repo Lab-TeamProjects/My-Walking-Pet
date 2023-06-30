@@ -16,5 +16,6 @@ public enum Broods {
      * Monkey broods.
      */
     MONKEY,
-    HAMSTER
+    HAMSTER,
+    Test
 }
