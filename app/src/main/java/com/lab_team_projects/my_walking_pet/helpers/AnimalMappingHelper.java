@@ -19,6 +19,17 @@ public class AnimalMappingHelper {
             , Broods.HAMSTER, new int[]{R.drawable.img_egg_yellow, R.drawable.img_pet_cat_1, R.drawable.img_pet_cat_2, R.drawable.img_pet_cat_3}
             , Broods.Test, new int[]{R.drawable.img_egg_yellow, R.drawable.img_pet_cat_1, R.drawable.img_pet_cat_2, R.drawable.img_pet_cat_3});
 
+    /**
+     * 종족명과 레벨을 넣으면 알맞은 그림을 반환합니다.
+     * @param broodName 종족 이름 (str)
+     * @param lv 레벨 (int)
+     * @return 매핑된 이미지 id (int)
+     */
+    public int getAnimalImg(String broodName, int lv) {
+        int[] values = getImgValue(Broods.valueOf(broodName));
+        return values[lv];
+    }
+
 
     /**
      * 종족과 이미지가 매핑되어있는 Map 객체를 반환합니다.

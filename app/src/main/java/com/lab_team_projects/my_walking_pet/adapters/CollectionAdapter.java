@@ -40,7 +40,15 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull CollectionAdapter.ViewHolder holder, int position) {
-        holder.bind(collectionList.get(position));
+        Collection collection = collectionList.get(position);
+        holder.bind(collection);
+        holder.binding.getRoot().setOnClickListener(v->{
+            if (!collection.getHave()) {
+                return;
+            }
+            CustomCollectionDialog dialog = new CustomCollectionDialog(context, collection);
+            dialog.show();
+        });
     }
 
     @Override
@@ -68,10 +76,6 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
             super(binding.getRoot());
             this.binding = binding;
 
-            binding.getRoot().setOnClickListener(e -> {
-                CustomCollectionDialog dialog = new CustomCollectionDialog(context);
-                dialog.show();
-            });
         }
 
         /**
