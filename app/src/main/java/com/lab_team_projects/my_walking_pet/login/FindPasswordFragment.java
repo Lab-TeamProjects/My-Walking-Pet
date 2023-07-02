@@ -3,6 +3,7 @@ package com.lab_team_projects.my_walking_pet.login;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.FAIL;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.FIND_EMAIL;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_AUTH_PASSWORD_RESET;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_FOUND_EMAIL;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.PASSWORD_RESET;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.PASSWORD_RESET_AUTH;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.PASSWORD_RESET_REQUEST;
@@ -11,7 +12,9 @@ import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.SUCCES
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -28,6 +32,7 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentFindEmailBinding;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentFindPasswordBinding;
 import com.lab_team_projects.my_walking_pet.helpers.ServerConnectionHelper;
+import com.lab_team_projects.my_walking_pet.helpers.UserAuthHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +45,7 @@ import java.util.Objects;
 public class FindPasswordFragment extends Fragment {
 
     private FragmentFindPasswordBinding binding;
+    private ServerConnectionHelper sch;
     /**
      * Instantiates a new Find password fragment.
      */
@@ -59,7 +65,7 @@ public class FindPasswordFragment extends Fragment {
                     jsonObject.put("email", binding.etEmail.getText().toString());
                 } catch (JSONException e) { Log.e("JsonInput", "JSONException", e); }
 
-                ServerConnectionHelper sch = new ServerConnectionHelper(PASSWORD_RESET_REQUEST, jsonObject);
+                sch = new ServerConnectionHelper(PASSWORD_RESET_REQUEST, jsonObject);
                 sch.setClientCallBackListener(((call, response) -> {
                     try {
                         JSONObject responseJson = null;
@@ -85,6 +91,7 @@ public class FindPasswordFragment extends Fragment {
                                                                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                                                 switch (result) {
                                                                     case SUCCESS:
+                                                                        Log.e("result", result);
                                                                         getActivity().runOnUiThread(new Runnable() {
                                                                             @Override
                                                                             public void run() {
@@ -99,6 +106,14 @@ public class FindPasswordFragment extends Fragment {
                                                                             @Override
                                                                             public void run() {
                                                                                 Toast.makeText(getActivity(), "인증이 완료되지 않았습니다.", Toast.LENGTH_SHORT).show();
+                                                                            }
+                                                                        });
+                                                                        break;
+                                                                    default:
+                                                                        getActivity().runOnUiThread(new Runnable() {
+                                                                            @Override
+                                                                            public void run() {
+                                                                                Toast.makeText(getContext(), "알 수 없는 오류로 실패했습니다.", Toast.LENGTH_SHORT).show();
                                                                             }
                                                                         });
                                                                         break;
@@ -118,14 +133,27 @@ public class FindPasswordFragment extends Fragment {
                                         dialog.show();
                                     }
                                 });
-                            case FAIL:
+                                break;
+                            case NOT_FOUND_EMAIL:
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(), "가입되지 않은 이메일 입니다.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                break;
+                            default:
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(), "알 수 없는 오류로 실패했습니다.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                                 break;
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.e("btnEmailAuth", "JSONException", e);
                     }
-
-
                 }));
             }
         });
@@ -162,10 +190,59 @@ public class FindPasswordFragment extends Fragment {
             }
         });
 
+
         binding.btnChangePW.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View v) {
+                UserAuthHelper uah = new UserAuthHelper(getActivity(),binding.etPassWord, binding.etPassWordCheck);
+                if (uah.isPasswordConfirmed() && uah.isPasswordValid()) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("email", binding.etEmail.getText().toString());
+                        jsonObject.put("password", binding.etPassWord.getText().toString());
+                    } catch (JSONException e) { Log.e("JsonInput", "JSONException", e); }
+                    sch = new ServerConnectionHelper(PASSWORD_RESET, jsonObject );
+                    sch.setClientCallBackListener(((call, response) -> {
+                        try {
+                            JSONObject responseJson = null;
+                            responseJson = new JSONObject(Objects.requireNonNull(response.body()).string());
+                            String result = responseJson.getString("result");
+                            switch (result) {
+                                case SUCCESS:
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getContext(), "비밀번호 변경이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(getActivity(), LoginActivity.class));
+                                            getActivity().finish();
+                                        }
+                                    });
+                                    break;
+                                case FAIL:
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getContext(), "비밀번호 변경에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    break;
+                                default:
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getContext(), "알 수 없는 오류로 실패했습니다.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    break;
+                            }
+                        } catch (JSONException e) { Log.e("change password", "JSONException", e); }
 
+                    }));
+                } else {
+                    uah.updatePasswordCheckValidationStatus();
+                    uah.updatePasswordValidationStatus();
+                }
             }
         });
 

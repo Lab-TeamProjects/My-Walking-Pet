@@ -60,7 +60,7 @@ public class ConnectionProtocol {
     /**
      * The constant NOT_FOUND_PROFILE.
      */
-    public static final String NOT_FOUND_PROFILE = "D06"; // 프로필 사진 없음
+    public static final String NOT_FOUND_PROFILE = "D06"; // 프로필 없음
     /**
      * The constant MYSELF_AN_ETERNAL_FRIEND.
      */
@@ -114,7 +114,7 @@ public class ConnectionProtocol {
      * The constant PASSWORD_RESET.
      * POST - 비밀번호 변경
      */
-    public static final String PASSWORD_RESET = "password-reset";
+    public static final String PASSWORD_RESET = "password/reset";
 
     /**
      * The constant PROFILE_SETTING
@@ -128,11 +128,12 @@ public class ConnectionProtocol {
      * GET - 프로필 사진 열람
      * POST - 프로필 사진 등록 및 수정
      */
-    public static final String PROFILE_PHOTO = "users/profile_photo";
+    public static final String PROFILE_PHOTO = "users/profile/photo";
 
     /**
      * 유저 재화 정보
      * GET - 재화 정보 가져오기
+     * PUT - 금액 수정
      */
     public static final String GET_MONEY = "users/money";
 
@@ -141,6 +142,13 @@ public class ConnectionProtocol {
      * GET - 추가된 걸음 수 등록
      */
     public static final String POST_STEP = "users/step";
+
+    /**
+     * 유저 걸음 수
+     * GET - 걸음 정보 가져오기
+     * PUT - 걸음 정보 등록
+     */
+    public static final String STEPS = "users/step";
 
     /**
      * 유저 걸음 수

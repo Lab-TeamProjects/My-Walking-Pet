@@ -5,6 +5,7 @@ import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.LOGIN;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_AUTH_EMAIL;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_CORRECT_PASSWORD;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_FOUND_EMAIL;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_FOUND_PROFILE;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.PROFILE_SETTING;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.SUCCESS;
 
@@ -41,6 +42,8 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity {
 
     private PermissionsCheckHelper pch;
+    private GameManager gm;
+    private User user;
 
     private ActivityLoginBinding binding;
 
@@ -67,40 +70,62 @@ public class LoginActivity extends AppCompatActivity {
                         jsonObject.put("password", binding.etPassWord.getText().toString());
                     } catch (JSONException e) { Log.e("JSONException : ", "btnLogin", e); }
                     ServerConnectionHelper sc = new ServerConnectionHelper(LOGIN, jsonObject);
-                    sc.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
+                    sc.setClientCallBackListener((call, response) -> {
                         if(response.isSuccessful()) {
                             try {
                                 JSONObject responseJson = new JSONObject(Objects.requireNonNull(response.body()).string());
                                 String result = responseJson.getString("result");
                                 switch(result) {
                                     case NOT_FOUND_EMAIL:
-                                        /*
-                                        아이디가 없는 경우
-                                         */
-                                        Toast.makeText(getApplicationContext(), "회원가입을 해주세요.", Toast.LENGTH_SHORT).show();
+                                        LoginActivity.this.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getApplicationContext(), "회원가입을 해주세요.", Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        });
                                         break;
                                     case NOT_AUTH_EMAIL:
-                                        /*
-                                        인증되지 않은 이메일 일 경우
-                                         */
-                                        Toast.makeText(getApplicationContext(), "이메일 인증을 완료해주세요.", Toast.LENGTH_SHORT).show();
+                                        LoginActivity.this.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getApplicationContext(), "이메일 인증을 완료해주세요.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                         break;
                                     case NOT_CORRECT_PASSWORD:
-                                        /*
-                                        비밀번호가 틀린 경우
-                                         */
-                                        Toast.makeText(getApplicationContext(), "비밀번호를 다시 확인해주세요.", Toast.LENGTH_SHORT).show();
+                                        LoginActivity.this.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getApplicationContext(), "비밀번호를 다시 확인해주세요.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                         break;
                                     case SUCCESS:
                                         /*
                                         성공한 경우
                                          */
                                         permissionCheck(); // 권한 체크
-                                        GameManager gm = GameManager.getInstance();
-                                        User user = gm.getUser();
+                                        gm = GameManager.getInstance();
+                                        user = gm.getUser();
                                         user.setAccessToken(responseJson.getString("access_token"));
 
-                                        ServerConnectionHelper loadData = new ServerConnectionHelper(PROFILE_SETTING, user.getAccessToken());
+                                        ServerConnectionHelper has_profile = new ServerConnectionHelper(PROFILE_SETTING, user.getAccessToken());
+                                        has_profile.setClientCallBackListener(((call1, response1) -> {
+                                            try {
+                                                JSONObject responseJson1 = new JSONObject(Objects.requireNonNull(response1.body()).string());
+                                                String result1 = (String) responseJson1.get("result");
+                                                switch(result1) {
+                                                    case SUCCESS:
+                                                        // 데이터 입력
+
+                                                    case NOT_FOUND_PROFILE:
+                                                        startActivity(new Intent(getApplicationContext(), UserInfoEntryActivity.class));
+                                                }
+                                            } catch (JSONException e) { Log.e("has profile", "JSONException", e); }
+                                        }));
+
+                                        /*ServerConnectionHelper loadData = new ServerConnectionHelper(PROFILE_SETTING, user.getAccessToken());
                                         loadData.setClientCallBackListener((c,r) -> runOnUiThread(() -> {
                                             if (r.isSuccessful()) {
                                                 try {
@@ -125,9 +150,9 @@ public class LoginActivity extends AppCompatActivity {
                                                     String animalData = data.getString("pets");
                                                     List<Animal> animalList = new Gson().fromJson(animalData, new TypeToken<List<Animal>>(){}.getType());
                                                     user.setAnimalList(animalList);
-                                                    /*
+                                                    *//*
                                                     다른 게임 정보도 받아야 함
-                                                     */
+                                                     *//*
                                                 } catch (JSONException e) {
                                                     Log.e("loadData_game", "JSONException", e);
                                                 } catch (IOException e) {
@@ -145,35 +170,33 @@ public class LoginActivity extends AppCompatActivity {
                                                     String animalData = data.getString("pets");
                                                     List<Animal> animalList = new Gson().fromJson(animalData, new TypeToken<List<Animal>>(){}.getType());
                                                     user.setAnimalList(animalList);
-                                                    /*
+                                                    *//*
                                                     다른 게임 정보도 받아야 함
-                                                     */
+                                                     *//*
                                                 } catch (JSONException e) {
                                                     Log.e("loadData_game", "JSONException", e);
                                                 } catch (IOException e) {
                                                     Log.e("loadData_game", "IOException", e);
                                                 }
                                             }
-                                        }));
-
-                                        startActivity(new Intent(getApplicationContext(), UserInfoEntryActivity.class));
-                                        finish();
+                                        }));*/
                                         break;
                                     default:
-                                        /*
-                                        그 외
-                                         */
-                                        Toast.makeText(getApplicationContext(), "알 수 없는 이유로 로그인에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                                        LoginActivity.this.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getApplicationContext(), "알 수 없는 이유로 로그인에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                         break;
                                 }
                             }
                             catch (JSONException e) { Log.e("JSONException", "btnLogin", e); }
                             catch (IOException e) { Log.e("IOException", "btnLogin", e); }
                         } else { Log.e("response failed : ", "btnLogin"); }
-                    }));
+                    });
                 }
-                                            }
-        );
+        });
 
         binding.tvFindPW.setOnClickListener(new View.OnClickListener() { // 비밀번호 찾기
             @Override

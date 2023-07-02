@@ -35,8 +35,6 @@ public class ServerConnectionHelper {
 
     private ClientCallBackListener clientCallBackListener = null;
 
-
-
     /**
      * Sets client call back listener.
      *
@@ -72,6 +70,7 @@ public class ServerConnectionHelper {
         Request request = new Request.Builder()
                 .url(serverUrl)
                 .addHeader("Authorization", "Bearer " + accessToken)
+                .get()
                 .build();
 
         requestClient(request);
@@ -149,7 +148,7 @@ public class ServerConnectionHelper {
      * @param photoName   the photo name
      * @param accessToken the access token
      */
-// 이미지 전송(인코딩 -> base64) 추가해야하고,
+    // 이미지 전송(인코딩 -> base64) 추가해야하고,
     public ServerConnectionHelper(File dir, String photoName, String accessToken) {
         serverUrl = serverUrl.concat(PROFILE_PHOTO);
         File file = new File(dir, photoName);
@@ -162,13 +161,16 @@ public class ServerConnectionHelper {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            jsonObject.put("img", encodedImageString);
-            RequestBody reqBody = RequestBody.create(encodedImageString, JSON);
+            jsonObject.put("image", encodedImageString);
+            RequestBody reqBody = RequestBody.create(
+                    jsonObject.toString(),
+                    JSON
+            );
 
             Request request = new Request.Builder()
                     .url(serverUrl)
-                    .post(reqBody)
                     .addHeader("Authorization", "Bearer " + accessToken)
+                    .post(reqBody)
                     .build();
 
             requestClient(request);

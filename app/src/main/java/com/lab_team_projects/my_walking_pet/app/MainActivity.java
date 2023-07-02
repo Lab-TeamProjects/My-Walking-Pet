@@ -43,7 +43,7 @@ import java.util.Locale;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private PermissionsCheckHelper pch;
+    private PermissionsCheckHelper pch =  new PermissionsCheckHelper(this, this);;
 
     private ActivityMainBinding binding;
     private NavController navController;
@@ -63,10 +63,6 @@ public class MainActivity extends AppCompatActivity {
         setUserPetList(); // 임시
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        //권한체크 로그인 마무리하면 로그인에서 체크하고 삭제해야함
-        permissionCheck();
-        pch.batteryOptimization();
 
 
         /*
@@ -225,27 +221,6 @@ public class MainActivity extends AppCompatActivity {
         Walk walk = gameManager.getWalk();
         AppDatabase db = AppDatabase.getInstance(this);
         db.walkDao().update(walk);
-    }
-
-    /**
-     * 권한 관련 메서드입니다.
-     */
-    // 권한 체크 함수
-    private void permissionCheck(){
-        pch =  new PermissionsCheckHelper(this, this);
-
-        if(!pch.checkPermission()){
-            pch.requestPermission();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (!pch.permissionResult(requestCode, permissions, grantResults)){
-            pch.requestPermission();
-        }
     }
 }
 

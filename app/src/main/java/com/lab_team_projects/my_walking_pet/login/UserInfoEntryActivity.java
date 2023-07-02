@@ -1,5 +1,6 @@
 package com.lab_team_projects.my_walking_pet.login;
 
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.NOT_FOUND_PROFILE;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.PROFILE_SETTING;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.SUCCESS;
 
@@ -9,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -19,6 +21,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -34,6 +37,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * The type User info entry activity.
@@ -92,10 +96,10 @@ public class UserInfoEntryActivity extends AppCompatActivity {
 
         // 설정완료 버튼 클릭
         binding.btnComplete.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View v) {
                 JSONObject jsonObject = new JSONObject();
-
                 try {
                     jsonObject.put("nickname", binding.etNickName.getText().toString());
                     jsonObject.put("status_message", binding.etStatusMsg.getText().toString());
@@ -110,25 +114,34 @@ public class UserInfoEntryActivity extends AppCompatActivity {
 
                     // 서버로 데이터 전송
                     ServerConnectionHelper serverRequest = new ServerConnectionHelper(PROFILE_SETTING, jsonObject, accessToken);
-                    serverRequest.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
-                        if(response.isSuccessful()) {
-                            try {
-                                JSONObject responseJson = new JSONObject(response.body().string());
-                                String result = responseJson.getString("result");
-                                if(result.equals(SUCCESS)) { // 응답 메시지 입력해야함
-                                    // 프로필 설정에 성공 했을 경우
-                                    Toast.makeText(UserInfoEntryActivity.this, "프로필 설정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                    finish();
-                                } else {
-                                    // 프로필 설정에 실패 했을 경우
-                                    Toast.makeText(UserInfoEntryActivity.this, "프로필 설정에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-                                }
+                    serverRequest.setClientCallBackListener((call, response) -> {
+                        try {
+                            JSONObject responseJson = new JSONObject(Objects.requireNonNull(response.body()).string());
+                            String result = responseJson.getString("result");
+                            switch (result) {
+                                case SUCCESS:
+                                    UserInfoEntryActivity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(UserInfoEntryActivity.this, "프로필 설정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                            finish();
+                                        }
+                                    });
+                                    break;
+                                default:
+                                    UserInfoEntryActivity.this.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(UserInfoEntryActivity.this, "프로필 설정에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    break;
                             }
-                            catch (IOException e) { Log.e("IOException :", "btnComplete", e); }
-                            catch (JSONException e) { Log.e("JSONException :", "btnComplete-serverRequest", e); }
-                        } else { Log.e("btnComplete", "응답 실패"); }
-                    }));
+                        }
+                        catch (IOException e) { Log.e("IOException :", "btnComplete", e); }
+                        catch (JSONException e) { Log.e("JSONException :", "btnComplete-serverRequest", e); }
+                    });
                 } catch (JSONException e) { Log.e("JSONException :", "btnComplete", e); }
             }
         });
@@ -155,30 +168,43 @@ public class UserInfoEntryActivity extends AppCompatActivity {
                         // 사진 불러오기
                         Uri uri = result.getData().getData();
                         Glide.with(UserInfoEntryActivity.this).load(uri).into(binding.ivUserProfile);
-
                         try {
-                            // 사진 지정
+
                             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                            Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(uri.toString()), 480,480);
+                            Bitmap resizeBitmap = ThumbnailUtils.extractThumbnail(bitmap, 480, 480);
 
-                            // 저장 경로 지정
-                            File directory = getFilesDir();
-                            File photoFile = new File(directory, "photo.jpg");
+                            if (resizeBitmap != null) {
+                                // 저장 경로 지정
+                                File directory = getFilesDir();
+                                File photoFile = new File(directory, "photo.jpg");
 
-                            // 사진 저장
-                            FileOutputStream fos = new FileOutputStream(photoFile);
-                            resizeBitmap.compress(Bitmap.CompressFormat.JPEG,100,fos);
-                            fos.close();
+                                // 사진 저장
+                                FileOutputStream fos = new FileOutputStream(photoFile);
+                                resizeBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                                fos.close();
 
-                            ServerConnectionHelper sc = new ServerConnectionHelper(directory, "photo.jpg", gm.getUser().getAccessToken());
-                            sc.setClientCallBackListener((call,response) -> runOnUiThread(()-> {
-                                if(response.isSuccessful()) {
-                                    // 사진 서버로 전송 구현 필요
-                                }
-                            }));
+                                ServerConnectionHelper imgSch = new ServerConnectionHelper(directory, "photo.jpg", gm.getUser().getAccessToken());
+                                imgSch.setClientCallBackListener((call,response) -> {
+                                    try {
+                                        JSONObject responseJson = new JSONObject(Objects.requireNonNull(response.body()).string());
+                                        String result1 = (String) responseJson.get("result");
+                                        switch(result1) {
+                                            case SUCCESS:
+                                                // 데이터 입력
 
+                                            case NOT_FOUND_PROFILE:
+                                                startActivity(new Intent(getApplicationContext(), UserInfoEntryActivity.class));
+                                        }
+                                    } catch (JSONException e) { Log.e("imgSch", "JSONException", e); }
+                                    catch (IOException e) { Log.e("imgSch", "IOException", e); }
+                                });
+                            } else {
+                                // resizeBitmap이 null인 경우에 대한 처리
+                                // 예를 들어 오류 메시지 출력 또는 기본 이미지 사용 등의 작업을 수행할 수 있습니다.
+                                Log.e("오류다아아ㅏㅏㅏ", "오류야ㅏㅏㅏㅏㅏㅏ");
+                            }
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            Log.e("activityResultLauncher", "IOException", e);
                         }
                     }
                 }

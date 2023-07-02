@@ -5,8 +5,10 @@ import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.EMAIL_
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.SIGN_UP;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.SUCCESS;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,10 +16,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.lab_team_projects.my_walking_pet.databinding.ActivitySignUpBinding;
 import com.lab_team_projects.my_walking_pet.helpers.ServerConnectionHelper;
+import com.lab_team_projects.my_walking_pet.helpers.UserAuthHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,7 +77,9 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         @Override
-        public void afterTextChanged(Editable s) {}
+        public void afterTextChanged(Editable s) {
+
+        }
     };
 
     /**
@@ -95,36 +101,43 @@ public class SignUpActivity extends AppCompatActivity {
             }
             else {
                 ServerConnectionHelper sc = new ServerConnectionHelper(CHECK_EMAIL_DUPLICATION, jsonObject);
-                sc.setClientCallBackListener((call, response) -> runOnUiThread(() -> {
-                    if(response.isSuccessful()) {
-                        try {
-                            JSONObject responseJson = new JSONObject(Objects.requireNonNull(response.body()).string());
-                            String result = (String) responseJson.get("result");
-
-                            if(result.equals(SUCCESS)) {
-                                // 사용 가능한 이메일일 경우
-                                binding.tvDuplicationResult.setText("사용가능한 이메일입니다.");
-                                binding.tvDuplicationResult.setTextColor(Color.GREEN);
-                                binding.etEmail.setEnabled(false);
-                            } else if (result.equals(EMAIL_IS_DUPLICATION)) {
-                                // 중복되거나
-                                binding.tvDuplicationResult.setText("중복된 이메일입니다.");
-                                binding.tvDuplicationResult.setTextColor(Color.RED);
-                            } else {
-                                binding.tvDuplicationResult.setText("사용할 수 없는 이메일입니다.");
-                                binding.tvDuplicationResult.setTextColor(Color.RED);
-                            }
-                        } catch (JSONException e) {
-                            Log.e("JSONException : ", "btnDuplicationCheck", e);
-                        } catch (IOException e) {
-                            Log.e("IOException : ", "btnDuplicationCheck", e);
+                sc.setClientCallBackListener((call, response) -> {
+                    try {
+                        JSONObject responseJson = new JSONObject(Objects.requireNonNull(response.body()).string());
+                        String result = (String) responseJson.get("result");
+                        switch (result) {
+                            case SUCCESS:
+                                SignUpActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        binding.tvDuplicationResult.setText("사용가능한 이메일입니다.");
+                                        binding.tvDuplicationResult.setTextColor(Color.GREEN);
+                                        binding.etEmail.setEnabled(false);
+                                    }
+                                });
+                                break;
+                            case EMAIL_IS_DUPLICATION:
+                                SignUpActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        binding.tvDuplicationResult.setText("중복된 이메일입니다.");
+                                        binding.tvDuplicationResult.setTextColor(Color.RED);
+                                    }
+                                });
+                                break;
+                            default:
+                                SignUpActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        binding.tvDuplicationResult.setText("사용할 수 없는 이메일입니다.");
+                                        binding.tvDuplicationResult.setTextColor(Color.RED);
+                                    }
+                                });
+                                break;
                         }
-                    } else {
-                        binding.tvDuplicationResult.setText("서버 연결이 불안정합니다.");
-                        binding.tvDuplicationResult.setTextColor(Color.RED);
-                        Log.e("response failed : ", "btnDuplicationCheck");
-                    }
-                }));
+                    } catch (JSONException e) { Log.e("JSONException : ", "btnDuplicationCheck", e); }
+                    catch (IOException e) { Log.e("IOException : ", "btnDuplicationCheck", e); }
+                });
             }
         }
     };
@@ -132,12 +145,14 @@ public class SignUpActivity extends AppCompatActivity {
     /**
      * The Btn sign up listener.
      */
-// 회원가입 버튼
+    // 회원가입 버튼
     View.OnClickListener btnSignUpListener = new View.OnClickListener() {
+        @RequiresApi(api = Build.VERSION_CODES.Q)
         @Override
         public void onClick(View v) {
+            UserAuthHelper uah = new UserAuthHelper(SignUpActivity.this, binding.etPassWord, binding.etPassWordCheck);
             if (binding.tvDuplicationResult.getText().equals("사용가능한 이메일입니다.")) {
-                if (binding.etPassWord.getText().toString().equals(binding.etPassWordCheck.getText().toString())) {
+                if (uah.isPasswordConfirmed() && uah.isPasswordValid()) {
                     JSONObject jsonObject = new JSONObject();
                     try {
                         jsonObject.put("email", binding.etEmail.getText().toString());
@@ -152,13 +167,13 @@ public class SignUpActivity extends AppCompatActivity {
                             try {
                                 JSONObject responseJson = new JSONObject(Objects.requireNonNull(response.body()).string());
                                 String result = (String) responseJson.get("result");
-
-                                if (result.equals(SUCCESS)) {
-                                    startActivity(new Intent(getApplicationContext(), EmailAuthNoticeActivity.class));
-                                    finish();
-                                } else {
-                                    // 회원가입에 실패 했을 경우
-                                    Toast.makeText(SignUpActivity.this, "회원가입에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                                switch(result) {
+                                    case SUCCESS:
+                                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                                        finish();
+                                    default :
+                                        // 회원가입에 실패 했을 경우
+                                        Toast.makeText(SignUpActivity.this, "회원가입에 실패했습니다.", Toast.LENGTH_SHORT).show();
                                 }
                             } catch (IOException e) {
                                 Log.e("IOException : ", "btnSignUp", e);
@@ -171,7 +186,8 @@ public class SignUpActivity extends AppCompatActivity {
                         }
                     }));
                 } else {
-                    Toast.makeText(SignUpActivity.this,"비밀번호를 다시 확인해주세요.", Toast.LENGTH_SHORT).show();
+                    uah.updatePasswordCheckValidationStatus();
+                    uah.updatePasswordValidationStatus();
                 }
 
             } else {
