@@ -56,13 +56,13 @@ public class CircularProgressBar extends View{
     /**
      * 프로그레스바 두께
      */
-    private final float strokeWidth = 33.0f;/**
+    private float strokeWidth = 34.0f;/**
      * 외곽선 두께
      */
-    private final float outlineWidth = 4.5f;/**
+    private final float outlineWidth = 4.8f;/**
      * 내곽선 두께
      */
-    private final float innerOutlineWidth = 4.5f;
+    private final float innerOutlineWidth = 4.8f;
     /**
      * 프로그레스바 색상
      */
@@ -109,13 +109,15 @@ public class CircularProgressBar extends View{
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        float halfStroke = strokeWidth / 2;
-        float halfOutline = outlineWidth / 2;
-        float halfInnerOutline = innerOutlineWidth * 4f;
+        float halfStroke = strokeWidth / 2.0f + 2;
+        float halfOutline = outlineWidth / 2.0f + 2;
 
         rectF = new RectF(halfStroke, halfStroke, w - halfStroke, h - halfStroke);
         outlineRectF = new RectF(halfOutline, halfOutline, w - halfOutline, h - halfOutline);
-        innerRectF = new RectF(halfStroke + halfInnerOutline, halfStroke + halfInnerOutline, w - halfStroke - halfInnerOutline, h - halfStroke - halfInnerOutline);
+
+        float outlineGap = (strokeWidth + innerOutlineWidth);
+        innerRectF = new RectF(outlineGap, outlineGap, w - outlineGap, h - outlineGap);
+
 
         // set the shader for the foreground paint
         float centerX = w / 2.0f;
@@ -193,32 +195,37 @@ public class CircularProgressBar extends View{
         progressColor = typedArray.getColor(R.styleable.CircularProgressBar_progressColor, 0xFF00CC00);
         backgroundColor = typedArray.getColor(R.styleable.CircularProgressBar_backgroundColor, 0xFFDDDDDD);
 
+        float strokeWidth = typedArray.getDimension(R.styleable.CircularProgressBar_strokeWidth, 34.0f);
+        if (strokeWidth != 34.0f) {
+            this.strokeWidth = strokeWidth;
+        }
+
         typedArray.recycle();
 
         backgroundPaint = new Paint();
         backgroundPaint.setAntiAlias(true);
         backgroundPaint.setStyle(Paint.Style.STROKE);
-        backgroundPaint.setStrokeWidth(strokeWidth);
-        backgroundPaint.setColor(backgroundColor);
+        backgroundPaint.setStrokeWidth(this.strokeWidth);
+        backgroundPaint.setColor(this.backgroundColor);
 
         foregroundPaint = new Paint();
         foregroundPaint.setAntiAlias(true);
         foregroundPaint.setStyle(Paint.Style.STROKE);
-        foregroundPaint.setStrokeWidth(strokeWidth);
-        foregroundPaint.setColor(progressColor);
+        foregroundPaint.setStrokeWidth(this.strokeWidth);
+        foregroundPaint.setColor(this.progressColor);
         foregroundPaint.setStrokeCap(Paint.Cap.ROUND);  // Add this line
 
 
         outlinePaint = new Paint();
         outlinePaint.setAntiAlias(true);
         outlinePaint.setStyle(Paint.Style.STROKE);
-        outlinePaint.setStrokeWidth(outlineWidth);
+        outlinePaint.setStrokeWidth(this.outlineWidth);
         outlinePaint.setColor(Color.parseColor("#282828"));  // 외곽선의 색상을 정의합니다.
 
         innerOutlinePaint = new Paint();
         innerOutlinePaint.setAntiAlias(true);
         innerOutlinePaint.setStyle(Paint.Style.STROKE);
-        innerOutlinePaint.setStrokeWidth(innerOutlineWidth);
+        innerOutlinePaint.setStrokeWidth(this.innerOutlineWidth);
         innerOutlinePaint.setColor(Color.parseColor("#282828"));  // 내곽선의 색상을 정의합니다.
 
     }

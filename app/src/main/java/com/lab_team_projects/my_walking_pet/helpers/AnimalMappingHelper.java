@@ -19,6 +19,14 @@ public class AnimalMappingHelper {
             , Broods.HAMSTER, new int[]{R.drawable.img_egg_yellow, R.drawable.img_pet_cat_1, R.drawable.img_pet_cat_2, R.drawable.img_pet_cat_3}
             , Broods.Test, new int[]{R.drawable.img_egg_yellow, R.drawable.img_pet_cat_1, R.drawable.img_pet_cat_2, R.drawable.img_pet_cat_3});
 
+    private final Map<Broods, String> broodsNameMap =  Map.of(
+            Broods.CAT, "고양이",
+            Broods.DOG, "강아지",
+            Broods.MONKEY, "원숭이",
+            Broods.HAMSTER, "햄스터",
+            Broods.Test, "테스트");
+
+
     /**
      * 종족명과 레벨을 넣으면 알맞은 그림을 반환합니다.
      * @param broodName 종족 이름 (str)
@@ -58,4 +66,22 @@ public class AnimalMappingHelper {
 
         return Arrays.copyOfRange(originalValue, 1, originalValue.length);
     }
+
+    /**
+     * 종족과 한글 이름으로 매핑된 Map 클래스를 반환
+     * @return Map 클래스
+     */
+    public Map<Broods, String> getBroodsNameMap() {
+        return broodsNameMap;
+    }
+
+    /**
+     * enum 클래스 종족에 대한 매핑된 이름을 String으로 반환합니다.
+     * @param broods 종족 enum
+     * @return 이름 반환
+     */
+    public String getBroodsName(Broods broods) {
+        return getBroodsNameMap().get(broods);
+    }
+
 }
