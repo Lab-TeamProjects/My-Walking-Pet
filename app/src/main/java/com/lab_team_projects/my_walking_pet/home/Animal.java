@@ -5,7 +5,7 @@ package com.lab_team_projects.my_walking_pet.home;
  * 사용자가 동물을 키울 수 있도록 동물에 대한 객체입니다.
  */
 public class Animal {
-    private int id;
+    private String id;
     /**
      * 동물 이름
      */
@@ -406,5 +406,14 @@ public class Animal {
      */
     public void setMaxGrowth(float maxGrowth) {
         this.maxGrowth = maxGrowth;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Animal setId(String id) {
+        this.id = id;
+        return this;
     }
 }
