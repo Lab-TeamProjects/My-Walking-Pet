@@ -27,7 +27,16 @@ public class AnimalMeasureManager {
     private Map<String, LocalDateTime> animalFigureChangeLastTimeMap;
 
     private AnimalMeasureManager() {
-        // private constructor to prevent instantiation
+        User user = GameManager.getInstance().getUser();
+
+        // 현재 시간 불러옴
+        LocalDateTime now = LocalDateTime.now();
+
+        // animalFigureChangeLastTimeMap 현재 시간으로 초기화
+        user.getAnimalList().forEach(animal ->{
+            animalFigureChangeLastTimeMap.put(animal.getId(), now);
+        });
+
     }
 
     /**
@@ -111,19 +120,20 @@ public class AnimalMeasureManager {
      * 일정 주기마다 동물 욕구 수치감소 시간을 판단하여 수치를 감소시키고
      * 사용자의 걸음 수를 판단하여 수치를 감소시킨다.
      *
-     * 현재 주기 : 10초
+     * 현재 주기 : 5분
      */
     public void startChecker() {
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
+                // 현재 시간 불러옴
+                LocalDateTime now = LocalDateTime.now();
 
 
 
 
-
-                handler.postDelayed(this, 10000);
+                handler.postDelayed(this, 1000 * 60 * 5);
             }
         };
         handler.post(runnable);
