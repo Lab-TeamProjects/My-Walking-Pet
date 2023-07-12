@@ -1,7 +1,14 @@
 package com.lab_team_projects.my_walking_pet.helpers;
 
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.FAIL;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.GET_EGGS;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.GET_PETS;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.GET_USER_ITEM;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.INVALID_ACCESS_TOKEN;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.MONEY;
 import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.PROFILE_PHOTO;
-import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.PROFILE_SETTING;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.STEPS;
+import static com.lab_team_projects.my_walking_pet.app.ConnectionProtocol.SUCCESS;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,7 +22,14 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -65,10 +79,8 @@ public class ServerConnectionHelper {
      * @param accessToken the access token
      */
     public ServerConnectionHelper(String url, String accessToken) {
-        serverUrl = serverUrl.concat(url);
-
         Request request = new Request.Builder()
-                .url(serverUrl)
+                .url(serverUrl.concat(url))
                 .addHeader("Authorization", "Bearer " + accessToken)
                 .get()
                 .build();
@@ -82,10 +94,8 @@ public class ServerConnectionHelper {
      * @param is_get      : get 판별 변수
      */
     public ServerConnectionHelper(String url, Boolean is_get) {
-        serverUrl = serverUrl.concat(url);
-
         Request request = new Request.Builder()
-                .url(serverUrl)
+                .url(serverUrl.concat(url))
                 .get()
                 .build();
 
@@ -122,9 +132,6 @@ public class ServerConnectionHelper {
      * @param accessToken : 사용자를 구분하기위한 액세스 토큰
      */
     public ServerConnectionHelper(String url, JSONObject jsonObject, String accessToken) {
-        serverUrl = serverUrl.concat(url);
-
-        Log.e("json", jsonObject.toString());
 
         RequestBody reqBody = RequestBody.create(
                 jsonObject.toString(),
@@ -132,7 +139,7 @@ public class ServerConnectionHelper {
         );
 
         Request request = new Request.Builder()
-                .url(serverUrl)
+                .url(serverUrl.concat(url))
                 .post(reqBody)
                 .addHeader("Authorization", "Bearer " + accessToken)
                 .build();
@@ -150,7 +157,6 @@ public class ServerConnectionHelper {
      */
     // 이미지 전송(인코딩 -> base64) 추가해야하고,
     public ServerConnectionHelper(File dir, String photoName, String accessToken) {
-        serverUrl = serverUrl.concat(PROFILE_PHOTO);
         File file = new File(dir, photoName);
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -168,7 +174,7 @@ public class ServerConnectionHelper {
             );
 
             Request request = new Request.Builder()
-                    .url(serverUrl)
+                    .url(serverUrl.concat(PROFILE_PHOTO))
                     .addHeader("Authorization", "Bearer " + accessToken)
                     .post(reqBody)
                     .build();
@@ -179,6 +185,8 @@ public class ServerConnectionHelper {
         }
 
     }
+
+
 
     /**
      * 서버에 데이터를 보내고 반환값을 받는 함수

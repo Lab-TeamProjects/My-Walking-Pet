@@ -38,6 +38,10 @@ public class ConnectionProtocol {
      */
     public static final String NOT_AUTH_PASSWORD_RESET = "A07"; // 비밀번호 변경 인증 안됨
     /**
+     * The constant EXPIRED_ACCESS_TOKEN.
+     */
+    public static final String EXPIRED_ACCESS_TOKEN = "A08"; // 만료된 엑세스 토큰
+    /**
      * The constant INVALID_IMAGE_DATA.
      */
     public static final String INVALID_IMAGE_DATA = "D01"; // 잘못된 이미지 파일
@@ -135,11 +139,11 @@ public class ConnectionProtocol {
      * GET - 재화 정보 가져오기
      * PUT - 금액 수정
      */
-    public static final String GET_MONEY = "users/money";
+    public static final String MONEY = "users/money";
 
     /**
      * 유저 걸음 수
-     * GET - 추가된 걸음 수 등록
+     * POST - 추가된 걸음 수 등록
      */
     public static final String POST_STEP = "users/step";
 
@@ -148,14 +152,7 @@ public class ConnectionProtocol {
      * GET - 걸음 정보 가져오기
      * PUT - 걸음 정보 등록
      */
-    public static final String STEPS = "users/step";
-
-    /**
-     * 유저 걸음 수
-     * GET - 걸음 수 가져오기
-     * POST - 걸음 정보 등록
-     */
-    public static final String NORMAL_WALK = "users/step";
+    public static final String STEPS = "users/steps";
 
     /**
      * 유저 친구 요청
@@ -191,13 +188,26 @@ public class ConnectionProtocol {
     public static final String USER_FRIENDS = "users/friends";
 
     /**
+     * 보유중인 아이템
+     * GET - 보유중인 아이템 목록 조회
+     */
+    public static final String GET_USER_ITEM = "/users/items";
+
+    /**
      * 판매중 아이템
      * GET - 판매중 아이템 목록 조회
      */
     public static final String STORE_ITEM = "store/items";
 
     /**
-     * The constant GAME_DATA_VIEW.
+     * 알 목록
+     * GET - 보유중인 알 목록 조회
+     */
+    public static final String GET_EGGS = "/users/eggs";
+
+    /**
+     * 보유중인 펫
+     * GET - 보유중인 펫 목록 조회
      */
     public static final String GET_PETS = "users/pets";
 
