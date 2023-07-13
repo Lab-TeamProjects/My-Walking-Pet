@@ -1,11 +1,13 @@
 package com.lab_team_projects.my_walking_pet.app;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -41,6 +43,7 @@ import java.util.Locale;
  * 메인 액티비티 클래스
  * 로그인 후 홈 프래그먼트, 상점 프래그먼트를 비롯하여 각각의 프래그먼트의 상위 객체입니다.
  */
+@RequiresApi(api = Build.VERSION_CODES.Q)
 public class MainActivity extends AppCompatActivity {
 
     private PermissionsCheckHelper pch =  new PermissionsCheckHelper(this, this);;

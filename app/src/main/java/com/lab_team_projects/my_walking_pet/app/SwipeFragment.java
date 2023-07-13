@@ -22,7 +22,7 @@ import java.util.List;
 public class SwipeFragment extends Fragment {
 
     /**
-     * 뷰페이저2를 바인딩하여 도움말 프래그먼트들을 스와이프할 수 있또록 구현합니다.
+     * 뷰페이저2를 바인딩하여 도움말 프래그먼트들을 스와이프할 수 있도록 구현합니다.
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

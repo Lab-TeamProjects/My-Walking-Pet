@@ -1,11 +1,13 @@
 package com.lab_team_projects.my_walking_pet.app;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.lab_team_projects.my_walking_pet.databinding.FragmentTitleBinding;
@@ -26,6 +28,7 @@ public class TitleFragment extends Fragment {
 
         binding = FragmentTitleBinding.inflate(inflater, container, false);
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(requireContext(), LoginActivity.class));

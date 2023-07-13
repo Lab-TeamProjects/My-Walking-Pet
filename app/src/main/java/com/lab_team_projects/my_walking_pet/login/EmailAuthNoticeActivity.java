@@ -1,6 +1,7 @@
 package com.lab_team_projects.my_walking_pet.login;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -26,7 +27,9 @@ public class EmailAuthNoticeActivity extends AppCompatActivity {
         binding.btnGoToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                }
                 finish();
             }
         });
