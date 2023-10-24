@@ -18,4 +18,7 @@
 
     <color name="button_ripple">#807C7C7C</color>
 
+    <color name="splash_back">#ede7db</color>
+    <color name="orange">#F6AC3F</color>
+
 </resources>

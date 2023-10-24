@@ -1,5 +1,6 @@
 package com.lab_team_projects.my_walking_pet.walk_count;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -422,6 +423,7 @@ public class WalkCountForeGroundService extends Service implements SensorEventLi
             this.context = context;
         }
 
+        @SuppressLint("NotificationPermission")
         @Override
         protected Integer doInBackground(Integer... values) {
 

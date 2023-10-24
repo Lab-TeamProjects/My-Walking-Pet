@@ -3,37 +3,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/splash_back"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".app.TitleFragment">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+
+    <ImageView
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginBottom="180dp"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:id="@+id/ivTitleImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:src="@drawable/bg_splash"/>
 
-        <ImageView
-            android:id="@+id/ivTitleImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_help_cloud" />
 
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="로그인"/>
+    <Button
+        android:textStyle="bold"
+        android:backgroundTint="@color/orange"
+        app:layout_constraintTop_toTopOf="@id/ivTitleImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="380dp"
+        android:id="@+id/btnLogin"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="로그인"/>
 
-        <TextView
-            android:id="@+id/tvSignUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="회원가입"/>
-
-    </LinearLayout>
+    <TextView
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/btnLogin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp"
+        android:textSize="16sp"
+        android:id="@+id/tvSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="회원가입"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

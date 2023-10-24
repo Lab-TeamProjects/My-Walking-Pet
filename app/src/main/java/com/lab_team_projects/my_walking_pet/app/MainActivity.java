@@ -191,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
         User user = GameManager.getInstance().getUser();
         Animal pet1 = new Animal("착한아이", Broods.CAT.name(), user.getUid(), user.getUid());
         pet1.setLevel(1);
+        pet1.setGrowth(pet1.getGrowth() + 1920.0f);
         collectionCheckHelper.addCollectionToUser(pet1);
         Animal pet2 = new Animal("멋진아이", Broods.CAT.name(), user.getUid(), user.getUid());
         pet2.setLevel(2);
