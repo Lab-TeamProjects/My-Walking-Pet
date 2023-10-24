@@ -31,7 +31,7 @@ public class MyBinder extends Binder {
          *
          * @param state the state
          */
-        void onChange(String state);
+        void onChange(String state, int selectedTime, int lastTime);
     }
 
     private OnBinderListener listener;

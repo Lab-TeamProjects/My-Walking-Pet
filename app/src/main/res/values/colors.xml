@@ -20,5 +20,7 @@
 
     <color name="splash_back">#ede7db</color>
     <color name="orange">#F6AC3F</color>
+    <color name="background_orange">#feeaa3</color>
+    <color name="background_orange_btn">#FFE790</color>
 
 </resources>

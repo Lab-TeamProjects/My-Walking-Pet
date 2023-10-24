@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.db.AppDatabase;
 import com.lab_team_projects.my_walking_pet.helpers.TTSHelper;
@@ -74,20 +75,23 @@ public class WalkingTimeCheckService extends Service implements SensorEventListe
         }
         map.put((this.time / 5), "몸풀기 시간 입니다");
         map.put((this.time / 5) + 1, "수고 하셨습니다");
-        map.forEach((integer, s) -> ttsHandler.postDelayed(() -> {
-            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-            Log.e("tts", integer + " : " + s);
 
-            binder.setState(s);
-            if (binder.getStateListener() != null) {
-                binder.getStateListener().onChange(s);
-            }
-            thr.speak(s);
+        for (Map.Entry<Integer, String> entry : map.entrySet()) {
+            Integer integer = entry.getKey();
+            String s = entry.getValue();
+            ttsHandler.postDelayed(() -> {
+                Log.e("tts", integer + " : " + s);
+                binder.setState(s);
+                if (binder.getStateListener() != null) {
+                    binder.getStateListener().onChange(s, this.time, (this.time-(integer*5)) + 5);
+                }
+                thr.speak(s);
 
-            if (integer == time / 5 + 1) {
-                binder.getListener().onFinish(false);
-            }
-        }, integer * 1000 * 2));
+                if (integer == time / 5 + 1) {
+                    binder.getListener().onFinish(false);
+                }
+            }, integer * 1000 * 2);
+        }
         return START_STICKY;
     }
 

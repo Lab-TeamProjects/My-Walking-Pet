@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.IdRes;
@@ -33,6 +34,7 @@ import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.material.snackbar.Snackbar;
 import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.app.GameManager;
 import com.lab_team_projects.my_walking_pet.databinding.FragmentHomeBinding;
@@ -489,14 +491,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 svc = (MyBinder) service;
-                svc.setListener(new MyBinder.OnBinderListener() {
-                    @Override
-                    public void onFinish(boolean flag) {
-                        isExercising = flag;
-                        requireContext().stopService(intent);
-                        requireContext().unbindService(mServiceConnection);
-                        mServiceConnection = null;
-                    }
+                svc.setListener(flag -> {
+                    isExercising = flag;
+                    requireContext().stopService(intent);
+                    requireContext().unbindService(mServiceConnection);
+                    mServiceConnection = null;
+                });
+
+                svc.setStateListener((state, selectedTime, lastTime) -> {
+                    Snackbar.make(requireView(), state, Snackbar.LENGTH_SHORT).setTextColor(ContextCompat.getColor(requireContext(), R.color.orange)).show();
                 });
             }
 

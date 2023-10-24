@@ -12,6 +12,8 @@ import com.lab_team_projects.my_walking_pet.R;
 import com.lab_team_projects.my_walking_pet.databinding.CustomExerciseDialogBinding;
 import com.lab_team_projects.my_walking_pet.databinding.CustomExercisingDialogBinding;
 
+import java.util.Locale;
+
 /**
  * 운동 설계 커스텀 다이얼로그 클래스
  * 다이얼로그 클래스를 상속 받음
@@ -115,7 +117,7 @@ public class CustomExerciseDialog extends Dialog {
             exerciseBinding.tvOK.setOnClickListener(v->{
                 // ok 버튼
                 selected = Integer.parseInt(exerciseBinding.tvTime.getText().toString());
-                Toast.makeText(context, String.valueOf(selected), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, String.valueOf(selected), Toast.LENGTH_SHORT).show();
                 onExerciseListener.onExercise(true, selected);
                 dismiss();
             });
@@ -141,8 +143,10 @@ public class CustomExerciseDialog extends Dialog {
 
             myBinder.setStateListener(new MyBinder.OnBinderStateListener() {
                 @Override
-                public void onChange(String state) {
+                public void onChange(String state, int selectedTime, int lastTime) {
                     exercisingBinding.tvCurrent.setText(state);
+                    exercisingBinding.tvSelected.setText(String.format(Locale.KOREA, "선택한 시간 : %d (분)", selectedTime));
+                    exercisingBinding.tvLastedTime.setText(String.format(Locale.KOREA, "남은 시간 : %d (분)", lastTime));
                 }
             });
 
